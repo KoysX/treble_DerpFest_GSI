@@ -1,0 +1,27 @@
+From c988fe2c763c9992fb7880d4bc0a2d210ad34e15 Mon Sep 17 00:00:00 2001
+From: TheAtt1la <alittauwu@gmail.com>
+Date: Wed, 17 May 2023 11:03:02 -0300
+Subject: [PATCH] Add maintainer name
+
+---
+ res/values/derp_strings.xml | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
+
+diff --git a/res/values/derp_strings.xml b/res/values/derp_strings.xml
+index 2c668b6..a16cc71 100644
+--- a/res/values/derp_strings.xml
++++ b/res/values/derp_strings.xml
+@@ -21,8 +21,8 @@
+ 
+     <!-- DerpFest maintainer -->
+     <string name="maintainer">Maintainer</string>
+-    <string name="maintainer_name" translatable="false">Your local GitHub Retard</string>
+-    <string name="maintainer_telegram" translatable="false">https://t.me/DerpFest5T</string>
++    <string name="maintainer_name" translatable="false">KoysX</string>
++    <string name="maintainer_telegram" translatable="false">https://github.com/KoysX/treble_DerpFest_GSI</string>
+ 
+     <!-- DerpFest Updater -->
+     <string name="update_settings_title">DerpFest Updater</string>
+-- 
+2.39.2
+

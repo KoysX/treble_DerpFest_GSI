@@ -1,0 +1,106 @@
+From e0420ca841793f33451d90194d69e1dccd21b17f Mon Sep 17 00:00:00 2001
+From: KoysX <2685697179b@gmail.com>
+Date: Thu, 20 Jul 2023 10:25:37 +0800
+Subject: [PATCH] Add-Mediatek-power-hints-on-touch
+
+---
+ services/core/Android.bp                      |  1 +
+ .../com/android/server/wm/DisplayPolicy.java  | 49 +++++++++++++++++++
+ 2 files changed, 50 insertions(+)
+
+diff --git a/services/core/Android.bp b/services/core/Android.bp
+index 8ad1fec9..1d9f3c27 100644
+--- a/services/core/Android.bp
++++ b/services/core/Android.bp
+@@ -180,6 +180,7 @@ java_library_static {
+         "kotlinx_coroutines",
+         "faceunlock_framework",
+         // HIDL
++        "vendor.mediatek.hardware.mtkpower-V1.1-java",
+         "vendor.samsung.hardware.sysinput-V1.2-java",
+         "vendor.goodix.hardware.biometrics.fingerprint-V2.1-java",
+         "vendor.samsung.hardware.biometrics.fingerprint-V3.0-java",
+diff --git a/services/core/java/com/android/server/wm/DisplayPolicy.java b/services/core/java/com/android/server/wm/DisplayPolicy.java
+index cc8b2a7d..23fa75ff 100644
+--- a/services/core/java/com/android/server/wm/DisplayPolicy.java
++++ b/services/core/java/com/android/server/wm/DisplayPolicy.java
+@@ -241,6 +241,9 @@ public class DisplayPolicy {
+     private boolean mCanSystemBarsBeShownByUser;
+     private boolean mNavButtonForcedVisible;
+ 
++    private vendor.mediatek.hardware.mtkpower.V1_1.IMtkPerf mMtkPerf;
++    private vendor.mediatek.hardware.mtkpower.V1_0.IMtkPower mOldMtkPerf;
++
+     StatusBarManagerInternal getStatusBarManagerInternal() {
+         synchronized (mServiceAcquireLock) {
+             if (mStatusBarManagerInternal == null) {
+@@ -527,6 +530,19 @@ public class DisplayPolicy {
+             mScreenOnEarly = true;
+             mScreenOnFully = true;
+         }
++        try {
++            mMtkPerf = vendor.mediatek.hardware.mtkpower.V1_1.IMtkPerf.getService();
++        } catch(Throwable t) {
++            android.util.Log.d("PHH-Power", "Retrieving mtkpower 1.0", t);
++            mMtkPerf = null;
++        }
++
++        try {
++            mOldMtkPerf = vendor.mediatek.hardware.mtkpower.V1_0.IMtkPower.getService();
++        } catch(Throwable t) {
++            android.util.Log.d("PHH-Power", "Retrieving mtkpower 1.0", t);
++            mOldMtkPerf = null;
++        }
+ 
+         if (mPerf != null) {
+             SCROLL_BOOST_SS_ENABLE = Boolean.parseBoolean(mPerf.perfGetProp("vendor.perf.gestureflingboost.enable", "true"));
+@@ -612,6 +628,17 @@ public class DisplayPolicy {
+                             mService.mPowerManagerInternal.setPowerBoost(
+                                     Boost.INTERACTION, duration);
+                         }
++                        if(mOldMtkPerf != null) {
++                            try {
++                                android.util.Log.d("PHH-Power", "mtk1 fling power hint");
++                                int hint = 36; // MTKPOWER_HINT_APP_TOUCH
++                                if("rotate".equals(SystemProperties.get("persist.sys.phh.touch_hint")))
++                                        hint = 35; // MTKPOWER_HINT_APP_ROTATE
++                                mOldMtkPerf.mtkPowerHint(hint, duration);
++                            } catch(Throwable t) {
++                                android.util.Log.d("PHH-Power", "Failed sending touch power hint", t);
++                            }
++                        }
+                     }
+ 
+                     @Override
+@@ -729,6 +756,28 @@ public class DisplayPolicy {
+                             mPerfBoostFling.perfLockRelease();
+                             mIsPerfBoostFlingAcquired = false;
+                         }
++                        if(mMtkPerf != null) {
++                            try {
++                                android.util.Log.d("PHH-Power", "mtk power hint");
++                                int hint = 25; //MTKPOWER_HINT_APP_TOUCH
++                                if("rotate".equals(SystemProperties.get("persist.sys.phh.touch_hint")))
++                                        hint = 24; // MTKPOWER_HINT_APP_ROTATE
++                                mMtkPerf.perfCusLockHint(hint, 1000);
++                            } catch(Throwable t) {
++                                android.util.Log.d("PHH-Power", "Failed sending touch power hint", t);
++                            }
++                        }
++                        if(mOldMtkPerf != null) {
++                            try {
++                                android.util.Log.d("PHH-Power", "mtk1 power hint");
++                                int hint = 36; // MTKPOWER_HINT_APP_TOUCH
++                                if("rotate".equals(SystemProperties.get("persist.sys.phh.touch_hint")))
++                                        hint = 35; // MTKPOWER_HINT_APP_ROTATE
++                                mOldMtkPerf.mtkPowerHint(hint, 1000);
++                            } catch(Throwable t) {
++                                android.util.Log.d("PHH-Power", "Failed sending touch power hint", t);
++                            }
++                        }
+                     }
+ 
+                     @Override
+-- 
+2.34.1
+

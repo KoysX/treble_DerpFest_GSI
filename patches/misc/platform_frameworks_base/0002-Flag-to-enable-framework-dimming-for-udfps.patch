@@ -1,0 +1,24 @@
+From 80f11a45325b572b7f1564295802b891a252693d Mon Sep 17 00:00:00 2001
+From: KoysX <2685697179b@gmail.com>
+Date: Thu, 20 Jul 2023 22:10:26 +0800
+Subject: [PATCH] Flag-to-enable-framework-dimming-for-udfps
+
+---
+ packages/SystemUI/res/values/bools.xml | 3 +++
+ 1 file changed, 3 insertions(+)
+
+diff --git a/packages/SystemUI/res/values/bools.xml b/packages/SystemUI/res/values/bools.xml
+index 04fc4b8c..b7bdfed4 100644
+--- a/packages/SystemUI/res/values/bools.xml
++++ b/packages/SystemUI/res/values/bools.xml
+@@ -30,4 +30,7 @@
+ 
+     <!-- Whether to enable transparent background for notification scrims -->
+     <bool name="notification_scrim_transparent">false</bool>
++
++    <!-- Flag to enable framework dimming for udfps -->
++    <bool name="config_udfpsFrameworkDimming">false</bool>
+ </resources>
+-- 
+2.34.1
+

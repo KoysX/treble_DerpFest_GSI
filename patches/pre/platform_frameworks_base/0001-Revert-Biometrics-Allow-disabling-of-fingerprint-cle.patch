@@ -1,0 +1,46 @@
+From 0d531f2cacc705044c38c5c852f5c9e4bf8f9482 Mon Sep 17 00:00:00 2001
+From: TheAtt1la <alittauwu@gmail.com>
+Date: Sun, 5 Feb 2023 22:35:52 +0100
+Subject: [PATCH 1/5] Revert Biometrics: Allow disabling of fingerprint cleanups
+
+---
+ .../sensors/fingerprint/hidl/Fingerprint21.java           | 8 --------
+ 1 file changed, 8 deletions(-)
+
+diff --git a/services/core/java/com/android/server/biometrics/sensors/fingerprint/hidl/Fingerprint21.java b/services/core/java/com/android/server/biometrics/sensors/fingerprint/hidl/Fingerprint21.java
+index ab2f366f5e07..f93281e049f5 100644
+--- a/services/core/java/com/android/server/biometrics/sensors/fingerprint/hidl/Fingerprint21.java
++++ b/services/core/java/com/android/server/biometrics/sensors/fingerprint/hidl/Fingerprint21.java
+@@ -128,8 +128,6 @@ public class Fingerprint21 implements IHwBinder.DeathRecipient, ServiceProvider
+     private final int mSensorId;
+     private final boolean mIsPowerbuttonFps;
+ 
+-    private boolean mCleanup;
+-
+     private final class BiometricTaskStackListener extends TaskStackListener {
+         @Override
+         public void onTaskStackChanged() {
+@@ -351,9 +349,6 @@ public class Fingerprint21 implements IHwBinder.DeathRecipient, ServiceProvider
+             mCurrentUserId = UserHandle.USER_NULL;
+         });
+ 
+-        mCleanup = context.getResources().getBoolean(
+-                com.android.internal.R.bool.config_cleanupUnusedFingerprints);
+-
+         try {
+             ActivityManager.getService().registerUserSwitchObserver(mUserSwitchObserver, TAG);
+         } catch (RemoteException e) {
+@@ -739,9 +734,6 @@ public class Fingerprint21 implements IHwBinder.DeathRecipient, ServiceProvider
+ 
+     private void scheduleInternalCleanup(int userId,
+             @Nullable ClientMonitorCallback callback) {
+-        if (!mCleanup) {
+-            return;
+-        }
+         mHandler.post(() -> {
+             scheduleUpdateActiveUserWithoutHandler(userId);
+ 
+-- 
+2.34.1
+
+

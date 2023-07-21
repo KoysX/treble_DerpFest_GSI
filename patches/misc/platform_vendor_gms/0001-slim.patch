@@ -1,0 +1,58 @@
+From cf08452ad8740833733689487afbb454cf3b2cbb Mon Sep 17 00:00:00 2001
+From: KoysX <2685697179b@gmail.com>
+Date: Thu, 20 Jul 2023 22:53:37 +0800
+Subject: [PATCH] slim
+
+---
+ common/common-vendor.mk | 11 -----------
+ 1 file changed, 11 deletions(-)
+
+diff --git a/common/common-vendor.mk b/common/common-vendor.mk
+index a797f87..97fb477 100644
+--- a/common/common-vendor.mk
++++ b/common/common-vendor.mk
+@@ -6,7 +6,6 @@ PRODUCT_SOONG_NAMESPACES += \
+     vendor/gms/common
+ 
+ PRODUCT_COPY_FILES += \
+-    vendor/gms/common/proprietary/product/app/Chrome/Chrome.apk.gz:$(TARGET_COPY_OUT_PRODUCT)/app/Chrome/Chrome.apk.gz \
+     vendor/gms/common/proprietary/product/app/TrichromeLibrary/TrichromeLibrary.apk.gz:$(TARGET_COPY_OUT_PRODUCT)/app/TrichromeLibrary/TrichromeLibrary.apk.gz \
+     vendor/gms/common/proprietary/product/app/WebViewGoogle/WebViewGoogle.apk.gz:$(TARGET_COPY_OUT_PRODUCT)/app/WebViewGoogle/WebViewGoogle.apk.gz \
+     vendor/gms/common/proprietary/product/etc/default-permissions/default-permissions.xml:$(TARGET_COPY_OUT_PRODUCT)/etc/default-permissions/default-permissions.xml \
+@@ -33,33 +32,23 @@ PRODUCT_COPY_FILES += \
+ PRODUCT_PACKAGES += \
+     GoogleExtShared \
+     GooglePrintRecommendationService \
+-    DocumentsUIGoogle \
+     GoogleExtServices \
+-    GooglePackageInstaller \
+     TagGoogle \
+     CalculatorGooglePrebuilt \
+     CalendarGooglePrebuilt \
+-    Drive \
+-    Chrome-Stub \
+     GoogleContacts \
+     GoogleTTS \
+     LatinIMEGooglePrebuilt \
+     LocationHistoryPrebuilt \
+-    Maps \
+     MarkupGoogle \
+     Photos \
+     PrebuiltDeskClockGoogle \
+-    PrebuiltGmail \
+     SoundPickerPrebuilt \
+     TrichromeLibrary-Stub \
+     WebViewGoogle-Stub \
+-    YouTube \
+-    talkback \
+-    AndroidAutoStubPrebuilt \
+     ConfigUpdater \
+     DeviceIntelligenceNetworkPrebuilt \
+     DevicePersonalizationPrebuiltPixel2020 \
+-    FilesPrebuilt \
+     GoogleDialer \
+     GoogleOneTimeInitializer \
+     GoogleRestorePrebuilt \
+-- 
+2.34.1
+

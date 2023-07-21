@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<manifest>
+  <project name="TrebleDroid/device_phh_treble" path="device/phh/treble" remote="github" revision="android-13.0" />
+  <project name="TrebleDroid/vendor_hardware_overlay" path="vendor/hardware_overlay" remote="github" revision="pie" />
+  <project name="TrebleDroid/vendor_interfaces" path="vendor/interfaces" remote="github" revision="android-13.0" />
+  <project name="TrebleDroid/treble_app" path="treble_app" remote="github" revision="master" />
+  <project name="AndyCGYan/android_packages_apps_QcRilAm" path="packages/apps/QcRilAm" remote="github" revision="master" />
+  <project name="KoysX/android_packages_apps_CameraGo" path="packages/apps/CameraGo" remote="github" revision="original" />
+</manifest>

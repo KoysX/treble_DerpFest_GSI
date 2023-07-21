@@ -1,0 +1,32 @@
+From 58710ae30278e99ac86b5a1378fbb42ebb97ace8 Mon Sep 17 00:00:00 2001
+From: naz664 <nazimnavas145@gmail.com>
+Date: Sat, 17 Sep 2022 11:57:42 +0000
+Subject: [PATCH 2/2] Remove duplicated adb
+
+Change-Id: I2cd0c6e9933e21796ad273b5d3ffdc289bd1cbb5
+---
+ core/main.mk | 6 +-----
+ 1 file changed, 1 insertion(+), 5 deletions(-)
+
+diff --git a/core/main.mk b/core/main.mk
+index df803b789..2b75ede21 100644
+--- a/core/main.mk
++++ b/core/main.mk
+@@ -378,13 +378,9 @@ enable_target_debugging := true
+ tags_to_install :=
+ ifneq (,$(user_variant))
+   # Target is secure in user builds.
+-  ADDITIONAL_SYSTEM_PROPERTIES += ro.secure=1
++#  ADDITIONAL_SYSTEM_PROPERTIES += ro.secure=1
+   ADDITIONAL_SYSTEM_PROPERTIES += security.perf_harden=1
+ 
+-  ifeq ($(user_variant),user)
+-    ADDITIONAL_SYSTEM_PROPERTIES += ro.adb.secure=1
+-  endif
+-
+   ifeq ($(user_variant),userdebug)
+     # Pick up some extra useful tools
+     tags_to_install += debug
+-- 
+2.25.1
+

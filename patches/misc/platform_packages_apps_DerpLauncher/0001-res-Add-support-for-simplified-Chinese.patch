@@ -1,0 +1,182 @@
+From ce223e1bacb49aecbbc45ea5fb3998a4d4b26b39 Mon Sep 17 00:00:00 2001
+From: KoysX <2685697179b@gmail.com>
+Date: Thu, 20 Jul 2023 12:38:01 +0800
+Subject: [PATCH] res-Add-support-for-simplified-Chinese
+
+---
+ res/values-zh-rCN/derp_config.xml | 160 +++++++++++++++++++++++++++---
+ 1 file changed, 145 insertions(+), 15 deletions(-)
+
+diff --git a/res/values-zh-rCN/derp_config.xml b/res/values-zh-rCN/derp_config.xml
+index a04ba2f..cf2ecbd 100644
+--- a/res/values-zh-rCN/derp_config.xml
++++ b/res/values-zh-rCN/derp_config.xml
+@@ -1,20 +1,150 @@
+ <?xml version="1.0" encoding="utf-8"?>
+-<!-- Copyright (C) 2023 DerpFest
++<!--
++/*
++* Copyright (C) 2022 DerpFest
++*
++* Licensed under the Apache License, Version 2.0 (the "License");
++* you may not use this file except in compliance with the License.
++* You may obtain a copy of the License at
++*
++*      http://www.apache.org/licenses/LICENSE-2.0
++*
++* Unless required by applicable law or agreed to in writing, software
++* distributed under the License is distributed on an "AS IS" BASIS,
++* WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
++* See the License for the specific language governing permissions and
++* limitations under the License.
++*/
++-->
+ 
+-     Licensed under the Apache License, Version 2.0 (the "License");
+-     you may not use this file except in compliance with the License.
+-     You may obtain a copy of the License at
++<resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
++    <string name="google_folder_title">Google</string>
+ 
+-        http://www.apache.org/licenses/LICENSE-2.0
++    <!-- Application name -->
++    <string name="derp_app_name" translatable="false">DerpLauncher</string>
+ 
+-     Unless required by applicable law or agreed to in writing, software
+-     distributed under the License is distributed on an "AS IS" BASIS,
+-     WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+-     See the License for the specific language governing permissions and
+-     limitations under the License.
+--->
+-<resources>
+-    <!-- Sort sections of apps list, in case AlphabeticIndex (of current locale)
+-         returns duplicate labels for some reasons. -->
+-    <bool name="config_appsListSortSections">true</bool>
++    <!-- Settings title to show Google Now at -1 screen on launcher. [CHAR LIMIT=50] -->
++    <string name="title_show_google_app">滑动即可访问 Google 应用</string>
++
++    <!-- Settings message explaining when the -1 screen is available on an LTR device. [CHAR LIMIT=100] -->
++    <string name="msg_minus_one_on_left">从主屏幕向左滑动即可打开 Google 应用</string>
++
++    <!-- Settings message explaining when the -1 screen is available on an RTL device. [CHAR LIMIT=100] -->
++    <string name="msg_minus_one_on_right">在主屏幕上向右滑动即可打开 Google 应用</string>
++    <string name="pref_show_google_now_summary" translatable="false">@string/msg_minus_one_on_right</string>
++
++    <!-- Suggestions -->
++    <string name="suggestion_pref_screen_title">建议</string>
++    <string name="suggestion_pref_screen_desc">对于所有应用程序和主屏幕建议</string>
++
++    <!-- Edit workspace -->
++    <string name="settings_lock_layout_title">锁定布局</string>
++    <string name="settings_lock_layout_summary_on">无法在主屏幕上添加、删除和移动图标和小部件</string>
++    <string name="settings_lock_layout_summary_off">可以在主屏幕上添加、删除和移动图标和小部件</string>
++    <string name="settings_edit_widgets_error">无法将小部件添加到主屏幕</string>
++
++    <!-- Hide labels -->
++    <string name="title_desktop_labels">桌面标签</string>
++    <string name="summary_desktop_labels">在桌面上显示图标标签</string>
++    <string name="title_drawer_labels">抽屉标签</string>
++    <string name="summary_drawer_labels">在抽屉中显示图标标签</string>
++
++    <!-- Settings Categories -->
++    <string name="category_icon">图标</string>
++    <string name="category_recents">最近的</string>
++    <string name="category_general">一般的</string>
++    <string name="category_google">Google</string>
++    <string name="category_dev">开发商</string>
++
++    <!-- Recents Lens -->
++    <string name="action_lens">镜片</string>
++    <string name="show_lens_button_title">显示镜头按键</string>
++    <string name="show_lens_button_summary">将屏幕截图按钮替换为 Google Lens 按键（如果有）</string>
++
++    <!-- Hotseat searchbar -->
++    <string name="label_search">搜索</string>
++    <string name="label_lens">Google Lens</string>
++    <string name="label_voice_search">声音搜索</string>
++    <string name="dock_search_title">谷歌搜索栏</string>
++    <string name="dock_search_summary">在底部停靠栏显示搜索栏</string>
++
++    <!-- All apps themed icons -->
++    <string name="pref_themed_icons_title">抽屉主题图标</string>
++    <string name="pref_themed_icons_summary">在抽屉中应用主题图标</string>
++
++    <!-- Custom seekbar -->
++    <string name="custom_seekbar_value">Value: <xliff:g id="v">%s</xliff:g></string>
++    <string name="custom_seekbar_default_value">默认</string>
++    <string name="custom_seekbar_default_value_to_set">Default value: <xliff:g id="v">%s</xliff:g>\nLong press to set</string>
++    <string name="custom_seekbar_default_value_is_set">默认值已设置</string>
++
++    <!-- Icon size -->
++    <string name="icon_size_title">图标大小</string>
++
++    <!-- Font size -->
++    <string name="font_size_title">字体大小</string>
++
++    <!-- Show top shadow -->
++    <string name="show_top_shadow_title">顶部阴影</string>
++    <string name="show_top_shadow_summary">在主屏幕顶部显示阴影</string>
++
++    <!-- Smartspace -->
++    <string name="smartspace_pref_title">At a Glance</string>
++    <string name="smartspace_pref_summary">在主屏幕顶部显示智能空间</string>
++
++    <!-- Dark Status Bar -->
++    <string name="perf_dark_status_bar_title">深色状态栏</string>
++    <string name="perf_dark_status_bar_summary">在主屏幕上使用深色状态栏</string>
++
++    <!-- Scroll Vibration -->
++    <string name="pref_scroll_vibration_title">滚动振动</string>
++    <string name="pref_scroll_vibration_summary">滚动浏览最近的应用程序时的触觉反馈（如果支持）</string>
++
++    <!-- AppInfo -->
++    <string name="app_info_version_value" translatable="false">%1$s (%2$d)</string>
++    <string name="app_info_icon_pack">图标包</string>
++    <string name="app_info_icon_pack_none">无</string>
++    <string name="app_info_source">来源</string>
++    <string name="app_info_source_unknown">Unknown</string>
++    <string name="app_info_last_update">最后更新</string>
++    <string name="app_info_version">版本</string>
++    <string name="app_info_more">更多</string>
++
++    <!-- Icon pack -->
++    <string name="icon_pack_title">图标包</string>
++    <string name="icon_pack_default_label">默认</string>
++    <string name="icon_pack_add">安装更多</string>
++    <string name="icon_pack_no_market">没有可用的应用商店</string>
++
++    <!-- Background opacity -->
++    <string name="drawer_background_opacity_title">抽屉背景不透明度</string>
++    <string name="recents_background_opacity_title">最近应用的背景不透明度</string>
++
++    <!-- Trust apps -->
++    <string name="trust_apps_manager_name">隐藏受保护的应用程序</string>
++    <string name="trust_apps_auth_manager">解锁以管理隐藏和受保护的应用程序</string>
++    <string name="trust_apps_auth_open_app">进行身份验证以打开 %1$s</string>
++    <string name="trust_apps_loading">Loading\u2026</string>
++    <string name="trust_apps_no_lock_error">请设置安全锁屏以限制应用程序访问</string>
++    <string name="trust_apps_help">帮助</string>
++    <string name="trust_apps_info_hidden">隐藏的应用程序及其小部件从抽屉中隐藏起来</string>
++    <string name="trust_apps_info_protected">受保护的应用程序需要身份验证才能从启动器打开</string>
++
++    <!-- Wallpaper scrolling -->
++    <string name="allow_wallpaper_scrolling">壁纸滚动</string>
++    <string name="allow_wallpaper_scrolling_summary">多屏壁纸滚动效果</string>
++
++    <!-- Parallax -->
++    <string name="short_parallax_title">允许视觉差</string>
++    <string name="short_parallax_summary">在较少数量的页面上启用完整壁纸滚动效果，而不是裁剪壁纸</string>
++    <string name="single_page_center_title">单页居中</string>
++    <string name="single_page_center_summary">如果仅使用单个页面，则将壁纸居中</string>
++
++    <!-- Force monochrome icons -->
++    <string name="pref_force_monochrome_themed_icons_title">强制主题图标</string>
++    <string name="pref_force_monochrome_themed_icons_summary">为没有主题图标的应用程序生成主题图标（需要重新切换主题图标）</string>
++
++    <!-- App label - max lines -->
++    <string name="icon_max_lines_title">应用程序标签的最大行数</string>
+ </resources>
++
+-- 
+2.34.1
+

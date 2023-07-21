@@ -1,0 +1,25 @@
+From 1632abb0efcb6639d5732c3eb5dfd8d8d2130e3d Mon Sep 17 00:00:00 2001
+From: TheAtt1la <alittauwu@gmail.com>
+Date: Tue, 20 Dec 2022 18:31:09 -0300
+Subject: [PATCH 2/2] Replace build name
+
+---
+ config/version.mk | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/config/version.mk b/config/version.mk
+index 07d5474..c152949 100644
+--- a/config/version.mk
++++ b/config/version.mk
+@@ -25,7 +25,7 @@ TARGET_PRODUCT_SHORT := $(subst derp_,,$(DERP_BUILDTYPE))
+ DERP_BUILDTYPE ?= Community
+ DERP_CODENAME := Tango
+ DERP_BUILD_VERSION := $(PLATFORM_VERSION)
+-DERP_VERSION := $(DERP_BUILD_VERSION)-$(DERP_BUILDTYPE)-$(DERP_CODENAME)-$(DERP_BUILD)-$(BUILD_DATE)
++DERP_VERSION := $(DERP_BUILD_VERSION)-$(DERP_BUILDTYPE)-$(DERP_CODENAME)-gsi-$(BUILD_DATE)
+ ROM_FINGERPRINT := DerpFest/$(PLATFORM_VERSION)/$(TARGET_PRODUCT_SHORT)/$(shell date -u +%H%M)
+ 
+ ifeq ($(DERP_BUILDTYPE), CI)
+-- 
+2.39.2
+
