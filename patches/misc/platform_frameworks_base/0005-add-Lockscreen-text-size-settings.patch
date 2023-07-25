@@ -1,0 +1,119 @@
+From e691e38583ea8d28e5027648a4cf150961c35359 Mon Sep 17 00:00:00 2001
+From: KoysX <2685697179b@gmail.com>
+Date: Mon, 24 Jul 2023 19:29:53 +0800
+Subject: [PATCH] add-Lockscreen-text-size-settings
+
+---
+ core/java/android/provider/Settings.java      | 10 ++++++++
+ .../shared/clocks/DefaultClockController.kt   | 16 ++++++++++++-
+ .../android/keyguard/ClockEventController.kt  |  1 +
+ .../theme/ThemeOverlayController.java         | 24 +++++++++++++++++++
+ 4 files changed, 50 insertions(+), 1 deletion(-)
+
+diff --git a/core/java/android/provider/Settings.java b/core/java/android/provider/Settings.java
+index 19507dba..c0cc52ee 100644
+--- a/core/java/android/provider/Settings.java
++++ b/core/java/android/provider/Settings.java
+@@ -12425,6 +12425,16 @@ public final class Settings {
+          */
+         public static final String KG_CUSTOM_CLOCK_TOP_MARGIN = "kg_custom_clock_top_margin";
+ 
++        /**
++         * @hide
++         */
++        public static final String KG_LARGE_CLOCK_TEXT_SIZE = "kg_large_clock_text_size";
++
++        /**
++         * @hide
++         */
++        public static final String KG_SMALL_CLOCK_TEXT_SIZE = "kg_small_clock_text_size";
++
+         /**
+          * Keys we no longer back up under the current schema, but want to continue to
+          * process when restoring historical backup datasets.
+diff --git a/packages/SystemUI/customization/src/com/android/systemui/shared/clocks/DefaultClockController.kt b/packages/SystemUI/customization/src/com/android/systemui/shared/clocks/DefaultClockController.kt
+index dfb48981..39e4a5fd 100644
+--- a/packages/SystemUI/customization/src/com/android/systemui/shared/clocks/DefaultClockController.kt
++++ b/packages/SystemUI/customization/src/com/android/systemui/shared/clocks/DefaultClockController.kt
+@@ -108,6 +108,8 @@ class DefaultClockController(
+         private var currentColor = Color.MAGENTA
+         private var isRegionDark = false
+         protected var targetRegion: Rect? = null
++        val Int.dp: Int get() = (this / Resources.getSystem().displayMetrics.density).toInt()
++        val Int.px: Int get() = (this * Resources.getSystem().displayMetrics.density).toInt()
+ 
+         override var logBuffer: LogBuffer?
+             get() = view.logBuffer
+@@ -137,9 +139,21 @@ class DefaultClockController(
+                 }
+ 
+                 override fun onFontSettingChanged(fontSizePx: Float) {
+-                    view.setTextSize(TypedValue.COMPLEX_UNIT_PX, fontSizePx)
++                    val smallClockTextSize = Secure.getIntForUser(ctx.getContentResolver(),
++                    Secure.KG_SMALL_CLOCK_TEXT_SIZE, 80, UserHandle.USER_CURRENT)
++                    val largeClockTextSize = Secure.getIntForUser(ctx.getContentResolver(),
++                    Secure.KG_LARGE_CLOCK_TEXT_SIZE, 86, UserHandle.USER_CURRENT)
++                    val finalSmallTextSize = smallClockTextSize.dp
++                    val finalLargeClockTextSize = largeClockTextSize.dp
++                    setClockFontSize(smallClock.view, finalSmallTextSize.px.toFloat() *  2.5f)
++                    setClockFontSize(largeClock.view, finalLargeClockTextSize.px.toFloat() * 2.5f)
+                     recomputePadding(targetRegion)
+                 }
++
++
++                fun setClockFontSize(v: AnimatableClockView, fontSizePx: Float) {
++                    v.setTextSize(TypedValue.COMPLEX_UNIT_PX, fontSizePx)
++                }
+             }
+ 
+         open fun recomputePadding(targetRegion: Rect?) {}
+diff --git a/packages/SystemUI/src/com/android/keyguard/ClockEventController.kt b/packages/SystemUI/src/com/android/keyguard/ClockEventController.kt
+index 3b9060ad..bb427b41 100644
+--- a/packages/SystemUI/src/com/android/keyguard/ClockEventController.kt
++++ b/packages/SystemUI/src/com/android/keyguard/ClockEventController.kt
+@@ -220,6 +220,7 @@ constructor(
+         object : ConfigurationController.ConfigurationListener {
+             override fun onThemeChanged() {
+                 clock?.events?.onColorPaletteChanged(resources)
++                updateFontSizes()
+                 updateColors()
+             }
+ 
+diff --git a/packages/SystemUI/src/com/android/systemui/theme/ThemeOverlayController.java b/packages/SystemUI/src/com/android/systemui/theme/ThemeOverlayController.java
+index cecb37b8..75af62ea 100644
+--- a/packages/SystemUI/src/com/android/systemui/theme/ThemeOverlayController.java
++++ b/packages/SystemUI/src/com/android/systemui/theme/ThemeOverlayController.java
+@@ -510,6 +510,30 @@ public class ThemeOverlayController implements CoreStartable, Dumpable {
+                 },
+                 UserHandle.USER_ALL);
+ 
++        mSecureSettings.registerContentObserverForUser(
++                Settings.Secure.getUriFor(Settings.Secure.KG_SMALL_CLOCK_TEXT_SIZE),
++                false,
++                new ContentObserver(mBgHandler) {
++                    @Override
++                    public void onChange(boolean selfChange, Collection<Uri> collection, int flags,
++                            int userId) {
++                        reevaluateSystemTheme(true /* forceReload */);
++                    }
++                },
++                UserHandle.USER_ALL);
++
++        mSecureSettings.registerContentObserverForUser(
++                Settings.Secure.getUriFor(Settings.Secure.KG_LARGE_CLOCK_TEXT_SIZE),
++                false,
++                new ContentObserver(mBgHandler) {
++                    @Override
++                    public void onChange(boolean selfChange, Collection<Uri> collection, int flags,
++                            int userId) {
++                        reevaluateSystemTheme(true /* forceReload */);
++                    }
++                },
++                UserHandle.USER_ALL);
++
+         mUserTracker.addCallback(mUserTrackerCallback, mMainExecutor);
+ 
+         mConfigurationController.addCallback(mConfigurationListener);
+-- 
+2.34.1
+

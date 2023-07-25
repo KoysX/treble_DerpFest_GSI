@@ -1,0 +1,24 @@
+From c5ff53a75f2e65f12b8033e45dcb8cc14ef15b2c Mon Sep 17 00:00:00 2001
+From: KoysX <2685697179b@gmail.com>
+Date: Mon, 24 Jul 2023 19:49:52 +0800
+Subject: [PATCH] add-zh
+
+---
+ res/values-zh-rCN/strings.xml | 3 +++
+ 1 file changed, 3 insertions(+)
+
+diff --git a/res/values-zh-rCN/strings.xml b/res/values-zh-rCN/strings.xml
+index e035904..f7eea71 100644
+--- a/res/values-zh-rCN/strings.xml
++++ b/res/values-zh-rCN/strings.xml
+@@ -579,4 +579,7 @@
+     <!-- Lockscreen Clock -->
+     <string name="lockscreen_clock_title">时钟</string>
+     <string name="kg_custom_clock_top_margin_title">双线时钟位置</string>
++
++    <string name="kg_small_clock_text_size_title">小锁屏时钟尺寸</string>
++    <string name="kg_big_clock_text_size_title">双线锁屏时钟尺寸</string>
+ </resources>
+-- 
+2.34.1
+
