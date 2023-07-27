@@ -19,5 +19,8 @@ EXTRA_UDFPS_ANIMATIONS := true
 TARGET_SUPPORTS_QUICK_TAP := true
 USE_LEGACY_BOOTANIMATION := false
 
-#PRODUCT_PACKAGES += \
-#      OnePlusCameraHelper
+PRODUCT_PACKAGES += \
+      OnePlusCameraHelper
+
+PRODUCT_SYSTEM_DEFAULT_PROPERTIES += \
+    ro.system.ota.json_url=https://raw.githubusercontent.com/KoysX/treble_DerpFest_GSI/13/ota.json
