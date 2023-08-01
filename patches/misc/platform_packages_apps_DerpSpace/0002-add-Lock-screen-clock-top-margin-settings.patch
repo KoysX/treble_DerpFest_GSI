@@ -1,6 +1,6 @@
-From 02fad8736faa218550daf3c8e618a9368b28cf84 Mon Sep 17 00:00:00 2001
+From 2d9f34ff01501510c76040e0e9ca61f587f54774 Mon Sep 17 00:00:00 2001
 From: KoysX <2685697179b@gmail.com>
-Date: Fri, 21 Jul 2023 13:20:05 +0800
+Date: Mon, 31 Jul 2023 12:04:36 +0800
 Subject: [PATCH] add-Lock-screen-clock-top-margin-settings
 
 ---
@@ -9,10 +9,10 @@ Subject: [PATCH] add-Lock-screen-clock-top-margin-settings
  2 files changed, 19 insertions(+)
 
 diff --git a/res/values/strings.xml b/res/values/strings.xml
-index b18b967..4421982 100644
+index 9e81a31..5f240eb 100644
 --- a/res/values/strings.xml
 +++ b/res/values/strings.xml
-@@ -580,4 +580,8 @@
+@@ -586,4 +586,8 @@
      <!-- Hide statusbar on lockscreen -->
      <string name="lockscreen_hide_status_bar_title">Hide Statusbar</string>
      <string name="lockscreen_hide_status_bar_summary">When enabled, statusbar will be hidden on lockscreen</string>

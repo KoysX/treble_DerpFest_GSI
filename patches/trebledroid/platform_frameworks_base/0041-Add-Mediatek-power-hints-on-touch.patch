@@ -1,6 +1,6 @@
-From e0420ca841793f33451d90194d69e1dccd21b17f Mon Sep 17 00:00:00 2001
+From b072f2416eb38a567f6ec6c1ffe79e0f503f83bd Mon Sep 17 00:00:00 2001
 From: KoysX <2685697179b@gmail.com>
-Date: Thu, 20 Jul 2023 10:25:37 +0800
+Date: Mon, 31 Jul 2023 13:57:08 +0800
 Subject: [PATCH] Add-Mediatek-power-hints-on-touch
 
 ---
@@ -9,13 +9,13 @@ Subject: [PATCH] Add-Mediatek-power-hints-on-touch
  2 files changed, 50 insertions(+)
 
 diff --git a/services/core/Android.bp b/services/core/Android.bp
-index 8ad1fec9..1d9f3c27 100644
+index f406226e..dc2e4c35 100644
 --- a/services/core/Android.bp
 +++ b/services/core/Android.bp
-@@ -180,6 +180,7 @@ java_library_static {
+@@ -179,6 +179,7 @@ java_library_static {
+         "kotlinx_coroutines_android",
          "kotlinx_coroutines",
          "faceunlock_framework",
-         // HIDL
 +        "vendor.mediatek.hardware.mtkpower-V1.1-java",
          "vendor.samsung.hardware.sysinput-V1.2-java",
          "vendor.goodix.hardware.biometrics.fingerprint-V2.1-java",

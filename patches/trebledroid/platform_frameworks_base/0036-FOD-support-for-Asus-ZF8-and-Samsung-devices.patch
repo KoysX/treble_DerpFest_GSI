@@ -1,37 +1,34 @@
-From c05651782358638ace34956b145d84a3e9bbce1c Mon Sep 17 00:00:00 2001
-From: Pierre-Hugues Husson <phh@phh.me>
-Date: Sun, 18 Dec 2022 18:20:40 -0500
-Subject: [PATCH 36/37] FOD support for Asus ZF8 and Samsung devices
+From 67cbeafc5fcae105aa20736048915c24d4717b77 Mon Sep 17 00:00:00 2001
+From: KoysX <2685697179b@gmail.com>
+Date: Mon, 31 Jul 2023 13:44:30 +0800
+Subject: [PATCH] FOD-support-for-Asus-ZF8-and-Samsung-devices
 
-Thanks Asus for providing a free device to make this support
-And thanks @davigamer987 for donating enough to get a Samsung FOD device
-to make this
 ---
  packages/SystemUI/Android.bp                  |   1 +
  packages/SystemUI/res/values/config.xml       |   2 +-
-  .../android/systemui/biometrics/UdfpsControllerOverlay.kt  | 7 ++++++-
+ .../biometrics/UdfpsControllerOverlay.kt      |   7 +-
  .../android/systemui/biometrics/UdfpsView.kt  | 138 ++++++++++
- services/core/Android.bp                      |   7 +-
+ services/core/Android.bp                      |   6 +-
  .../server/biometrics/AuthService.java        | 238 +++++++++++++++++-
- 6 files changed, 388 insertions(+), 5 deletions(-)
+ 6 files changed, 387 insertions(+), 5 deletions(-)
 
 diff --git a/packages/SystemUI/Android.bp b/packages/SystemUI/Android.bp
-index 8f5851533929..3fb31499df69 100644
+index eff370f4..13a86a60 100644
 --- a/packages/SystemUI/Android.bp
 +++ b/packages/SystemUI/Android.bp
-@@ -128,6 +128,7 @@ android_library {
+@@ -179,6 +179,7 @@ android_library {
+         "motion_tool_lib",
          "faceunlock_framework",
          "vendor.lineage.powershare-V1.0-java",
-         "bcsmartspace-google",
 +        "vendor.goodix.hardware.biometrics.fingerprint-V2.1-java",
      ],
      manifest: "AndroidManifest.xml",
      additional_manifests: ["DerpFestManifest.xml"],
 diff --git a/packages/SystemUI/res/values/config.xml b/packages/SystemUI/res/values/config.xml
-index 24ff595ad369..29cddb1d9a4f 100644
+index 25b30d6f..e09a66a6 100644
 --- a/packages/SystemUI/res/values/config.xml
 +++ b/packages/SystemUI/res/values/config.xml
-@@ -583,7 +583,7 @@
+@@ -585,7 +585,7 @@
  
      <!-- The radius of the enrollment progress bar, in dp -->
      <integer name="config_udfpsEnrollProgressBar" translatable="false">
@@ -66,7 +63,7 @@ index 6fad2b2d..f9216750 100644
                          if (accessibilityManager.isTouchExplorationEnabled) {
                              setOnHoverListener { v, event -> onTouch(v, event, true) }
 diff --git a/packages/SystemUI/src/com/android/systemui/biometrics/UdfpsView.kt b/packages/SystemUI/src/com/android/systemui/biometrics/UdfpsView.kt
-index a15456d46897..a78a478c3006 100644
+index e61c614f..59554b3a 100644
 --- a/packages/SystemUI/src/com/android/systemui/biometrics/UdfpsView.kt
 +++ b/packages/SystemUI/src/com/android/systemui/biometrics/UdfpsView.kt
 @@ -19,18 +19,27 @@ import android.content.Context
@@ -161,7 +158,7 @@ index a15456d46897..a78a478c3006 100644
      /** Debug message. */
      var debugMessage: String? = null
          set(value) {
-@@ -150,15 +209,94 @@ class UdfpsView(
+@@ -146,15 +205,94 @@ class UdfpsView(
              !(animationViewController?.shouldPauseAuth() ?: false)
      }
  
@@ -257,15 +254,14 @@ index a15456d46897..a78a478c3006 100644
      }
  }
 diff --git a/services/core/Android.bp b/services/core/Android.bp
-index aa0b20382da0..1541ae5ca0e5 100644
+index 4b98acf3..f406226e 100644
 --- a/services/core/Android.bp
 +++ b/services/core/Android.bp
-@@ -180,7 +180,12 @@ java_library_static {
+@@ -179,7 +179,11 @@ java_library_static {
          "kotlinx_coroutines_android",
          "kotlinx_coroutines",
          "faceunlock_framework",
 -        "vendor.samsung.hardware.sysinput-V1.2-java", // HIDL
-+        // HIDL
 +        "vendor.samsung.hardware.sysinput-V1.2-java",
 +        "vendor.goodix.hardware.biometrics.fingerprint-V2.1-java",
 +        "vendor.samsung.hardware.biometrics.fingerprint-V3.0-java",
@@ -275,7 +271,7 @@ index aa0b20382da0..1541ae5ca0e5 100644
      javac_shard_size: 50,
  }
 diff --git a/services/core/java/com/android/server/biometrics/AuthService.java b/services/core/java/com/android/server/biometrics/AuthService.java
-index 48293576519b..b47b47c41f76 100644
+index 6fbc3c66..748152aa 100644
 --- a/services/core/java/com/android/server/biometrics/AuthService.java
 +++ b/services/core/java/com/android/server/biometrics/AuthService.java
 @@ -75,6 +75,22 @@ import java.util.ArrayList;

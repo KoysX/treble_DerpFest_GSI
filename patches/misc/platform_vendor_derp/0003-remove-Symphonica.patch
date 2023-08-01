@@ -1,0 +1,27 @@
+From a36683e51790f1dab6f0d1650affa11ea5b009be Mon Sep 17 00:00:00 2001
+From: KoysX <2685697179b@gmail.com>
+Date: Mon, 31 Jul 2023 23:29:47 +0800
+Subject: [PATCH] remove-Symphonica
+
+---
+ config/common_full.mk | 4 ----
+ 1 file changed, 4 deletions(-)
+
+diff --git a/config/common_full.mk b/config/common_full.mk
+index 95cd28c..006ec45 100644
+--- a/config/common_full.mk
++++ b/config/common_full.mk
+@@ -3,10 +3,6 @@ $(call inherit-product, vendor/derp/config/common_mobile.mk)
+ 
+ PRODUCT_SIZE := full
+ 
+-# Apps
+-PRODUCT_PACKAGES += \
+-    Symphonica
+-
+ ifneq ($(PRODUCT_NO_CAMERA),true)
+ PRODUCT_PACKAGES += \
+     Flash
+-- 
+2.34.1
+

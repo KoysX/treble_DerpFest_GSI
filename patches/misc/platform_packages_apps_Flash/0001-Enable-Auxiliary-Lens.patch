@@ -1,14 +1,14 @@
-From f75a9f85f373f70748de6146ff12a68ddd63c863 Mon Sep 17 00:00:00 2001
-From: ChonDoit <thphantomblog@gmail.com>
-Date: Mon, 24 Apr 2023 16:55:33 +0000
-Subject: [PATCH] Enable Auxiliary Lens
+From 6b71ec8e61ba70a552116f1b71ce664cec37974d Mon Sep 17 00:00:00 2001
+From: KoysX <2685697179b@gmail.com>
+Date: Mon, 31 Jul 2023 23:36:24 +0800
+Subject: [PATCH] Enable-Auxiliary-Lens
 
 ---
  app/src/main/res/values/config.xml | 8 ++------
  1 file changed, 2 insertions(+), 6 deletions(-)
 
 diff --git a/app/src/main/res/values/config.xml b/app/src/main/res/values/config.xml
-index 13f7ddf..7e11b25 100644
+index 3fe8772..885084f 100644
 --- a/app/src/main/res/values/config.xml
 +++ b/app/src/main/res/values/config.xml
 @@ -5,7 +5,7 @@
