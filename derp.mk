@@ -21,3 +21,6 @@ USE_LEGACY_BOOTANIMATION := false
 
 #PRODUCT_PACKAGES += \
 #      OnePlusCameraHelper
+
+PRODUCT_SYSTEM_DEFAULT_PROPERTIES += \
+    ro.system.ota.json_url=https://raw.githubusercontent.com/KoysX/treble_DerpFest_GSI/13/ota.json
