@@ -1,25 +1,17 @@
-From 2d82e16bd3da008a352914e7316e70aca2e5aed0 Mon Sep 17 00:00:00 2001
+From 75e8f7bbe3606b393759f143e9d932dab17bdf4d Mon Sep 17 00:00:00 2001
 From: KoysX <2685697179b@gmail.com>
-Date: Mon, 31 Jul 2023 12:22:21 +0800
+Date: Sun, 13 Aug 2023 10:59:24 +0800
 Subject: [PATCH] add-Chinese-translation
 
 ---
- res/values-zh-rCN/strings.xml | 22 +++++++++++++++++++++-
- 1 file changed, 21 insertions(+), 1 deletion(-)
+ res/values-zh-rCN/strings.xml | 24 ++++++++++++++++++++++++
+ 1 file changed, 24 insertions(+)
 
 diff --git a/res/values-zh-rCN/strings.xml b/res/values-zh-rCN/strings.xml
-index 4d774fc..6b0e180 100644
+index 4d774fc..ca4deb8 100644
 --- a/res/values-zh-rCN/strings.xml
 +++ b/res/values-zh-rCN/strings.xml
-@@ -374,6 +374,7 @@
-     <string name="notification_material_dismiss_bgstyle_dashedline">带虚线的正方形</string>
-     <string name="notification_material_dismiss_bgstyle_circle_accent">环状 (带取色描边)</string>
-     <string name="notification_material_dismiss_bgstyle_rectangle_accent">圆角矩形 (带取色描边)</string>
-+    <string name="notification_material_dismiss_bgstyle_rectangle_gradient">具有渐变背景的圆角矩形</string>
- 
-     <!-- Bluetooth status -->
-     <string name="bluetooth_battery_title">蓝牙设备电量显示</string>
-@@ -511,6 +512,12 @@
+@@ -511,6 +511,12 @@
      <!-- Fingerprint authentication vibration -->
      <string name="fprint_sucess_vib_title">指纹识别振动</string>
      <string name="fprint_sucess_vib_summary">当指纹识别成功时振动</string>
@@ -32,14 +24,16 @@ index 4d774fc..6b0e180 100644
  
      <!-- Navbar styles -->
      <string name="theme_customization_navbar_title">导航栏样式</string>
-@@ -570,5 +577,18 @@
-     <string name="status_bar_battery_percent_text_next_right">在图标右侧显示</string>
+@@ -571,4 +577,22 @@
      <string name="status_bar_battery_percent_text_next_left">在图标左侧显示</string>
      <string name="status_bar_battery_text_charging_title">充电时显示百分比</string>
--    <string name="status_bar_battery_text_charging_summary">充电时总是显示百分比</string>
-+    <string name="status_bar_battery_text_charging_summary">充电时始终显示电池百分比</string>
+     <string name="status_bar_battery_text_charging_summary">充电时总是显示百分比</string>
 +    <!-- QS battery -->
 +    <string name="qs_use_status_bar_battery_style">遵循状态栏样式</string>
++
++    <!-- Brightness slider haptic feedback -->
++    <string name="qs_brightness_slider_haptic_title">触觉反馈</string>
++    <string name="qs_brightness_slider_haptic_summary">使用滑块提供有关更改亮度的触觉反馈</string>
 +
 +    <!-- Hide statusbar on lockscreen -->
 +    <string name="lockscreen_hide_status_bar_title">隐藏状态栏</string>
@@ -49,6 +43,7 @@ index 4d774fc..6b0e180 100644
 +    <string name="lockscreen_clock_title">时钟</string>
 +    <string name="kg_custom_clock_top_margin_title">双线时钟位置</string>
 +
++    <!-- Lockscreen Clock size -->
 +    <string name="kg_small_clock_text_size_title">小锁屏时钟尺寸</string>
 +    <string name="kg_big_clock_text_size_title">双线锁屏时钟尺寸</string>
  </resources>

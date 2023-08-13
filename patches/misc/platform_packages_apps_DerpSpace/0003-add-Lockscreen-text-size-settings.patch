@@ -1,31 +1,32 @@
-From 92e902002225590a1e63afd3b82189dc31a3a865 Mon Sep 17 00:00:00 2001
+From 676bfc4aa4b904cc65ae850f96f406bf8867860d Mon Sep 17 00:00:00 2001
 From: KoysX <2685697179b@gmail.com>
-Date: Mon, 31 Jul 2023 12:08:22 +0800
+Date: Sun, 13 Aug 2023 10:42:12 +0800
 Subject: [PATCH] add-Lockscreen-text-size-settings
 
 ---
- res/values/strings.xml    |  3 +++
+ res/values/strings.xml    |  4 ++++
  res/xml/lockscreen_ui.xml | 18 ++++++++++++++++++
- 2 files changed, 21 insertions(+)
+ 2 files changed, 22 insertions(+)
 
 diff --git a/res/values/strings.xml b/res/values/strings.xml
-index 5f240eb..29144b5 100644
+index 489b747..35b8cce 100644
 --- a/res/values/strings.xml
 +++ b/res/values/strings.xml
-@@ -590,4 +590,7 @@
+@@ -594,4 +594,8 @@
      <!-- Lockscreen Clock -->
      <string name="lockscreen_clock_title">Clock</string>
      <string name="kg_custom_clock_top_margin_title">Double-line clock position</string>
 +
++    <!-- Lockscreen Clock size -->
 +    <string name="kg_small_clock_text_size_title">Small Lockscreen clock size</string>
 +    <string name="kg_big_clock_text_size_title">Double-line Lockscreen clock size</string>
  </resources>
 diff --git a/res/xml/lockscreen_ui.xml b/res/xml/lockscreen_ui.xml
-index fd675c4..1d23476 100644
+index 33f213e..ce6535f 100644
 --- a/res/xml/lockscreen_ui.xml
 +++ b/res/xml/lockscreen_ui.xml
 @@ -64,6 +64,24 @@
-             android:defaultValue="180"
+             android:defaultValue="68"
              settings:units="@string/unit_pixels" />
  
 +        <org.derpfest.support.preferences.SecureSettingSeekBarPreference
@@ -43,7 +44,7 @@ index fd675c4..1d23476 100644
 +        android:max="250"
 +        settings:min="25"
 +        settings:interval="1"
-+        android:defaultValue="180"
++        android:defaultValue="160"
 +        settings:units="@string/unit_pixels" />
 +
      </PreferenceCategory>

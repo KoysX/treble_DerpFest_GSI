@@ -1,6 +1,6 @@
-From 66ddae65acf4740eb29f7f4886e441422920e0ca Mon Sep 17 00:00:00 2001
+From 8c62135950a5e402d218b4be10f98055245c2049 Mon Sep 17 00:00:00 2001
 From: KoysX <2685697179b@gmail.com>
-Date: Mon, 31 Jul 2023 11:46:12 +0800
+Date: Sun, 13 Aug 2023 10:34:10 +0800
 Subject: [PATCH] add-hide-status-bar-on-lock-screen
 
 ---
@@ -9,13 +9,13 @@ Subject: [PATCH] add-hide-status-bar-on-lock-screen
  2 files changed, 10 insertions(+)
 
 diff --git a/res/values/strings.xml b/res/values/strings.xml
-index a8abb31..9e81a31 100644
+index 8323f67..fd8498e 100644
 --- a/res/values/strings.xml
 +++ b/res/values/strings.xml
-@@ -582,4 +582,8 @@
- 
-     <!-- QS battery -->
-     <string name="qs_use_status_bar_battery_style">Follow status bar style</string>
+@@ -586,4 +586,8 @@
+     <!-- Brightness slider haptic feedback -->
+     <string name="qs_brightness_slider_haptic_title">Haptic feedback</string>
+     <string name="qs_brightness_slider_haptic_summary">Provide haptic feedback on changing brightness using slider</string>
 +
 +    <!-- Hide statusbar on lockscreen -->
 +    <string name="lockscreen_hide_status_bar_title">Hide Statusbar</string>
