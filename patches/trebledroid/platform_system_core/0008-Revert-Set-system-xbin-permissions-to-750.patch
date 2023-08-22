@@ -1,11 +1,8 @@
-From 6e4cd954acc520057a4cb83f0d6a0386864b8309 Mon Sep 17 00:00:00 2001
-From: Alberto Ponces <ponces26@gmail.com>
-Date: Tue, 1 Feb 2022 13:48:35 +0000
-Subject: [PATCH 08/16] Revert "Set /system/xbin permissions to 750."
+From 727bdcdb393afaf1f0f6264e973e8bf2937c65d8 Mon Sep 17 00:00:00 2001
+From: KoysX <2685697179b@gmail.com>
+Date: Tue, 22 Aug 2023 18:56:22 +0800
+Subject: [PATCH] Revert-Set-system-xbin-permissions-to-750
 
-This reverts commit 42a1a126e554a8bca31d0afc832848b7b0fa1f4e.
-
-Change-Id: I277def5153616d6f00bc877e6170b7fed7cd799d
 ---
  libcutils/fs_config.cpp | 2 +-
  1 file changed, 1 insertion(+), 1 deletion(-)
@@ -24,5 +21,5 @@ index 6f7cbff..0d9736a 100644
      { 00751, AID_ROOT,         AID_SHELL,        0, "system_ext/bin" },
      { 00751, AID_ROOT,         AID_SHELL,        0, "system_ext/apex/*/bin" },
 -- 
-2.39.2
+2.34.1
 

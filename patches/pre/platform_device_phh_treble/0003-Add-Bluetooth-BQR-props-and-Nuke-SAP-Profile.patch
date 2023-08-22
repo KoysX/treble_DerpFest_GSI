@@ -1,0 +1,40 @@
+From 04a0ae146c09fe0e9da2d959df253a03ecb0edf5 Mon Sep 17 00:00:00 2001
+From: ChonDoit <thphantomblog@gmail.com>
+Date: Mon, 19 Jun 2023 22:26:48 +0000
+Subject: [PATCH] Add Bluetooth BQR props and Nuke SAP Profile
+
+---
+ system.prop | 10 +++++++++-
+ 1 file changed, 9 insertions(+), 1 deletion(-)
+
+diff --git a/system.prop b/system.prop
+index fa2a5c9..bfb6145 100644
+--- a/system.prop
++++ b/system.prop
+@@ -30,6 +30,7 @@ bluetooth.device.class_of_device=90,2,12
+ 
+ # Enable system-side generic bluetooth audio HAL
+ persist.bluetooth.system_audio_hal.enabled=1
++
+ # Set commonly-supported Bluetooth profiles to enabled
+ # TODO: Enable BLE Audio profiles on newer vendors
+ bluetooth.profile.asha.central.enabled?=true
+@@ -45,7 +46,14 @@ bluetooth.profile.opp.enabled?=true
+ bluetooth.profile.pan.nap.enabled?=true
+ bluetooth.profile.pan.panu.enabled?=true
+ bluetooth.profile.pbap.server.enabled?=true
+-bluetooth.profile.sap.server.enabled?=true
++#bluetooth.profile.sap.server.enabled?=true
++
++# System props to enable Bluetooth Quality Report (BQR) feature
++# BQR event mask configuration
++persist.bluetooth.bqr.event_mask=14
++
++# BQR minimum report interval configuration
++persist.bluetooth.bqr.min_interval_ms=500
+ 
+ # Samsung vendors default to a Samsung-specific gadget for MTP. Set this to use AOSP's functionfs MTP
+ vendor.usb.use_ffs_mtp=1
+-- 
+2.34.1
+

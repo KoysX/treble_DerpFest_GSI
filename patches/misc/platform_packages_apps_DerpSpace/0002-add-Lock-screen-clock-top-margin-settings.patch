@@ -1,6 +1,6 @@
-From 66b2552ddebfec8d865dbbf875caa834f4a1601e Mon Sep 17 00:00:00 2001
+From a4f394dbe507e2eab074c2284e624d499ff33644 Mon Sep 17 00:00:00 2001
 From: KoysX <2685697179b@gmail.com>
-Date: Sun, 13 Aug 2023 10:38:07 +0800
+Date: Tue, 22 Aug 2023 17:27:22 +0800
 Subject: [PATCH] add-Lock-screen-clock-top-margin-settings
 
 ---
@@ -9,20 +9,22 @@ Subject: [PATCH] add-Lock-screen-clock-top-margin-settings
  2 files changed, 19 insertions(+)
 
 diff --git a/res/values/strings.xml b/res/values/strings.xml
-index fd8498e..489b747 100644
+index 016f32d..497900b 100644
 --- a/res/values/strings.xml
 +++ b/res/values/strings.xml
-@@ -590,4 +590,8 @@
-     <!-- Hide statusbar on lockscreen -->
+@@ -584,6 +584,10 @@
      <string name="lockscreen_hide_status_bar_title">Hide Statusbar</string>
      <string name="lockscreen_hide_status_bar_summary">When enabled, statusbar will be hidden on lockscreen</string>
-+
+ 
 +    <!-- Lockscreen Clock -->
 +    <string name="lockscreen_clock_title">Clock</string>
 +    <string name="kg_custom_clock_top_margin_title">Double-line clock position</string>
- </resources>
++
+     <!-- QS battery -->
+     <string name="qs_use_status_bar_battery_style">Follow status bar style</string>
+ 
 diff --git a/res/xml/lockscreen_ui.xml b/res/xml/lockscreen_ui.xml
-index c16cf19..33f213e 100644
+index c16cf19..304da54 100644
 --- a/res/xml/lockscreen_ui.xml
 +++ b/res/xml/lockscreen_ui.xml
 @@ -43,12 +43,27 @@

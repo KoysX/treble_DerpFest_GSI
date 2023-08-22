@@ -1,39 +1,33 @@
-From 75e8f7bbe3606b393759f143e9d932dab17bdf4d Mon Sep 17 00:00:00 2001
+From 6e72ff95b3b1ad5f3481080cd6bf073b04c31219 Mon Sep 17 00:00:00 2001
 From: KoysX <2685697179b@gmail.com>
-Date: Sun, 13 Aug 2023 10:59:24 +0800
+Date: Tue, 22 Aug 2023 18:37:29 +0800
 Subject: [PATCH] add-Chinese-translation
 
 ---
- res/values-zh-rCN/strings.xml | 24 ++++++++++++++++++++++++
- 1 file changed, 24 insertions(+)
+ res/values-zh-rCN/strings.xml | 29 +++++++++++++++++++++++++++++
+ 1 file changed, 29 insertions(+)
 
 diff --git a/res/values-zh-rCN/strings.xml b/res/values-zh-rCN/strings.xml
-index 4d774fc..ca4deb8 100644
+index 4d774fc..9bb4654 100644
 --- a/res/values-zh-rCN/strings.xml
 +++ b/res/values-zh-rCN/strings.xml
-@@ -511,6 +511,12 @@
-     <!-- Fingerprint authentication vibration -->
+@@ -512,6 +512,12 @@
      <string name="fprint_sucess_vib_title">指纹识别振动</string>
      <string name="fprint_sucess_vib_summary">当指纹识别成功时振动</string>
+ 
 +    <!-- QS Header -->
 +    <string name="qs_header_image_title">QS 标题图片</string>
 +
 +    <!-- Brightness slider styles -->
 +    <string name="theme_customization_brightness_slider_title">亮度滑块样式</string>
 +    <string name="theme_customization_brightness_slider_summary">设置自定义亮度滑块样式</string>
- 
      <!-- Navbar styles -->
      <string name="theme_customization_navbar_title">导航栏样式</string>
-@@ -571,4 +577,22 @@
+     <string name="theme_customization_navbar_summary">自定义导航栏样式</string>
+@@ -571,4 +577,27 @@
      <string name="status_bar_battery_percent_text_next_left">在图标左侧显示</string>
      <string name="status_bar_battery_text_charging_title">充电时显示百分比</string>
      <string name="status_bar_battery_text_charging_summary">充电时总是显示百分比</string>
-+    <!-- QS battery -->
-+    <string name="qs_use_status_bar_battery_style">遵循状态栏样式</string>
-+
-+    <!-- Brightness slider haptic feedback -->
-+    <string name="qs_brightness_slider_haptic_title">触觉反馈</string>
-+    <string name="qs_brightness_slider_haptic_summary">使用滑块提供有关更改亮度的触觉反馈</string>
 +
 +    <!-- Hide statusbar on lockscreen -->
 +    <string name="lockscreen_hide_status_bar_title">隐藏状态栏</string>
@@ -46,6 +40,17 @@ index 4d774fc..ca4deb8 100644
 +    <!-- Lockscreen Clock size -->
 +    <string name="kg_small_clock_text_size_title">小锁屏时钟尺寸</string>
 +    <string name="kg_big_clock_text_size_title">双线锁屏时钟尺寸</string>
++
++    <!-- QS battery -->
++    <string name="qs_use_status_bar_battery_style">遵循状态栏样式</string>
++
++    <!-- Brightness slider haptic feedback -->
++    <string name="qs_brightness_slider_haptic_title">触觉反馈</string>
++    <string name="qs_brightness_slider_haptic_summary">使用滑块提供有关更改亮度的触觉反馈</string>
++
++    <!-- Custom Data icons -->
++    <string name="theme_customization_data_title">数据图标样式</string>
++    <string name="theme_customization_data_summary">设置自定义数据图标样式</string>
  </resources>
 -- 
 2.34.1
