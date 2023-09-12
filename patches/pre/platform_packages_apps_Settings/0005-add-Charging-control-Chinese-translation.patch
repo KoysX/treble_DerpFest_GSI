@@ -1,0 +1,40 @@
+From a735161d6f95ec341752cfd720c3abdbdcef0d74 Mon Sep 17 00:00:00 2001
+From: KoysX <2685697179b@gmail.com>
+Date: Tue, 12 Sep 2023 12:36:33 +0800
+Subject: [PATCH] add-Charging-control-Chinese-translation
+
+---
+ res/values-zh-rCN/derp_strings.xml | 17 +++++++++++++++++
+ 1 file changed, 17 insertions(+)
+
+diff --git a/res/values-zh-rCN/derp_strings.xml b/res/values-zh-rCN/derp_strings.xml
+index 67dcc85..ebc0d48 100644
+--- a/res/values-zh-rCN/derp_strings.xml
++++ b/res/values-zh-rCN/derp_strings.xml
+@@ -348,6 +348,23 @@
+     <string name="light_brightness_normal">正常</string>
+     <string name="light_brightness_zen">请勿打扰</string>
+ 
++    <!-- Charging control settings -->
++    <string name="charging_control_title">充电控制</string>
++    <string name="charging_control_summary">为您的设备自定义充电时间表和限制</string>
++    <string name="charging_control_enable_title">启用充电控制</string>
++    <string name="charging_control_mode_title">充电方式</string>
++    <string name="charging_control_mode_auto_title">自动排程</string>
++    <string name="charging_control_mode_auto_summary">根据设置的警报自动确定何时开始充电</string>
++    <string name="charging_control_mode_custom_title">定制时间表</string>
++    <string name="charging_control_mode_custom_summary">设置充满电的目标时间</string>
++    <string name="charging_control_mode_limit_title">限制充电</string>
++    <string name="charging_control_mode_limit_summary">将充电限制在一定百分比</string>
++    <string name="charging_control_start_time_title">开始时间</string>
++    <string name="charging_control_start_time_summary">当您在 %s 之后开始充电时，充电控制将激活</string>
++    <string name="charging_control_target_time_title">充满电的目标时间</string>
++    <string name="charging_control_target_time_summary">电池将在 %s 之前充满电</string>
++    <string name="charging_control_limit_title">限制</string>
++
+     <!-- Battery light settings -->
+     <string name="battery_light_title">电池灯</string>
+     <string name="battery_light_summary">自定义电池灯行为</string>
+-- 
+2.34.1
+

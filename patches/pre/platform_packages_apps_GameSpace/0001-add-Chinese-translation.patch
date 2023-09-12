@@ -1,0 +1,107 @@
+From d243ce7d8837429b3a5a49030bd5b2903c5c083a Mon Sep 17 00:00:00 2001
+From: KoysX <2685697179b@gmail.com>
+Date: Tue, 12 Sep 2023 12:53:24 +0800
+Subject: [PATCH] add-Chinese-translation
+
+---
+ app/src/main/res/values-zh-rCN/strings.xml | 72 +++++++++++++++++-----
+ 1 file changed, 57 insertions(+), 15 deletions(-)
+
+diff --git a/app/src/main/res/values-zh-rCN/strings.xml b/app/src/main/res/values-zh-rCN/strings.xml
+index 565a856..961e132 100644
+--- a/app/src/main/res/values-zh-rCN/strings.xml
++++ b/app/src/main/res/values-zh-rCN/strings.xml
+@@ -17,19 +17,17 @@
+ <resources>
+     <string name="settings_title">游戏空间</string>
+     <string name="settings_summary">管理您的游戏设置</string>
+-    <string name="app_selector_label">选择您的游戏</string>
++
++    <!-- Game options -->
+     <string name="auto_brightness_disabled_title">禁用自动亮度</string>
+-    <string name="auto_brightness_disabled_summary">在游戏中保持亮度稳定</string>
+-    <string name="heads_up_disabled_title">禁用悬浮通知</string>
+-    <string name="heads_up_disabled_summary">在游戏中禁用悬浮通知</string>
+-    <string name="game_list_title">游戏库</string>
+-    <string name="game_remove_message">确定从你的游戏库中删除 %1$s 吗?</string>
+-    <string name="app_search_title">搜索</string>
+-    <string name="three_screenshot_disabled_summary">游戏中临时禁用三指截图手势</string>
+-    <string name="three_screenshot_disabled_title">禁用三指截图</string>
++    <string name="auto_brightness_disabled_summary">游戏中保持亮度稳定</string>
++    <string name="in_game_preferences_title">游戏内选项</string>
++    <string name="three_screenshot_disabled_summary">游戏中暂时禁用三指滑动截图手势</string>
++    <string name="three_screenshot_disabled_title">禁用滑动屏幕截图</string>
+     <string name="chaldea">chaldeaprjkt</string>
+-    <string name="state_enabled">已启用</string>
++    <string name="state_enabled">启用</string>
+     <string name="state_disabled">禁用</string>
++
+     <!-- Game Mode Name - sorted by GameManager's enum, do not modify the sequence! -->
+     <string name="game_mode_title">游戏模式</string>
+     <string-array name="game_mode_names">
+@@ -38,13 +36,57 @@
+         <item>性能</item>
+         <item>省电</item>
+     </string-array>
+-    <string name="heads_up_title">警告</string>
+-    <string name="fps_Info_title">帧率信息</string>
++    <string name="fps_Info_title">帧数信息</string>
++    <string name="notifications_title">通知</string>
++    <string name="notifications_hide">隐藏</string>
++    <string name="notifications_headsup">抬头</string>
++    <string name="notifications_reticker">reTicker</string>
++    <string name="notifications_danmaku">弹幕</string>
+     <string name="stay_awake_title">永不息屏</string>
+-    <string name="stay_awake_summary">在游戏中保持亮屏</string>
++    <string name="stay_awake_summary">游戏中保持屏幕常亮</string>
+ 
+-    <string name="ringer_mode_title">游戏内铃声</string>
++    <string name="ringer_mode_title">游戏内铃声模式</string>
++    <string-array name="ringer_mode_entries">
++        <item>静音</item>
++        <item>振动</item>
++        <item>正常</item>
++        <item>保持原样</item>
++    </string-array>
+ 
+     <string name="suppress_fullscreen_intent_title">阻止全屏事件</string>
+-    <string name="suppress_fullscreen_intent_summary">防止游戏中出现诸如来电之类的全屏事件</string>
++    <string name="suppress_fullscreen_intent_summary">防止在游戏中出现全屏事件，例如来电</string>
++
++    <!-- Game picker -->
++    <string name="game_list_title">图书馆</string>
++    <string name="game_list_add_title">添加</string>
++    <string name="app_selector_label">选择你的游戏</string>
++    <string name="app_search_title">搜索</string>
++    <string name="game_remove_message">您确定要从游戏列表中删除 %1$s 吗？</string>
++
++    <!-- Configure game -->
++    <string name="per_app_title">配置游戏</string>
++    <string name="per_app_mode_title">首选模式</string>
++    <string-array name="per_app_preferred_mode_entries">
++        <item>均衡</item>
++        <item>性能</item>
++        <item>省电</item>
++    </string-array>
++    <string name="per_app_angle_title">使用 ANGLE（实验）</string>
++    <string name="per_app_angle_summary">如果设备支持，请使用 ANGLE 渲染器而不是本机 GLES 驱动程序。\n警告！！ 可能会破坏游戏画面，请谨慎使用！</string>
++    <string name="cant_find_angle_pkg">ANGLE 在您的系统上不可用</string>
++    <string name="per_app_unregister">从库中删除 %1$s</string>
++
++    <string name="gamespace_menu_opacity_title">覆盖菜单不透明度级别</string>
++
++    <string name="in_game_calls_title">游戏内通话</string>
++    <string name="in_game_calls_no_action">无动作</string>
++    <string name="in_game_calls_auto_answer">自动接听</string>
++    <string name="in_game_calls_auto_reject">自动拒绝</string>
++    <string name="in_game_calls_received_number">接到%1$s打来的电话</string>
++    <string name="in_game_calls_rejected_number">已拒绝 %1$s 的来电</string>
++    <string name="in_game_notifications_title">游戏内通知</string>
++    <string name="in_game_notifications_hide">不显示</string>
++    <string name="in_game_notifications_headsup">显示为抬头</string>
++    <string name="in_game_notifications_reticker">显示为 reTicker</string>
++    <string name="in_game_notifications_danmaku">显示为弹幕</string>
+ </resources>
+-- 
+2.34.1
+

@@ -1,0 +1,51 @@
+From 11fce2d24b4147df6a37efc8be7627509cd8b4a3 Mon Sep 17 00:00:00 2001
+From: KoysX <2685697179b@gmail.com>
+Date: Tue, 12 Sep 2023 12:25:29 +0800
+Subject: [PATCH] add-zh-rcn
+
+---
+ res/values-zh-rCN/derp_strings.xml | 29 +++++++++++++++++++++++++++++
+ 1 file changed, 29 insertions(+)
+
+diff --git a/res/values-zh-rCN/derp_strings.xml b/res/values-zh-rCN/derp_strings.xml
+index a311d30..67dcc85 100644
+--- a/res/values-zh-rCN/derp_strings.xml
++++ b/res/values-zh-rCN/derp_strings.xml
+@@ -876,5 +876,34 @@
+     <string name="volume_separate_notification_summary">允许单独控制铃声音量与通知音量</string>
+     <!-- In-call notifications -->
+     <string name="in_call_notifications_title">通话中通知</string>
++
++    <!-- LTE only [CHAR LIMIT=100] -->
++    <string name="preferred_network_mode_lte_only_summary">Preferred network mode: LTE only</string>
++    <!-- Text for Network lte only [CHAR LIMIT=NONE] -->
++    <string name="network_lte_only">LTE only</string>
++    <!-- Text for Network 4g only [CHAR LIMIT=NONE] -->
++    <string name="network_4G_only">4G only</string>
++
++    <!-- Doze on double tap -->
++    <string name="double_tap_title">双击</string>
++    <string name="doze_double_tap_title">双击查看手机</string>
++    <string name="doze_double_tap_summary">通过双击脉冲通知</string>
++
++    <!-- Per-app data restrictions -->
++    <string name="data_usage_app_restrict_all">允许网络访问</string>
++    <string name="data_usage_app_restrict_all_summary">启用网络使用</string>
++    <string name="data_usage_app_restrict_mobile">移动数据</string>
++    <string name="data_usage_app_restrict_mobile_summary">启用移动数据的使用</string>
++    <string name="data_usage_app_restrict_vpn">VPN数据</string>
++    <string name="data_usage_app_restrict_vpn_summary">启用 VPN 数据的使用</string>
++    <string name="data_usage_app_restrict_wifi">Wi\u2011Fi数据</string>
++    <string name="data_usage_app_restrict_wifi_summary">启用 Wi\u2011Fi 数据的使用</string>
++    <string name="data_usage_app_restrict_bluetooth_ethernet">Bluetooth \u0026 Ethernet data</string>
++    <string name="data_usage_app_restrict_bluetooth_ethernet_summary">启用蓝牙互联网和以太网数据的使用</string>
++
++    <!-- Checkbox label that restricts network internet access of a specific application. [CHAR LIMIT=40] -->
++    <string name="data_usage_app_restrict_background_all">后台网络访问</string>
++    <!-- Summary message for checkbox that restricts background network access of a specific application. [CHAR LIMIT=NONE] -->
++    <string name="data_usage_app_restrict_background_all_summary">在后台启用网络使用</string>
+ </resources>
+ 
+-- 
+2.34.1
+
