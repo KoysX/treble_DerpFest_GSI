@@ -1,6 +1,6 @@
-From 99f8b45d7e14d04209bb93b221f19e953c718967 Mon Sep 17 00:00:00 2001
+From b61c490f48ebe2b36c7951253d299762ac74a8d9 Mon Sep 17 00:00:00 2001
 From: KoysX <2685697179b@gmail.com>
-Date: Fri, 21 Jul 2023 13:14:07 +0800
+Date: Mon, 18 Sep 2023 16:56:55 +0800
 Subject: [PATCH] add-Lock-screen-clock-top-margin-settings
 
 ---
@@ -10,10 +10,10 @@ Subject: [PATCH] add-Lock-screen-clock-top-margin-settings
  3 files changed, 24 insertions(+), 6 deletions(-)
 
 diff --git a/core/java/android/provider/Settings.java b/core/java/android/provider/Settings.java
-index e041e51c..19507dba 100644
+index 491df221..87069737 100644
 --- a/core/java/android/provider/Settings.java
 +++ b/core/java/android/provider/Settings.java
-@@ -12420,6 +12420,11 @@ public final class Settings {
+@@ -12482,6 +12482,11 @@ public final class Settings {
           */
          public static final String PULSE_VERTICAL_MIRROR = "pulse_vertical_mirror";
  
@@ -23,8 +23,8 @@ index e041e51c..19507dba 100644
 +        public static final String KG_CUSTOM_CLOCK_TOP_MARGIN = "kg_custom_clock_top_margin";
 +
          /**
-          * Keys we no longer back up under the current schema, but want to continue to
-          * process when restoring historical backup datasets.
+          * Whether to show or hide the arrow for back gesture
+          * @hide
 diff --git a/packages/SystemUI/customization/src/com/android/systemui/shared/clocks/DefaultClockController.kt b/packages/SystemUI/customization/src/com/android/systemui/shared/clocks/DefaultClockController.kt
 index 2401a810..dfb48981 100644
 --- a/packages/SystemUI/customization/src/com/android/systemui/shared/clocks/DefaultClockController.kt
@@ -72,10 +72,10 @@ index 2401a810..dfb48981 100644
          }
  
 diff --git a/packages/SystemUI/src/com/android/systemui/theme/ThemeOverlayController.java b/packages/SystemUI/src/com/android/systemui/theme/ThemeOverlayController.java
-index fbfcc571..cecb37b8 100644
+index 4cba41b4..75a48407 100644
 --- a/packages/SystemUI/src/com/android/systemui/theme/ThemeOverlayController.java
 +++ b/packages/SystemUI/src/com/android/systemui/theme/ThemeOverlayController.java
-@@ -498,6 +498,18 @@ public class ThemeOverlayController implements CoreStartable, Dumpable {
+@@ -540,6 +540,18 @@ public class ThemeOverlayController implements CoreStartable, Dumpable {
                  },
                  UserHandle.USER_ALL);
  

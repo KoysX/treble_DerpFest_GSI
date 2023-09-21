@@ -1,17 +1,47 @@
-From 6e72ff95b3b1ad5f3481080cd6bf073b04c31219 Mon Sep 17 00:00:00 2001
+From 58a0fca01db023f0bc2c74dccf71ff5509766884 Mon Sep 17 00:00:00 2001
 From: KoysX <2685697179b@gmail.com>
-Date: Tue, 22 Aug 2023 18:37:29 +0800
+Date: Mon, 18 Sep 2023 20:08:01 +0800
 Subject: [PATCH] add-Chinese-translation
 
 ---
- res/values-zh-rCN/strings.xml | 29 +++++++++++++++++++++++++++++
- 1 file changed, 29 insertions(+)
+ res/values-zh-rCN/strings.xml | 42 ++++++++++++++++++++++++++++++++---
+ 1 file changed, 39 insertions(+), 3 deletions(-)
 
 diff --git a/res/values-zh-rCN/strings.xml b/res/values-zh-rCN/strings.xml
-index 4d774fc..9bb4654 100644
+index 4d774fc..2927a54 100644
 --- a/res/values-zh-rCN/strings.xml
 +++ b/res/values-zh-rCN/strings.xml
-@@ -512,6 +512,12 @@
+@@ -85,6 +85,8 @@
+     <!-- Quick Settings footer category -->
+     <string name="footer_category">脚注</string>
+ 
++    <!-- Quick Settings header category -->
++    <string name="header_category">标题</string>
+     <!-- Statusbar Iten -->
+     <string name="statusbar_items_category">状态栏图标</string>
+ 
+@@ -149,9 +151,9 @@
+     <string name="lockscreen_battery_info_title">锁屏充电信息</string>
+     <string name="lockscreen_battery_info_summary">在锁屏时显示充电电流, 电压, 功率和电池温度</string>
+ 
+-    <!-- Tiles on secure keyguard -->
+-    <string name="use_tiles_on_secure_keyguard_title">使用敏感磁贴时要求解锁</string>
+-    <string name="use_tiles_on_secure_keyguard_summary">当试图在锁屏界面使用敏感功能的快速设置磁贴时要求解锁</string>
++    <!-- QSTile requires unlocking before being accessible -->
++    <string name="qstile_requires_unlocking_title">需要解锁才能使用敏感图块</string>
++    <string name="qstile_requires_unlocking_summary">使用敏感图块时要求解锁锁屏</string>
+ 
+     <!-- QS footer text -->
+     <string name="qs_footer_text_show_title">显示快速设置脚注</string>
+@@ -374,6 +376,7 @@
+     <string name="notification_material_dismiss_bgstyle_dashedline">带虚线的正方形</string>
+     <string name="notification_material_dismiss_bgstyle_circle_accent">环状 (带取色描边)</string>
+     <string name="notification_material_dismiss_bgstyle_rectangle_accent">圆角矩形 (带取色描边)</string>
++    <string name="notification_material_dismiss_bgstyle_rectangle_gradient">具有渐变背景的圆角矩形</string>
+ 
+     <!-- Bluetooth status -->
+     <string name="bluetooth_battery_title">蓝牙设备电量显示</string>
+@@ -512,6 +515,12 @@
      <string name="fprint_sucess_vib_title">指纹识别振动</string>
      <string name="fprint_sucess_vib_summary">当指纹识别成功时振动</string>
  
@@ -24,14 +54,13 @@ index 4d774fc..9bb4654 100644
      <!-- Navbar styles -->
      <string name="theme_customization_navbar_title">导航栏样式</string>
      <string name="theme_customization_navbar_summary">自定义导航栏样式</string>
-@@ -571,4 +577,27 @@
+@@ -571,4 +580,31 @@
      <string name="status_bar_battery_percent_text_next_left">在图标左侧显示</string>
      <string name="status_bar_battery_text_charging_title">充电时显示百分比</string>
      <string name="status_bar_battery_text_charging_summary">充电时总是显示百分比</string>
-+
 +    <!-- Hide statusbar on lockscreen -->
 +    <string name="lockscreen_hide_status_bar_title">隐藏状态栏</string>
-+    <string name="lockscreen_hide_status_bar_summary">启用后，状态栏将在锁定屏幕上隐藏</string>
++    <string name="lockscreen_hide_status_bar_summary">启用后，状态栏将在锁屏上隐藏</string>
 +
 +    <!-- Lockscreen Clock -->
 +    <string name="lockscreen_clock_title">时钟</string>
@@ -51,6 +80,11 @@ index 4d774fc..9bb4654 100644
 +    <!-- Custom Data icons -->
 +    <string name="theme_customization_data_title">数据图标样式</string>
 +    <string name="theme_customization_data_summary">设置自定义数据图标样式</string>
++
++    <!-- Unlimited g00gle ph0t0s st0rage -->
++    <string name="use_photos_spoof_title">无限的 Google 照片存储空间</string>
++    <string name="use_photos_spoof_summary">您的设备将被识别为 Pixel XL，以便以原始质量获得无限的 Google 照片存储空间</string>
++    <string name="photos_spoof_toast">重新启动照片应用程序使其生效</string>
  </resources>
 -- 
 2.34.1

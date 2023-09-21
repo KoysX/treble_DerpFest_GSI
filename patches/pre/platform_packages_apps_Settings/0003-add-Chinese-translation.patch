@@ -1,0 +1,270 @@
+From d6f4e5419f3a04542475546cff19c932ecf3a3f5 Mon Sep 17 00:00:00 2001
+From: KoysX <2685697179b@gmail.com>
+Date: Mon, 18 Sep 2023 20:32:07 +0800
+Subject: [PATCH] add-Chinese-translation
+
+---
+ res/values-zh-rCN/derp_strings.xml | 149 +++++++++++++++++++++++------
+ 1 file changed, 119 insertions(+), 30 deletions(-)
+
+diff --git a/res/values-zh-rCN/derp_strings.xml b/res/values-zh-rCN/derp_strings.xml
+index a57a077..86b899a 100644
+--- a/res/values-zh-rCN/derp_strings.xml
++++ b/res/values-zh-rCN/derp_strings.xml
+@@ -28,7 +28,12 @@
+ 
+     <!-- Summary text for system preference tile, showing important setting items under system setting [CHAR LIMIT=NONE]-->
+     <string name="system_dashboard_custom_summary">语言, 手势, 系统更新, 时间, 备份</string>
++    <!-- String for removal of sensitive info on about, depending on tap -->
++    <string name="device_info_protected_single_press">点按即可显示信息</string>
+ 
++    <!-- Hotspot extras -->
++    <string name="tethering_allow_vpn_upstreams_title">允许客户端使用 VPN</string>
++    <string name="tethering_allow_vpn_upstreams_summary">允许热点客户端使用此设备的 VPN 连接进行上游连接</string>
+     <!-- Double tap to sleep on status bar or lockscreen -->
+     <string name="status_bar_double_tap_to_sleep_title">双击睡眠</string>
+     <string name="status_bar_double_tap_to_sleep_summary">双击状态栏或锁屏界面以关闭屏幕</string>
+@@ -86,6 +91,9 @@
+     <string name="high_touch_polling_rate_title">高触摸采样率</string>
+     <string name="high_touch_polling_rate_summary">增加屏幕触摸采样率</string>
+ 
++    <!-- High touch sensitivity -->
++    <string name="high_touch_sensitivity_title">高触摸灵敏度</string>
++    <string name="high_touch_sensitivity_summary">提高触摸屏灵敏度，以便戴着手套时也可以使用</string>
+     <!-- Notification sound timeout -->
+     <string name="app_notification_sound_timeout_title">通知铃声最小间隔</string>
+     <string name="app_notification_sound_timeout_summary_template">仅允许每 <xliff:g id="duration">%1$s</xliff:g> 发出声音或振动</string>
+@@ -97,9 +105,15 @@
+     <string name="app_notification_sound_timeout_value_15_minutes">10 分钟</string>
+     <string name="app_notification_sound_timeout_value_30_minutes">30 分钟</string>
+ 
++    <!-- PIN scramble -->
++    <string name="unlock_scramble_pin_layout_title">随机布局</string>
++    <string name="unlock_scramble_pin_layout_summary">解锁设备时扰乱 PIN 布局</string>
+     <!-- Proximity wake -->
+     <string name="proximity_wake_title">避免意外唤醒</string>
+     <string name="proximity_wake_summary">唤醒屏幕前检查距离传感器以避免意外唤醒</string>
++    <!-- Touchscreen gesture settings -->
++    <string name="touchscreen_gesture_settings_title">触摸屏手势</string>
++    <string name="touchscreen_gesture_settings_summary">执行各种触摸屏手势以实现快速操作</string>
+ 
+     <!-- Touchscreen hovering -->
+     <string name="touchscreen_hovering_title">触屏悬停</string>
+@@ -113,7 +127,8 @@
+     <string name="preferred_refresh_rate_info">当偏好刷新率在最大最小刷新率区间中时将被用作您的默认刷新率</string>
+     <string name="battery_saver_refresh_rate_title">降低刷新率</string>
+     <string name="battery_saver_refresh_rate_summary">当省电模式启动时降低刷新率</string>
+-
++    <!-- Generic stuff used everywhere -->
++    <string name="reset">重置</string>
+     <!-- Buttons -->
+     <string name="button_pref_title">按键</string>
+     <string name="hardware_keys_power_key_title">电源键</string>
+@@ -176,18 +191,27 @@
+     <string name="navigation_bar_edge_long_swipe_title">边缘长扫</string>
+ 
+     <!-- Power menu -->
++    <string name="power_menu_title">电源菜单</string>
+     <string name="power_menu_items_title">电源菜单项</string>
+     <string name="power_menu_screenshot_title">截图</string>
+-    <string name="power_menu_screenshot_summary">长按以部分截图</string>
++    <string name="power_menu_screenshot_summary">长按部分截图</string>
+     <string name="power_menu_airplane_title">飞行模式</string>
+-    <string name="power_menu_users_title">切换用户</string>
++    <string name="power_menu_users_title">用户切换器</string>
+     <string name="power_menu_bug_report_title">错误报告</string>
+     <string name="power_menu_bug_report_devoptions_unavailable">由于未启用开发设置，错误报告已被禁用</string>
+-    <string name="power_menu_bug_report_unavailable_for_user">由于正在使用非主用户，错误报告已被禁用。</string>
+-    <string name="power_menu_emergency_title">紧急模式</string>
++    <string name="power_menu_bug_report_unavailable_for_user">对于非主要用户禁用错误报告。</string>
++    <string name="power_menu_emergency_title">紧急情况</string>
+     <string name="power_menu_devicecontrols_title">设备控制</string>
+-    <string name="power_menu_emergency_affordance_enabled">紧急模式已启用</string>
++    <string name="power_menu_advanced_restart_title">高级重启</string>
++    <string name="power_menu_advanced_restart_summary">解锁后，电源菜单中包含用于重新启动进入恢复或引导加载程序的选项</string>
++    <string name="power_menu_emergency_affordance_enabled">紧急可供性已启用</string>
++    <string name="power_menu_type_title">电源菜单样式</string>
++
++    <!-- Description of setting that controls gesture to open camera by double tapping the power button [CHAR LIMIT=NONE] -->
++    <string name="camera_double_tap_power_gesture_desc">无需解锁屏幕即可快速打开相机</string>
+ 
++    <string name="torch_long_press_power_gesture_title">长按电源键</string>
++    <string name="torch_long_press_power_gesture_desc">在显示屏关闭时长按电源按钮激活手电筒</string>
+     <string name="torch_long_press_power_timeout_title">自动关闭手电筒</string>
+ 
+     <string name="torch_long_press_power_timeout_never">从不</string>
+@@ -280,6 +304,9 @@
+     <!-- Wake on plug -->
+     <string name="wake_when_plugged_or_unplugged_title">充电时唤醒</string>
+     <string name="wake_when_plugged_or_unplugged_summary">连接或断开电源时打开屏幕</string>
++    <!-- FastCharge feature -->
++    <string name="fast_charging_title">快速充电</string>
++    <string name="fast_charging_summary">禁用以减少充电时设备产生的热量或延长电池的使用寿命</string>
+ 
+     <!-- Screen off FOD -->
+     <string name="screen_off_fod_title">息屏指纹</string>
+@@ -322,6 +349,23 @@
+     <string name="light_brightness_normal">正常</string>
+     <string name="light_brightness_zen">请勿打扰</string>
+ 
++    <!-- Charging control settings -->
++    <string name="charging_control_title">充电控制</string>
++    <string name="charging_control_summary">为您的设备自定义充电时间表和限制</string>
++    <string name="charging_control_enable_title">启用充电控制</string>
++    <string name="charging_control_mode_title">充电方式</string>
++    <string name="charging_control_mode_auto_title">自动排程</string>
++    <string name="charging_control_mode_auto_summary">根据设置的警报自动确定何时开始充电</string>
++    <string name="charging_control_mode_custom_title">定制时间表</string>
++    <string name="charging_control_mode_custom_summary">设置充满电的目标时间</string>
++    <string name="charging_control_mode_limit_title">限制充电</string>
++    <string name="charging_control_mode_limit_summary">将充电限制在一定百分比</string>
++    <string name="charging_control_start_time_title">开始时间</string>
++    <string name="charging_control_start_time_summary">当您在 %s 之后开始充电时，充电控制将激活</string>
++    <string name="charging_control_target_time_title">充满电的目标时间</string>
++    <string name="charging_control_target_time_summary">电池将在 %s 之前充满电</string>
++    <string name="charging_control_limit_title">限制</string>
++
+     <!-- Battery light settings -->
+     <string name="battery_light_title">电池灯</string>
+     <string name="battery_light_summary">自定义电池灯行为</string>
+@@ -409,10 +453,10 @@
+     <string name="power_menu_panic_summary">激活一次崩溃.</string>
+ 
+     <!-- Face Unlock -->
+-    <string name="security_settings_face_unlock_redo_face_scan_summary">删除现有的面部模型并创建新的模型</string>
+-    <string name="security_settings_face_unlock_redo_face_scan_title">重建面部模型</string>
+-    <string name="face_redo_confirm_btn">重建</string>
+-    <string name="face_redo_warning_msg">您是否要删除现有的面部扫描并创建新的面部扫描?</string>
++    <string name="security_settings_face_unlock_redo_face_scan_summary">删除现有的面部扫描并创建新的扫描</string>
++    <string name="security_settings_face_unlock_redo_face_scan_title">重做面部扫描</string>
++    <string name="face_redo_confirm_btn">重做</string>
++    <string name="face_redo_warning_msg">您想删除现有的面部扫描并创建新的面部扫描吗？</string>
+     <string name="face_unlock_method_title">允许在锁定屏幕上进行面部解锁</string>
+     <string name="face_unlock_method_default">当屏幕打开时</string>
+     <string name="face_unlock_method_swipe">在锁定屏幕上滑动时</string>
+@@ -530,27 +574,21 @@
+     <string name="application_icon">应用图标</string>
+ 
+     <!-- Incall options -->
+-    <string name="incall_category">来电选项</string>
+-    <string name="flashlight_on_call_title">来电时闪烁 LED 灯</string>
+-    <string name="flashlight_on_call_disabled">关闭</string>
++    <string name="incall_category">通话中选项</string>
++    <string name="flashlight_notifications_title">闪光警报</string>
++    <string name="flashlight_on_call_title">来电时闪烁手电筒</string>
++    <string name="flashlight_on_call_disabled">禁用</string>
+     <string name="flashlight_on_call_ringer">响铃时</string>
+-    <string name="flashlight_on_call_no_ringer">静音时</string>
+-    <string name="flashlight_on_call_silent">完全静音时</string>
+-    <string name="flashlight_on_call_always">始终启用</string>
+-    <string name="flashlight_on_call_ignore_dnd_title">忽略 DND</string>
+-    <string name="flashlight_on_call_ignore_dnd_summary">勿扰模式时闪烁</string>
++    <string name="flashlight_on_call_no_ringer">当铃声静音时</string>
++    <string name="flashlight_on_call_silent">当完全静音时（没有铃声或振动器）</string>
++    <string name="flashlight_on_call_always">总是</string>
++    <string name="flashlight_on_call_ignore_dnd_title">忽略免打扰</string>
++    <string name="flashlight_on_call_ignore_dnd_summary">勿扰模式开启时是否闪烁</string>
+     <string name="flashlight_on_call_rate_title">频率</string>
+-    <string name="flashlight_on_call_rate_summary">通话时闪光灯闪烁频率</string>
+ 
+     <!-- Brightness control -->
+     <string name="status_bar_toggle_brightness">亮度控制</string>
+     <string name="status_bar_toggle_brightness_summary">通过滑动状态栏调节亮度</string>
+-
+-    <!-- Back gesture animation -->
+-    <string name="navbar_gesture_handle_category">手势处理</string>
+-    <string name="back_gesture_arrow_message">返回手势动画</string>
+-    <string name="back_gesture_arrow_summary">显示返回手势的动画箭头</string>
+-
+     <!-- Power menu on lockscreen -->
+     <string name="power_menu_hide_on_secure_title">禁用锁屏电源菜单</string>
+     <string name="power_menu_hide_on_secure_summary">在安全锁定屏幕上时隐藏电源菜单</string>
+@@ -580,6 +618,7 @@
+     <string name="accessibility_text_reading_options_summary">自定义显示大小, 字体 &amp; 文本样式</string>
+ 
+     <!-- Back gesture height -->
++    <string name="navbar_gesture_handle_category">Gesture handle</string>
+     <string name="back_height_low_label">全高</string>
+     <string name="back_height_high_label">部分</string>
+     <string name="back_options_dialog_title">选项</string>
+@@ -730,6 +769,13 @@
+ 
+     <!-- Timeout entries -->
+     <string name="timeout_summary_never">从不超时</string>
++    <string name="timeout_summary_15secs">15 秒</string>
++    <string name="timeout_summary_30secs">30 秒</string>
++    <string name="timeout_summary_1min">1 分钟</string>
++    <string name="timeout_summary_2mins">2 分钟</string>
++    <string name="timeout_summary_5mins">5 分钟</string>
++    <string name="timeout_summary_10mins">10 分钟</string>
++    <string name="timeout_summary_30mins">30 分钟</string>
+     <string name="timeout_summary_1hour">1 小时</string>
+     <string name="timeout_summary_2hours">2 小时</string>
+     <string name="timeout_summary_4hours">4 小时</string>
+@@ -837,15 +883,58 @@
+     <string name="doze_enabled_title">AOD</string>
+     <string name="doze_enabled_summary">是否启用 AOD 功能</string>
+ 
+-    <!-- Fingerprint wake-and-unlock -->
+-    <string name="fingerprint_wake_unlock_title">触摸指纹传感器以解锁</string>
+-    <string name="fingerprint_wake_unlock_touch">屏幕关闭时监听指纹解锁事件</string>
+-    <string name="fingerprint_wake_unlock_press">仅在屏幕亮起时监听指纹解锁事件</string>
+-
+     <!-- Android Beam -->
+     <string name="android_beam_main_switch_title">使用 Android Beam</string>
+ 
+     <!-- Separate ring & notification toggle -->
+     <string name="volume_separate_notification_title">分离铃声与通知音量</string>
+     <string name="volume_separate_notification_summary">允许单独控制铃声音量与通知音量</string>
++    <!-- In-call notifications -->
++    <string name="in_call_notifications_title">通话中通知</string>
++
++    <!-- LTE only [CHAR LIMIT=100] -->
++    <string name="preferred_network_mode_lte_only_summary">首选网络模式：仅限 LTE</string>
++    <!-- Text for Network lte only [CHAR LIMIT=NONE] -->
++    <string name="network_lte_only">LTE only</string>
++    <!-- Text for Network 4g only [CHAR LIMIT=NONE] -->
++    <string name="network_4G_only">4G only</string>
++
++    <!-- Doze on double tap -->
++    <string name="double_tap_title">双击</string>
++    <string name="doze_double_tap_title">双击查看手机</string>
++    <string name="doze_double_tap_summary">通过双击脉冲通知</string>
++
++    <!-- Per-app data restrictions -->
++    <string name="data_usage_app_restrict_all">允许网络访问</string>
++    <string name="data_usage_app_restrict_all_summary">启用网络使用</string>
++    <string name="data_usage_app_restrict_mobile">移动数据</string>
++    <string name="data_usage_app_restrict_mobile_summary">启用移动数据的使用</string>
++    <string name="data_usage_app_restrict_vpn">VPN数据</string>
++    <string name="data_usage_app_restrict_vpn_summary">启用 VPN 数据的使用</string>
++    <string name="data_usage_app_restrict_wifi">Wi\u2011Fi数据</string>
++    <string name="data_usage_app_restrict_wifi_summary">启用 Wi\u2011Fi 数据的使用</string>
++    <string name="data_usage_app_restrict_bluetooth_ethernet">Bluetooth \u0026 Ethernet data</string>
++    <string name="data_usage_app_restrict_bluetooth_ethernet_summary">启用蓝牙互联网和以太网数据的使用</string>
++
++    <!-- Checkbox label that restricts network internet access of a specific application. [CHAR LIMIT=40] -->
++    <string name="data_usage_app_restrict_background_all">后台网络访问</string>
++    <!-- Summary message for checkbox that restricts background network access of a specific application. [CHAR LIMIT=NONE] -->
++    <string name="data_usage_app_restrict_background_all_summary">在后台启用网络使用</string>
++
++    <!-- Back gesture animation -->
++    <string name="back_gesture_arrow_message">返回手势动画</string>
++    <string name="back_gesture_arrow_summary">显示后退手势的动画箭头</string>
++
++    <!-- Network preferences screen, setting option name to change wifi timeout -->
++    <string name="wifi_timeout">自动关闭 Wi-Fi</string>
++
++    <!-- Network preferences screen, setting option summary to change wifi timeout -->
++    <string name="wifi_timeout_summary">Wi-Fi 将在之后关闭 <xliff:g id="timeout_description">%1$s</xliff:g> 如果没有网络连接</string>
++    <string name="wifi_timeout_summary2">禁用</string>
++
++    <!-- Connected devices screen, setting option name to change bluetooth timeout -->
++    <string name="bluetooth_timeout">蓝牙超时</string>
++    <!-- Connected devices screen, setting option summary to change bluetooth timeout -->
++    <string name="bluetooth_timeout_summary">蓝牙将在之后关闭 <xliff:g id="timeout_description">%1$s</xliff:g> 如果没有连接设备</string>
++    <string name="bluetooth_timeout_summary2">不自动关闭蓝牙</string>
+ </resources>
+-- 
+2.34.1
+
