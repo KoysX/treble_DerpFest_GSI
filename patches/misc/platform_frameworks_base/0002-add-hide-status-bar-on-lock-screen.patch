@@ -1,7 +1,7 @@
-From 13e46c03aae5f064e20e5bac102c14b3200e2170 Mon Sep 17 00:00:00 2001
+From 4ce8f715be24698300495e822bc5cc29d4be0ce7 Mon Sep 17 00:00:00 2001
 From: KoysX <2685697179b@gmail.com>
-Date: Fri, 21 Jul 2023 09:18:17 +0800
-Subject: [PATCH] hide-status-bar-on-lock-screen
+Date: Fri, 22 Sep 2023 11:21:23 +0800
+Subject: [PATCH] add-hide-status-bar-on-lock-screen
 
 ---
  core/java/android/provider/Settings.java      |   5 +
@@ -12,10 +12,10 @@ Subject: [PATCH] hide-status-bar-on-lock-screen
  5 files changed, 111 insertions(+), 1 deletion(-)
 
 diff --git a/core/java/android/provider/Settings.java b/core/java/android/provider/Settings.java
-index a480f280..e041e51c 100644
+index 345ec98c..8914bb1a 100644
 --- a/core/java/android/provider/Settings.java
 +++ b/core/java/android/provider/Settings.java
-@@ -6589,6 +6589,11 @@ public final class Settings {
+@@ -6622,6 +6622,11 @@ public final class Settings {
           */
          public static final String STATUSBAR_CLOCK_CHIP ="statusbar_clock_chip";
  
@@ -28,7 +28,7 @@ index a480f280..e041e51c 100644
           * @hide
           */
 diff --git a/packages/SettingsProvider/src/android/provider/settings/backup/SystemSettings.java b/packages/SettingsProvider/src/android/provider/settings/backup/SystemSettings.java
-index 37fef189..4ae33675 100644
+index 1cc9eaeb..2654aa83 100644
 --- a/packages/SettingsProvider/src/android/provider/settings/backup/SystemSettings.java
 +++ b/packages/SettingsProvider/src/android/provider/settings/backup/SystemSettings.java
 @@ -110,6 +110,7 @@ public class SystemSettings {
@@ -38,9 +38,9 @@ index 37fef189..4ae33675 100644
 +        Settings.System.LOCK_HIDE_STATUS_BAR,
          Settings.System.KEYGUARD_QUICK_TOGGLES_NEW,
          Settings.System.QS_PANEL_STYLE,
-     };
+         Settings.System.USE_OLD_MOBILETYPE,
 diff --git a/packages/SettingsProvider/src/android/provider/settings/validators/SystemSettingsValidators.java b/packages/SettingsProvider/src/android/provider/settings/validators/SystemSettingsValidators.java
-index b42a337e..86c85002 100644
+index 3abd202e..d95638c6 100644
 --- a/packages/SettingsProvider/src/android/provider/settings/validators/SystemSettingsValidators.java
 +++ b/packages/SettingsProvider/src/android/provider/settings/validators/SystemSettingsValidators.java
 @@ -264,6 +264,7 @@ public class SystemSettingsValidators {
@@ -52,10 +52,10 @@ index b42a337e..86c85002 100644
                  new Validator() {
                      @Override
 diff --git a/packages/SystemUI/src/com/android/systemui/shade/NotificationPanelViewController.java b/packages/SystemUI/src/com/android/systemui/shade/NotificationPanelViewController.java
-index b7b6bcbd..64221b97 100644
+index dc04dc2a..ce762e35 100644
 --- a/packages/SystemUI/src/com/android/systemui/shade/NotificationPanelViewController.java
 +++ b/packages/SystemUI/src/com/android/systemui/shade/NotificationPanelViewController.java
-@@ -4664,6 +4664,9 @@ public final class NotificationPanelViewController implements Dumpable {
+@@ -4666,6 +4666,9 @@ public final class NotificationPanelViewController implements Dumpable {
                              /* alpha= */ 1f,
                              keyguardShowing ? View.VISIBLE : View.INVISIBLE);
                  }
