@@ -1,0 +1,26 @@
+From e64724c76d7d0133bb10bcae4854b825352c1e16 Mon Sep 17 00:00:00 2001
+From: KoysX <2685697179b@gmail.com>
+Date: Wed, 25 Oct 2023 00:31:22 -0400
+Subject: [PATCH] add-OnePlusCameraHelper
+
+---
+ base.mk | 3 +++
+ 1 file changed, 3 insertions(+)
+
+diff --git a/base.mk b/base.mk
+index 80d104e..f6d5f26 100644
+--- a/base.mk
++++ b/base.mk
+@@ -252,6 +252,9 @@ PRODUCT_PACKAGES += \
+ PRODUCT_PACKAGES += \
+     QcRilAm
+ 
++PRODUCT_PACKAGES += \
++      OnePlusCameraHelper
++
+ PRODUCT_PACKAGES += \
+ 	slsi-booted
+ 
+-- 
+2.42.0
+
