@@ -29,7 +29,6 @@ repo sync -c -j$(nproc --all) --force-sync --no-clone-bundle --no-tags
 ```
 
 ### Apply the patches
-Copy the patches folder to the ROM folder, and run this in the ROM folder:
 ```bash
 bash treble_DerpFest_GSI/apply-patches.sh treble_DerpFest_GSI misc
 bash treble_DerpFest_GSI/apply-patches.sh treble_DerpFest_GSI pre
