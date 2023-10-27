@@ -1,7 +1,7 @@
-From 0ba44142cfe5fa3197d0ba38f7f8efaaffc45644 Mon Sep 17 00:00:00 2001
+From d6b5d2b7b43d93c5ac13f67fcf4ad6fb73302593 Mon Sep 17 00:00:00 2001
 From: Pierre-Hugues Husson <phh@phh.me>
 Date: Fri, 6 Oct 2023 08:20:48 -0400
-Subject: [PATCH 19/21] Ignore dm-verity setup issues
+Subject: [PATCH] Ignore dm-verity setup issues
 
 On Amlogic STB Android 9 vendor, no boot device is setup
 (fstab doesn't use /dev/block/by-name but more direct mappings)

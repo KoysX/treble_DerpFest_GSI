@@ -1,22 +1,16 @@
-From 1881f48cef85f8014b9304bfa3a0f56b4b59a712 Mon Sep 17 00:00:00 2001
-From: Pierre-Hugues Husson <phh@phh.me>
-Date: Sun, 18 Dec 2022 18:20:40 -0500
-Subject: [PATCH 22/22] FOD support for Asus, Samsung and recent Xiaomi devices
+From dd64a35de52e7d102751cd6c3b659a8d6ae90a00 Mon Sep 17 00:00:00 2001
+From: KoysX <2685697179b@gmail.com>
+Date: Thu, 26 Oct 2023 11:37:28 -0400
+Subject: [PATCH] FOD-support-for-Asus-Samsung-and-recent-Xiaomi-devic
 
-Thanks Asus for providing a free device to make this support
-And thanks @davigamer987 for donating enough to get a Samsung FOD device
-to make this
-
-Co-authored-by: jgudec <jakov.gudec@gmail.com>
-Change-Id: Ibd0f9ea8fba584a38c060fd9271549a5e106b4eb
 ---
  packages/SystemUI/Android.bp                  |   3 +
  .../biometrics/UdfpsControllerOverlay.kt      |   7 +-
- .../android/systemui/biometrics/UdfpsView.kt  | 191 ++++++++++++
+ .../android/systemui/biometrics/UdfpsView.kt  | 203 ++++++++++--
  services/core/Android.bp                      |   5 +
- .../server/biometrics/AuthService.java        | 289 +++++++++++++++++-
+ .../server/biometrics/AuthService.java        | 290 +++++++++++++++++-
  .../fingerprint/FingerprintService.java       |   3 +-
- 6 files changed, 492 insertions(+), 6 deletions(-)
+ 6 files changed, 487 insertions(+), 24 deletions(-)
 
 diff --git a/packages/SystemUI/Android.bp b/packages/SystemUI/Android.bp
 index 0145b011..0c9da712 100644
@@ -33,7 +27,7 @@ index 0145b011..0c9da712 100644
      manifest: "AndroidManifest.xml",
      additional_manifests: ["DerpFestManifest.xml"],
 diff --git a/packages/SystemUI/src/com/android/systemui/biometrics/UdfpsControllerOverlay.kt b/packages/SystemUI/src/com/android/systemui/biometrics/UdfpsControllerOverlay.kt
-index cabe9008ab47..826804492bc7 100644
+index cabe9008..82680449 100644
 --- a/packages/SystemUI/src/com/android/systemui/biometrics/UdfpsControllerOverlay.kt
 +++ b/packages/SystemUI/src/com/android/systemui/biometrics/UdfpsControllerOverlay.kt
 @@ -124,7 +124,9 @@ class UdfpsControllerOverlay @JvmOverloads constructor(
@@ -58,10 +52,10 @@ index cabe9008ab47..826804492bc7 100644
                          if (accessibilityManager.isTouchExplorationEnabled) {
                              setOnHoverListener { v, event -> onTouch(v, event, true) }
 diff --git a/packages/SystemUI/src/com/android/systemui/biometrics/UdfpsView.kt b/packages/SystemUI/src/com/android/systemui/biometrics/UdfpsView.kt
-index ef7fcc95..26d23fc6 100644
+index ef7fcc95..6c5067b7 100644
 --- a/packages/SystemUI/src/com/android/systemui/biometrics/UdfpsView.kt
 +++ b/packages/SystemUI/src/com/android/systemui/biometrics/UdfpsView.kt
-@@ -19,17 +19,31 @@ import android.content.Context
+@@ -19,17 +19,30 @@ import android.content.Context
  import android.graphics.Canvas
  import android.graphics.Color
  import android.graphics.Paint
@@ -73,10 +67,10 @@ index ef7fcc95..26d23fc6 100644
  import android.util.AttributeSet
  import android.util.Log
  import android.view.MotionEvent
+-import android.view.Surface
 +import android.view.SurfaceHolder
 +import android.view.SurfaceView
 +import android.view.ViewGroup
- import android.view.Surface
  import android.widget.FrameLayout
  import com.android.settingslib.udfps.UdfpsOverlayParams
  import com.android.systemui.R
@@ -93,7 +87,7 @@ index ef7fcc95..26d23fc6 100644
  
  private const val TAG = "UdfpsView"
  
-@@ -40,6 +54,54 @@ class UdfpsView(
+@@ -40,6 +53,54 @@ class UdfpsView(
      context: Context,
      attrs: AttributeSet?
  ) : FrameLayout(context, attrs), DozeReceiver {
@@ -123,7 +117,7 @@ index ef7fcc95..26d23fc6 100644
 +                try {
 +                    canvas = p0.lockCanvas();
 +                    Log.d("PHH", "Surface dimensions ${canvas.getWidth()*1.0f} ${canvas.getHeight()*1.0f}")
-+                    canvas.drawOval(RectF(0.0f, 0.0f, canvas.getWidth()*1.0f, canvas.getHeight()*1.0f), paint);
++                    canvas.drawOval(RectF(overlayParams.sensorBounds), paint);
 +                } finally {
 +                    // Make sure the surface is never left in a bad state.
 +                    if (canvas != null) {
@@ -143,12 +137,12 @@ index ef7fcc95..26d23fc6 100644
 +            }
 +        })
 +        mySurfaceView.holder.setFormat(PixelFormat.RGBA_8888)
-+
++ 
 +    }
  
      // Use expanded overlay when feature flag is true, set by UdfpsViewController
      var useExpandedOverlay: Boolean = false
-@@ -70,6 +132,8 @@ class UdfpsView(
+@@ -70,6 +131,8 @@ class UdfpsView(
      /** Parameters that affect the position and size of the overlay. */
      var overlayParams = UdfpsOverlayParams()
  
@@ -157,7 +151,7 @@ index ef7fcc95..26d23fc6 100644
      /** Debug message. */
      var debugMessage: String? = null
          set(value) {
-@@ -154,6 +218,27 @@ class UdfpsView(
+@@ -154,37 +217,141 @@ class UdfpsView(
              !(animationViewController?.shouldPauseAuth() ?: false)
      }
  
@@ -176,7 +170,7 @@ index ef7fcc95..26d23fc6 100644
 +    val hasSamsungMask = File(samsungActualMaskBrightness).exists()
 +    var fodFileObserver: FileObserver? = null
 +
-+    val xiaomiDispParam = "/sys/class/mi_display/disp-DSI-0/disp_param"
++   val xiaomiDispParam = "/sys/class/mi_display/disp-DSI-0/disp_param"
 +    var hasXiaomiLhbm = File(xiaomiDispParam).exists()
 +
 +    private val handlerThread = HandlerThread("UDFPS").also { it.start() }
@@ -185,10 +179,12 @@ index ef7fcc95..26d23fc6 100644
      fun configureDisplay(onDisplayConfigured: Runnable) {
          isDisplayConfigured = true
          animationViewController?.onDisplayConfiguring()
-@@ -165,6 +250,65 @@ class UdfpsView(
-         } else {
-             doIlluminate(null /* surface */, onDisplayConfigured)
-         }
+-        val gView = ghbmView
+-        if (gView != null) {
+-            gView.setGhbmIlluminationListener(this::doIlluminate)
+-            gView.visibility = VISIBLE
+-            gView.startGhbmIllumination(onDisplayConfigured)
++        mUdfpsDisplayMode?.enable(onDisplayConfigured)
 +
 +        mySurfaceView.setVisibility(VISIBLE)
 +        Log.d("PHH", "setting surface visible!")
@@ -202,11 +198,11 @@ index ef7fcc95..26d23fc6 100644
 +        if (brightnessFile.exists() && maxBrightnessFile.exists()) {
 +            brightness = brightnessFile.readText().toDouble()
 +            maxBrightness = maxBrightnessFile.readText().toDouble()
-+        } else {
+         } else {
+-            doIlluminate(null /* surface */, onDisplayConfigured)
 +            brightness = File("/sys/class/backlight/panel0-backlight/brightness").readText().toDouble()
 +            maxBrightness = File("/sys/class/backlight/panel0-backlight/max_brightness").readText().toDouble()
 +        }
-+
 +        // Assume HBM is max brightness
 +        val dim = 1.0 - Math.pow( (brightness / maxBrightness), 1/2.3);
 +        Log.d("PHH-Enroll", "Brightness is $brightness / $maxBrightness, setting dim to $dim")
@@ -215,12 +211,19 @@ index ef7fcc95..26d23fc6 100644
 +        }
 +        if (hasSamsungMask) {
 +            dimUpdate(dim.toFloat())
-+        }
-+
+         }
+-    }
+ 
+-    private fun doIlluminate(surface: Surface?, onDisplayConfigured: Runnable?) {
+-        if (ghbmView != null && surface == null) {
+-            Log.e(TAG, "doIlluminate | surface must be non-null for GHBM")
 +        if(android.os.SystemProperties.get("ro.vendor.build.fingerprint").contains("ASUS")) {
 +            goodixCmd(200001)
-+        }
-+
+         }
+ 
+-        mUdfpsDisplayMode?.enable {
+-            onDisplayConfigured?.run()
+-            ghbmView?.drawIlluminationDot(RectF(sensorRect))
 +        if(hasXiaomiLhbm){
 +            Log.d("PHH-Enroll", "Xiaomi scenario in UdfpsView reached!")
 +            mySurfaceView.setVisibility(INVISIBLE)
@@ -247,13 +250,16 @@ index ef7fcc95..26d23fc6 100644
 +                    }
 +                }, 600)
 +            }, 200)
-+        }
+         }
      }
  
-     private fun doIlluminate(surface: Surface?, onDisplayConfigured: Runnable?) {
-@@ -186,5 +330,52 @@ class UdfpsView(
-             view.visibility = INVISIBLE
-         }
+     fun unconfigureDisplay() {
+         isDisplayConfigured = false
+         animationViewController?.onDisplayUnconfigured()
+-        ghbmView?.let { view ->
+-            view.setGhbmIlluminationListener(null)
+-            view.visibility = INVISIBLE
+-        }
          mUdfpsDisplayMode?.disable(null /* onDisabled */)
 +
 +        if (hasAsusGhbm) {
@@ -321,24 +327,17 @@ index 05782235..18a9fe12 100644
      javac_shard_size: 50,
      javacflags: [
 diff --git a/services/core/java/com/android/server/biometrics/AuthService.java b/services/core/java/com/android/server/biometrics/AuthService.java
-index 3df521a6..92487607 100644
+index c692f5f9..d9cbb1f7 100644
 --- a/services/core/java/com/android/server/biometrics/AuthService.java
 +++ b/services/core/java/com/android/server/biometrics/AuthService.java
-@@ -66,6 +66,7 @@ import android.os.ServiceManager;
- import android.os.SystemProperties;
- import android.os.UserHandle;
- import android.provider.Settings;
-+import android.text.TextUtils;
- import android.util.Slog;
- 
- import com.android.internal.R;
-@@ -78,6 +79,24 @@ import java.util.ArrayList;
+@@ -78,6 +78,25 @@ import java.util.ArrayList;
  import java.util.Arrays;
  import java.util.List;
  
 +import android.hardware.display.DisplayManager;
 +
 +import android.graphics.Point;
++import android.text.TextUtils;
 +import android.util.DisplayMetrics;
 +import java.io.BufferedReader;
 +import java.io.File;
@@ -486,7 +485,7 @@ index 3df521a6..92487607 100644
      }
  
      /**
-@@ -797,18 +917,116 @@ public class AuthService extends SystemService {
+@@ -797,18 +917,117 @@ public class AuthService extends SystemService {
                  ? modality : (modality & ~BiometricAuthenticator.TYPE_CREDENTIAL);
      }
  
@@ -568,9 +567,10 @@ index 3df521a6..92487607 100644
 +            return udfpsProps;
 +        }
 +
-+       if(!TextUtils.isEmpty(android.os.SystemProperties.get("persist.vendor.sys.fp.fod.location.X_Y"))) {
++       String fpLocation = android.os.SystemProperties.get("persist.vendor.sys.fp.fod.location.X_Y");
++       if(!TextUtils.isEmpty(fpLocation) && fpLocation.contains(",")) {
 +            int[] udfpsProps = new int[3];
-+            String[] coordinates = android.os.SystemProperties.get("persist.vendor.sys.fp.fod.location.X_Y").split(",");
++            String[] coordinates = fpLocation.split(",");
 +            udfpsProps[0] = displayRealSize.x/2;
 +            udfpsProps[1] = Integer.parseInt(coordinates[1]) + 100;
 +
@@ -605,7 +605,7 @@ index 3df521a6..92487607 100644
  
          // config_is_powerbutton_fps indicates whether device has a power button fingerprint sensor.
          final boolean isPowerbuttonFps = getContext().getResources().getBoolean(
-@@ -876,4 +1094,67 @@ public class AuthService extends SystemService {
+@@ -876,4 +1095,67 @@ public class AuthService extends SystemService {
                  componentInfo, resetLockoutRequiresHardwareAuthToken,
                  resetLockoutRequiresChallenge);
      }
