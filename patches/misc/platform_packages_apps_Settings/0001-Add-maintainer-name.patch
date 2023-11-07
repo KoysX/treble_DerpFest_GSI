@@ -1,6 +1,6 @@
-From 87c0cb692933c22c1172b30a8dbad0952b8de1ee Mon Sep 17 00:00:00 2001
-From: KoysX <2685697179b@gmail.com>
-Date: Wed, 25 Oct 2023 09:53:30 -0400
+From da024b08c6b1f40ba317addbf7e60e910bf94424 Mon Sep 17 00:00:00 2001
+From: BoNic <BoNio9527@gmail.com>
+Date: Tue, 7 Nov 2023 13:54:14 +0800
 Subject: [PATCH] Add-maintainer-name
 
 ---
@@ -8,10 +8,10 @@ Subject: [PATCH] Add-maintainer-name
  1 file changed, 2 insertions(+), 2 deletions(-)
 
 diff --git a/res/values/derp_strings.xml b/res/values/derp_strings.xml
-index 5ae33ac..513e48c 100644
+index fbffc74..9238e96 100644
 --- a/res/values/derp_strings.xml
 +++ b/res/values/derp_strings.xml
-@@ -14,7 +14,7 @@
+@@ -18,8 +18,8 @@
  
      <!-- DerpFest maintainer -->
      <string name="maintainer">Maintainer</string>
@@ -20,7 +20,8 @@ index 5ae33ac..513e48c 100644
 +    <string name="maintainer_name" translatable="false">KoysX</string>
 +    <string name="maintainer_telegram" translatable="false">https://github.com/KoysX/treble_DerpFest_GSI</string>
  
- </resources>
+     <!-- Doze on charge -->
+     <string name="doze_on_charge_title">Always on when charging</string>
 -- 
-2.42.0
+2.34.1
 

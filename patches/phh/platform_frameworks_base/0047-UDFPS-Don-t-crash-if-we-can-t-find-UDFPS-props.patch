@@ -1,6 +1,6 @@
-From 9675ea2c8884d6f091d9586d951bb7e332c728bd Mon Sep 17 00:00:00 2001
-From: KoysX <2685697179b@gmail.com>
-Date: Thu, 26 Oct 2023 20:37:32 -0400
+From 4ebbe017a0a67dfb651b7b43468b5baea0e47719 Mon Sep 17 00:00:00 2001
+From: BoNic <BoNio9527@gmail.com>
+Date: Tue, 7 Nov 2023 14:54:38 +0800
 Subject: [PATCH] UDFPS-Don-t-crash-if-we-can-t-find-UDFPS-props
 
 ---
@@ -27,5 +27,5 @@ index d9cbb1f7..8194fbc2 100644
  
          if(udfpsProps.length > 0) {
 -- 
-2.42.0
+2.34.1
 

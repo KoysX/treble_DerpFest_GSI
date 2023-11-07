@@ -13,13 +13,13 @@ Subject: [PATCH] FOD-support-for-Asus-Samsung-and-recent-Xiaomi-devic
  6 files changed, 487 insertions(+), 24 deletions(-)
 
 diff --git a/packages/SystemUI/Android.bp b/packages/SystemUI/Android.bp
-index 0145b011..0c9da712 100644
+index e9cc55056e14..5df3a157bd6d 100644
 --- a/packages/SystemUI/Android.bp
 +++ b/packages/SystemUI/Android.bp
-@@ -198,6 +198,9 @@ android_library {
-         "LowLightDreamLib",
+@@ -199,6 +199,9 @@ android_library {
          "motion_tool_lib",
          "bcsmartspace-google",
+         "vendor.lineage.powershare-V1.0-java",
 +        "vendor.goodix.hardware.biometrics.fingerprint-V2.1-java",
 +        "vendor.xiaomi.hw.touchfeature-V1.0-java",
 +        "vendor.xiaomi.hardware.fingerprintextension-V1.0-java"

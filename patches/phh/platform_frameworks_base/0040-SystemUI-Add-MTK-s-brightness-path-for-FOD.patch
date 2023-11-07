@@ -1,6 +1,6 @@
-From bd5badfe5b9b1712d55dbfcb508aa630f0956265 Mon Sep 17 00:00:00 2001
-From: KoysX <2685697179b@gmail.com>
-Date: Thu, 26 Oct 2023 11:47:31 -0400
+From 4c7e84eff2f9d193b198c9c7b200886717c9cc1f Mon Sep 17 00:00:00 2001
+From: BoNic <BoNio9527@gmail.com>
+Date: Tue, 7 Nov 2023 14:37:07 +0800
 Subject: [PATCH] SystemUI-Add-MTK-s-brightness-path-for-FOD
 
 ---
@@ -8,7 +8,7 @@ Subject: [PATCH] SystemUI-Add-MTK-s-brightness-path-for-FOD
  1 file changed, 22 insertions(+), 8 deletions(-)
 
 diff --git a/packages/SystemUI/src/com/android/systemui/biometrics/UdfpsView.kt b/packages/SystemUI/src/com/android/systemui/biometrics/UdfpsView.kt
-index 6c5067b7..c544782e 100644
+index bebaab98..4c206bee 100644
 --- a/packages/SystemUI/src/com/android/systemui/biometrics/UdfpsView.kt
 +++ b/packages/SystemUI/src/com/android/systemui/biometrics/UdfpsView.kt
 @@ -35,6 +35,7 @@ import com.android.settingslib.udfps.UdfpsOverlayParams
@@ -60,5 +60,5 @@ index 6c5067b7..c544782e 100644
          // Assume HBM is max brightness
          val dim = 1.0 - Math.pow( (brightness / maxBrightness), 1/2.3);
 -- 
-2.42.0
+2.34.1
 

@@ -1,6 +1,6 @@
-From 3c58fd0616e0e90c10a4aa01e7c665d14917afc9 Mon Sep 17 00:00:00 2001
-From: KoysX <2685697179b@gmail.com>
-Date: Thu, 26 Oct 2023 20:35:13 -0400
+From e1ef1a4d7cba8d2119932d986e614d49d7944873 Mon Sep 17 00:00:00 2001
+From: BoNic <BoNio9527@gmail.com>
+Date: Tue, 7 Nov 2023 14:52:20 +0800
 Subject: [PATCH] UDFPS-Don-t-crash-if-we-can-t-compute-a-dim.-Just-do
 
 ---
@@ -8,7 +8,7 @@ Subject: [PATCH] UDFPS-Don-t-crash-if-we-can-t-compute-a-dim.-Just-do
  1 file changed, 4 insertions(+), 3 deletions(-)
 
 diff --git a/packages/SystemUI/src/com/android/systemui/biometrics/UdfpsView.kt b/packages/SystemUI/src/com/android/systemui/biometrics/UdfpsView.kt
-index f8f9cb50..6dee1a63 100644
+index 6fa31568..7076f23d 100644
 --- a/packages/SystemUI/src/com/android/systemui/biometrics/UdfpsView.kt
 +++ b/packages/SystemUI/src/com/android/systemui/biometrics/UdfpsView.kt
 @@ -276,11 +276,12 @@ class UdfpsView(
@@ -28,5 +28,5 @@ index f8f9cb50..6dee1a63 100644
          if (hasAsusGhbm) {
              dimUpdate(dim.toFloat())
 -- 
-2.42.0
+2.34.1
 
