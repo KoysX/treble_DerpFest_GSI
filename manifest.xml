@@ -2,7 +2,7 @@
 <manifest>
   <project name="TrebleDroid/device_phh_treble" path="device/phh/treble" remote="github" revision="android-14.0" />
   <project name="TrebleDroid/vendor_hardware_overlay" path="vendor/hardware_overlay" remote="github" revision="pie" />
-  <project name="TrebleDroid/vendor_interfaces" path="vendor/interfaces" remote="github" revision="android-13.0" />
+  <project name="TrebleDroid/vendor_interfaces" path="vendor/interfaces" remote="github" revision="android-14.0" />
   <project name="TrebleDroid/treble_app" path="treble_app" remote="github" revision="master" />
   <project name="AndyCGYan/android_packages_apps_QcRilAm" path="packages/apps/QcRilAm" remote="github" revision="master" />
   <project name="platform/prebuilts/vndk/v28" path="prebuilts/vndk/v28" remote="aosp" revision="204f1bad00aaf480ba33233f7b8c2ddaa03155dd" clone-depth="1" />
