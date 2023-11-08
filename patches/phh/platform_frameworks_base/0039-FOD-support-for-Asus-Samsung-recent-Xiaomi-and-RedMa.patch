@@ -1,31 +1,135 @@
-From dd64a35de52e7d102751cd6c3b659a8d6ae90a00 Mon Sep 17 00:00:00 2001
-From: KoysX <2685697179b@gmail.com>
-Date: Thu, 26 Oct 2023 11:37:28 -0400
-Subject: [PATCH] FOD-support-for-Asus-Samsung-and-recent-Xiaomi-devic
+From 2fcecbceb67de7fcf43bc7ad21c114f295d99c49 Mon Sep 17 00:00:00 2001
+From: BoNic <BoNio9527@gmail.com>
+Date: Wed, 8 Nov 2023 10:54:45 +0800
+Subject: [PATCH] FOD-support-for-Asus-Samsung-recent-Xiaomi-and-RedMa
 
 ---
- packages/SystemUI/Android.bp                  |   3 +
+ packages/SystemUI/Android.bp                  |   4 +
+ .../systemui/biometrics/UdfpsController.java  |  56 ++++
  .../biometrics/UdfpsControllerOverlay.kt      |   7 +-
- .../android/systemui/biometrics/UdfpsView.kt  | 203 ++++++++++--
+ .../android/systemui/biometrics/UdfpsView.kt  | 220 +++++++++++++
  services/core/Android.bp                      |   5 +
- .../server/biometrics/AuthService.java        | 290 +++++++++++++++++-
+ .../server/biometrics/AuthService.java        | 296 +++++++++++++++++-
  .../fingerprint/FingerprintService.java       |   3 +-
- 6 files changed, 487 insertions(+), 24 deletions(-)
+ 7 files changed, 585 insertions(+), 6 deletions(-)
 
 diff --git a/packages/SystemUI/Android.bp b/packages/SystemUI/Android.bp
-index e9cc55056e14..5df3a157bd6d 100644
+index e9cc5505..2e4ef5a9 100644
 --- a/packages/SystemUI/Android.bp
 +++ b/packages/SystemUI/Android.bp
-@@ -199,6 +199,9 @@ android_library {
+@@ -199,6 +199,10 @@ android_library {
          "motion_tool_lib",
          "bcsmartspace-google",
          "vendor.lineage.powershare-V1.0-java",
 +        "vendor.goodix.hardware.biometrics.fingerprint-V2.1-java",
 +        "vendor.xiaomi.hw.touchfeature-V1.0-java",
-+        "vendor.xiaomi.hardware.fingerprintextension-V1.0-java"
++        "vendor.xiaomi.hardware.fingerprintextension-V1.0-java",
++        "vendor.nubia.ifaa-V1.0-java",
      ],
      manifest: "AndroidManifest.xml",
      additional_manifests: ["DerpFestManifest.xml"],
+diff --git a/packages/SystemUI/src/com/android/systemui/biometrics/UdfpsController.java b/packages/SystemUI/src/com/android/systemui/biometrics/UdfpsController.java
+index 701bb46c..13c621f4 100644
+--- a/packages/SystemUI/src/com/android/systemui/biometrics/UdfpsController.java
++++ b/packages/SystemUI/src/com/android/systemui/biometrics/UdfpsController.java
+@@ -49,6 +49,7 @@ import android.os.Handler;
+ import android.os.PowerManager;
+ import android.os.Process;
+ import android.os.Trace;
++import android.os.SystemProperties;
+ import android.os.VibrationAttributes;
+ import android.os.VibrationEffect;
+ import android.util.Log;
+@@ -112,9 +113,13 @@ import java.util.HashSet;
+ import java.util.Optional;
+ import java.util.Set;
+ import java.util.concurrent.Executor;
++import java.io.File;
++import java.io.FileWriter;
++import java.io.IOException;
+ 
+ import javax.inject.Inject;
+ import javax.inject.Provider;
++import vendor.nubia.ifaa.V1_0.IIfaa;
+ 
+ /**
+  * Shows and hides the under-display fingerprint sensor (UDFPS) overlay, handles UDFPS touch events,
+@@ -246,6 +251,46 @@ public class UdfpsController implements DozeReceiver, Dumpable {
+             mScreenOn = false;
+         }
+     };
++    // Nubia 6 series fingerprint control command
++    // cmd = 13 -> finger down
++    // cmd = 14 -> after UI ready
++    // cmd = 15 -> finger up
++    public byte[] processCmd(int cmd, int param1, int param2, byte[] send_buf, int length) {
++        try {
++            if (cmd == 999) {
++                Log.d(TAG, "processCmd: 999");
++                return null;
++            }
++            ArrayList<Byte> sendList = new ArrayList<>();
++            if (send_buf != null) {
++                for (byte b : send_buf) {
++                    sendList.add(Byte.valueOf(b));
++                }
++            }
++            if (send_buf == null) {
++                Log.d(TAG, "FingerprintService send_buf = " + send_buf);
++            }
++            IIfaa iIfaaDaemon = IIfaa.getService();
++            if (iIfaaDaemon == null) {
++                Log.d(TAG, "processCmd: no iIfaaDaemon!");
++                return null;
++            }
++            ArrayList<Byte> resultList = iIfaaDaemon.processCmd(cmd, param1, param2, sendList, length);
++            int n = resultList.size();
++            Log.d(TAG, "FingerprintService result length n = " + n);
++            if (n == 0) {
++                return null;
++            }
++            byte[] result = new byte[n];
++            for (int i = 0; i < n; i++) {
++                result[i] = resultList.get(i).byteValue();
++            }
++            return result;
++        } catch (Exception e) {
++            e.printStackTrace();
++            return null;
++        }
++    };
+ 
+     @Override
+     public void dump(@NonNull PrintWriter pw, @NonNull String[] args) {
+@@ -1208,10 +1253,17 @@ public class UdfpsController implements DozeReceiver, Dumpable {
+                 view.configureDisplay(() -> dispatchOnUiReady(requestId));
+             }
+         }
++        if(SystemProperties.get("ro.vendor.build.fingerprint").contains("nubia/NX669")) {
++          processCmd(13, 0, 0, new byte[0], 0);
++        }
+ 
+         for (Callback cb : mCallbacks) {
+             cb.onFingerDown();
+         }
++        if(SystemProperties.get("ro.vendor.build.fingerprint").contains("nubia/NX669")) {
++          processCmd(14, 0, 0, new byte[0], 0);
++        }
++
+     }
+ 
+     private void onFingerUp(long requestId, @NonNull UdfpsView view) {
+@@ -1262,6 +1314,10 @@ public class UdfpsController implements DozeReceiver, Dumpable {
+                     mFingerprintManager.onPointerUp(requestId, mSensorProps.sensorId);
+                 }
+             }
++        if(SystemProperties.get("ro.vendor.build.fingerprint").contains("nubia/NX669")) {
++          processCmd(15, 0, 0, new byte[0], 0);
++        }
++
+             for (Callback cb : mCallbacks) {
+                 cb.onFingerUp();
+             }
 diff --git a/packages/SystemUI/src/com/android/systemui/biometrics/UdfpsControllerOverlay.kt b/packages/SystemUI/src/com/android/systemui/biometrics/UdfpsControllerOverlay.kt
 index cabe9008..82680449 100644
 --- a/packages/SystemUI/src/com/android/systemui/biometrics/UdfpsControllerOverlay.kt
@@ -52,10 +156,10 @@ index cabe9008..82680449 100644
                          if (accessibilityManager.isTouchExplorationEnabled) {
                              setOnHoverListener { v, event -> onTouch(v, event, true) }
 diff --git a/packages/SystemUI/src/com/android/systemui/biometrics/UdfpsView.kt b/packages/SystemUI/src/com/android/systemui/biometrics/UdfpsView.kt
-index ef7fcc95..6c5067b7 100644
+index ef7fcc95..a2a04ecf 100644
 --- a/packages/SystemUI/src/com/android/systemui/biometrics/UdfpsView.kt
 +++ b/packages/SystemUI/src/com/android/systemui/biometrics/UdfpsView.kt
-@@ -19,17 +19,30 @@ import android.content.Context
+@@ -19,17 +19,34 @@ import android.content.Context
  import android.graphics.Canvas
  import android.graphics.Color
  import android.graphics.Paint
@@ -67,15 +171,16 @@ index ef7fcc95..6c5067b7 100644
  import android.util.AttributeSet
  import android.util.Log
  import android.view.MotionEvent
--import android.view.Surface
 +import android.view.SurfaceHolder
 +import android.view.SurfaceView
 +import android.view.ViewGroup
+ import android.view.Surface
  import android.widget.FrameLayout
  import com.android.settingslib.udfps.UdfpsOverlayParams
  import com.android.systemui.R
  import com.android.systemui.doze.DozeReceiver
 +import java.io.File
++import java.io.FileNotFoundException
 +
 +import vendor.goodix.hardware.biometrics.fingerprint.V2_1.IGoodixFingerprintDaemon
 +
@@ -84,10 +189,12 @@ index ef7fcc95..6c5067b7 100644
 +
 +import android.os.Handler
 +import android.os.HandlerThread
++
++import vendor.nubia.ifaa.V1_0.IIfaa
  
  private const val TAG = "UdfpsView"
  
-@@ -40,6 +53,54 @@ class UdfpsView(
+@@ -40,6 +57,54 @@ class UdfpsView(
      context: Context,
      attrs: AttributeSet?
  ) : FrameLayout(context, attrs), DozeReceiver {
@@ -137,12 +244,12 @@ index ef7fcc95..6c5067b7 100644
 +            }
 +        })
 +        mySurfaceView.holder.setFormat(PixelFormat.RGBA_8888)
-+ 
++
 +    }
  
      // Use expanded overlay when feature flag is true, set by UdfpsViewController
      var useExpandedOverlay: Boolean = false
-@@ -70,6 +131,8 @@ class UdfpsView(
+@@ -70,6 +135,8 @@ class UdfpsView(
      /** Parameters that affect the position and size of the overlay. */
      var overlayParams = UdfpsOverlayParams()
  
@@ -151,7 +258,7 @@ index ef7fcc95..6c5067b7 100644
      /** Debug message. */
      var debugMessage: String? = null
          set(value) {
-@@ -154,37 +217,141 @@ class UdfpsView(
+@@ -154,6 +221,31 @@ class UdfpsView(
              !(animationViewController?.shouldPauseAuth() ?: false)
      }
  
@@ -176,54 +283,63 @@ index ef7fcc95..6c5067b7 100644
 +    private val handlerThread = HandlerThread("UDFPS").also { it.start() }
 +    val myHandler = Handler(handlerThread.looper)
 +
++    // This file contain current hbm value
++    val nubiaHbmState = "/sys/kernel/lcd_enhance/hbm_state"
++    var hasNubiaHbm = File(nubiaHbmState).exists()
++
      fun configureDisplay(onDisplayConfigured: Runnable) {
          isDisplayConfigured = true
          animationViewController?.onDisplayConfiguring()
--        val gView = ghbmView
--        if (gView != null) {
--            gView.setGhbmIlluminationListener(this::doIlluminate)
--            gView.visibility = VISIBLE
--            gView.startGhbmIllumination(onDisplayConfigured)
-+        mUdfpsDisplayMode?.enable(onDisplayConfigured)
+@@ -165,6 +257,84 @@ class UdfpsView(
+         } else {
+             doIlluminate(null /* surface */, onDisplayConfigured)
+         }
 +
 +        mySurfaceView.setVisibility(VISIBLE)
 +        Log.d("PHH", "setting surface visible!")
 +
-+        val brightnessFile = File("/sys/class/backlight/panel/brightness")
-+        val maxBrightnessFile = File("/sys/class/backlight/panel/max_brightness")
++        val brightnessFiles = listOf(
++            File("/sys/class/backlight/panel/brightness"),
++            File("/sys/class/backlight/panel0-backlight/brightness"),
++            File("/sys/devices/platform/soc/soc:mtk_leds/leds/lcd-backlight/brightness")
++        )
++        val maxBrightnessFiles = listOf(
++            File("/sys/class/backlight/panel/max_brightness"),
++            File("/sys/class/backlight/panel0-backlight/max_brightness"),
++            File("/sys/devices/platform/soc/soc:mtk_leds/leds/lcd-backlight/max_brightness")
++        )
 +
 +        var brightness: Double = 0.0
 +        var maxBrightness: Double = 0.0
++        var bmFilesExist: Boolean = false
 +
-+        if (brightnessFile.exists() && maxBrightnessFile.exists()) {
-+            brightness = brightnessFile.readText().toDouble()
-+            maxBrightness = maxBrightnessFile.readText().toDouble()
-         } else {
--            doIlluminate(null /* surface */, onDisplayConfigured)
-+            brightness = File("/sys/class/backlight/panel0-backlight/brightness").readText().toDouble()
-+            maxBrightness = File("/sys/class/backlight/panel0-backlight/max_brightness").readText().toDouble()
++        brightnessFiles.zip(maxBrightnessFiles) {bFile, mFile ->
++            if (bFile.exists() && mFile.exists()) {
++                bmFilesExist = true
++                brightness = bFile.readText().toDouble()
++                maxBrightness = mFile.readText().toDouble()
++            }
 +        }
++
++        val dim = if (bmFilesExist) {
++            1.0 - Math.pow( (brightness / maxBrightness), 1/2.3);
++        } else {
++            0.0
++        }
++
 +        // Assume HBM is max brightness
-+        val dim = 1.0 - Math.pow( (brightness / maxBrightness), 1/2.3);
 +        Log.d("PHH-Enroll", "Brightness is $brightness / $maxBrightness, setting dim to $dim")
 +        if (hasAsusGhbm) {
 +            dimUpdate(dim.toFloat())
 +        }
 +        if (hasSamsungMask) {
 +            dimUpdate(dim.toFloat())
-         }
--    }
- 
--    private fun doIlluminate(surface: Surface?, onDisplayConfigured: Runnable?) {
--        if (ghbmView != null && surface == null) {
--            Log.e(TAG, "doIlluminate | surface must be non-null for GHBM")
++        }
++
 +        if(android.os.SystemProperties.get("ro.vendor.build.fingerprint").contains("ASUS")) {
 +            goodixCmd(200001)
-         }
- 
--        mUdfpsDisplayMode?.enable {
--            onDisplayConfigured?.run()
--            ghbmView?.drawIlluminationDot(RectF(sensorRect))
++        }
++
 +        if(hasXiaomiLhbm){
 +            Log.d("PHH-Enroll", "Xiaomi scenario in UdfpsView reached!")
 +            mySurfaceView.setVisibility(INVISIBLE)
@@ -250,16 +366,18 @@ index ef7fcc95..6c5067b7 100644
 +                    }
 +                }, 600)
 +            }, 200)
-         }
++        }
++          if(hasNubiaHbm) {
++            Log.d("PHH-Enroll", "Nubia scenario in UdfpsView reached!")
++            File(nubiaHbmState).writeText("4095")
++          }
++
      }
  
-     fun unconfigureDisplay() {
-         isDisplayConfigured = false
-         animationViewController?.onDisplayUnconfigured()
--        ghbmView?.let { view ->
--            view.setGhbmIlluminationListener(null)
--            view.visibility = INVISIBLE
--        }
+     private fun doIlluminate(surface: Surface?, onDisplayConfigured: Runnable?) {
+@@ -186,5 +356,55 @@ class UdfpsView(
+             view.visibility = INVISIBLE
+         }
          mUdfpsDisplayMode?.disable(null /* onDisabled */)
 +
 +        if (hasAsusGhbm) {
@@ -299,6 +417,9 @@ index ef7fcc95..6c5067b7 100644
 +        } else if(hasXiaomiLhbm) {
 +            IXiaomiFingerprint.getService().extCmd(android.os.SystemProperties.getInt("persist.phh.xiaomi.fod.enrollment.id", 4), 0);
 +            ITouchFeature.getService().setTouchMode(0, 10, 0);
++        } else if(hasNubiaHbm) {
++            Log.d("PHH-Enroll", "Nubia Restore brightness")
++            File(nubiaHbmState).writeText(File("/sys/class/backlight/panel0-backlight/brightness").readText())
 +        } else {
 +            dimUpdate(0.0f)
 +        }
@@ -327,7 +448,7 @@ index 05782235..18a9fe12 100644
      javac_shard_size: 50,
      javacflags: [
 diff --git a/services/core/java/com/android/server/biometrics/AuthService.java b/services/core/java/com/android/server/biometrics/AuthService.java
-index c692f5f9..d9cbb1f7 100644
+index c692f5f9..8194fbc2 100644
 --- a/services/core/java/com/android/server/biometrics/AuthService.java
 +++ b/services/core/java/com/android/server/biometrics/AuthService.java
 @@ -78,6 +78,25 @@ import java.util.ArrayList;
@@ -485,7 +606,7 @@ index c692f5f9..d9cbb1f7 100644
      }
  
      /**
-@@ -797,18 +917,117 @@ public class AuthService extends SystemService {
+@@ -797,18 +917,123 @@ public class AuthService extends SystemService {
                  ? modality : (modality & ~BiometricAuthenticator.TYPE_CREDENTIAL);
      }
  
@@ -596,7 +717,13 @@ index c692f5f9..d9cbb1f7 100644
  
 -        final boolean isUdfps = !ArrayUtils.isEmpty(udfpsProps);
 +        boolean isUdfps = !ArrayUtils.isEmpty(udfpsProps);
-+        if(!isUdfps) udfpsProps = dynamicUdfpsProps();
++        if(!isUdfps) {
++            try {
++                udfpsProps = dynamicUdfpsProps();
++            } catch(Throwable t) {
++                Slog.e("PHH-Enroll", "Failed generating UDFPS props");
++            }
++        }
 +        isUdfps = !ArrayUtils.isEmpty(udfpsProps);
 +
 +        if(udfpsProps.length > 0) {
@@ -605,7 +732,7 @@ index c692f5f9..d9cbb1f7 100644
  
          // config_is_powerbutton_fps indicates whether device has a power button fingerprint sensor.
          final boolean isPowerbuttonFps = getContext().getResources().getBoolean(
-@@ -876,4 +1095,67 @@ public class AuthService extends SystemService {
+@@ -876,4 +1101,67 @@ public class AuthService extends SystemService {
                  componentInfo, resetLockoutRequiresHardwareAuthToken,
                  resetLockoutRequiresChallenge);
      }
@@ -695,5 +822,5 @@ index ece35c52..8c20b9e1 100644
              });
          }
 -- 
-2.42.0
+2.34.1
 
