@@ -1,40 +1,43 @@
-From cf55d115d784f2f74710842f0fa8e6a1586abd5a Mon Sep 17 00:00:00 2001
+From 8949c92703f5dd3e866b001819b739c35a6478e8 Mon Sep 17 00:00:00 2001
 From: BoNic <BoNio9527@gmail.com>
-Date: Thu, 9 Nov 2023 09:14:06 +0800
-Subject: [PATCH] add-Chinese-translation
+Date: Mon, 13 Nov 2023 17:15:30 +0800
+Subject: [PATCH] res-Add-support-for-simplified-Chinese
 
 ---
- res/values-zh-rCN/derp_strings.xml | 461 +++++++++++++++++++++++++++++
- 1 file changed, 461 insertions(+)
+ res/values-zh-rCN/derp_strings.xml | 518 +++++++++++++++++++++++++++++
+ 1 file changed, 518 insertions(+)
  create mode 100644 res/values-zh-rCN/derp_strings.xml
 
 diff --git a/res/values-zh-rCN/derp_strings.xml b/res/values-zh-rCN/derp_strings.xml
 new file mode 100644
-index 0000000..f62e006
+index 0000000..8c36374
 --- /dev/null
 +++ b/res/values-zh-rCN/derp_strings.xml
-@@ -0,0 +1,461 @@
+@@ -0,0 +1,518 @@
 +<?xml version="1.0" encoding="utf-8"?>
 +<!--
 +     Copyright (C) 2023 DerpFest
 +     SPDX-License-Identifier: Apache-2.0
 +-->
 +<resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
++    <!-- Android debugging as root -->
++    <string name="adb_enable_root">Rooted debugging</string>
++    <string name="adb_enable_summary_root">Allow running Android debugging as root</string>
 +
 +    <!-- Advanced keyboard settings -->
 +    <string name="keyboard_extras_title">附加功能</string>
 +    <string name="advanced_keyboard_settings_title">高级设置</string>
 +
 +    <!-- DerpFest version -->
-+    <string name="derp_version">DerpFest version</string>
++    <string name="derp_version">DerpFest版本</string>
 +    <string name="derp_version_default">Unknown</string>
 +
 +    <!-- Platform version -->
-+    <string name="platform_version">Platform version</string>
++    <string name="platform_version">平台版本</string>
 +
 +    <!-- Doze on charge -->
 +    <string name="doze_on_charge_title">充电时常亮</string>
-+    <string name="doze_on_charge_summary">充电时一直显示瞌睡屏幕</string>
++    <string name="doze_on_charge_summary">充电时一直显示屏幕</string>
 +
 +    <!-- Hotspot extras -->
 +    <string name="tethering_allow_vpn_upstreams_title">允许客户端使用 VPN</string>
@@ -57,31 +60,31 @@ index 0000000..f62e006
 +    <string name="trust_restrict_usb_disabled">始终允许 USB 连接</string>
 +
 +    <!-- Message shown in fingerprint enrollment dialog to locate the sensor -->
-+    <string name="fingerprint_enroll_find_sensor_message_front" product="tablet">Locate the fingerprint sensor on the front of your tablet.</string>
-+    <string name="fingerprint_enroll_find_sensor_message_front" product="device">Locate the fingerprint sensor on the front of your device.</string>
-+    <string name="fingerprint_enroll_find_sensor_message_front" product="default">Locate the fingerprint sensor on the front of your phone.</string>
-+    <string name="fingerprint_enroll_find_sensor_message_rear" product="tablet">Locate the fingerprint sensor on the back of your tablet.</string>
-+    <string name="fingerprint_enroll_find_sensor_message_rear" product="device">Locate the fingerprint sensor on the back of your device.</string>
-+    <string name="fingerprint_enroll_find_sensor_message_rear" product="default">Locate the fingerprint sensor on the back of your phone.</string>
-+    <string name="fingerprint_enroll_find_sensor_message_side" product="tablet">Locate the fingerprint sensor on the side of your tablet.</string>
-+    <string name="fingerprint_enroll_find_sensor_message_side" product="device">Locate the fingerprint sensor on the side of your device.</string>
-+    <string name="fingerprint_enroll_find_sensor_message_side" product="default">Locate the fingerprint sensor on the side of your phone.</string>
++    <string name="fingerprint_enroll_find_sensor_message_front" product="tablet">找到平板电脑正面的指纹传感器。</string>
++    <string name="fingerprint_enroll_find_sensor_message_front" product="device">找到设备正面的指纹传感器。</string>
++    <string name="fingerprint_enroll_find_sensor_message_front" product="default">找到手机正面的指纹传感器。</string>
++    <string name="fingerprint_enroll_find_sensor_message_rear" product="tablet">找到平板电脑背面的指纹传感器。</string>
++    <string name="fingerprint_enroll_find_sensor_message_rear" product="device">找到设备背面的指纹传感器。</string>
++    <string name="fingerprint_enroll_find_sensor_message_rear" product="default">找到手机背面的指纹传感器。</string>
++    <string name="fingerprint_enroll_find_sensor_message_side" product="tablet">找到平板电脑侧面的指纹传感器。</string>
++    <string name="fingerprint_enroll_find_sensor_message_side" product="device">找到设备侧面的指纹传感器。</string>
++    <string name="fingerprint_enroll_find_sensor_message_side" product="default">找到手机侧面的指纹传感器。</string>
 +
 +    <!-- Message shown when user touches the icon on the screen, instead of the real fingerprint sensor -->
-+    <string name="fingerprint_enroll_touch_dialog_message_front" product="tablet">Touch the sensor on the front of your tablet.</string>
-+    <string name="fingerprint_enroll_touch_dialog_message_front" product="device">Touch the sensor on the front of your device.</string>
-+    <string name="fingerprint_enroll_touch_dialog_message_front" product="default">Touch the sensor on the front of your phone.</string>
-+    <string name="fingerprint_enroll_touch_dialog_message_rear" product="tablet">Touch the sensor on the back of your tablet.</string>
-+    <string name="fingerprint_enroll_touch_dialog_message_rear" product="device">Touch the sensor on the back of your device.</string>
-+    <string name="fingerprint_enroll_touch_dialog_message_rear" product="default">Touch the sensor on the back of your phone.</string>
-+    <string name="fingerprint_enroll_touch_dialog_message_side" product="tablet">Touch the sensor on the side of your tablet.</string>
-+    <string name="fingerprint_enroll_touch_dialog_message_side" product="device">Touch the sensor on the side of your device.</string>
-+    <string name="fingerprint_enroll_touch_dialog_message_side" product="default">Touch the sensor on the side of your phone.</string>
++    <string name="fingerprint_enroll_touch_dialog_message_front" product="tablet">触摸平板电脑正面的传感器。</string>
++    <string name="fingerprint_enroll_touch_dialog_message_front" product="device">触摸设备正面的传感器。</string>
++    <string name="fingerprint_enroll_touch_dialog_message_front" product="default">触摸手机正面的传感器。</string>
++    <string name="fingerprint_enroll_touch_dialog_message_rear" product="tablet">触摸平板电脑背面的传感器。</string>
++    <string name="fingerprint_enroll_touch_dialog_message_rear" product="device">触摸设备背面的传感器。</string>
++    <string name="fingerprint_enroll_touch_dialog_message_rear" product="default">触摸手机背面的传感器。</string>
++    <string name="fingerprint_enroll_touch_dialog_message_side" product="tablet">触摸平板电脑侧面的传感器。</string>
++    <string name="fingerprint_enroll_touch_dialog_message_side" product="device">触摸设备侧面的传感器。</string>
++    <string name="fingerprint_enroll_touch_dialog_message_side" product="default">触摸手机侧面的传感器。</string>
 +
 +    <!-- Navigation bar hint -->
 +    <string name="navbar_category">导航栏</string>
-+    <string name="hide_navbar_gesture_bar_title">隐藏导航栏</string>
-+    <string name="hide_navbar_gesture_bar_summary">隐藏屏幕底部的导航栏</string>
++    <string name="hide_navbar_gesture_bar_title">隐藏手势栏</string>
++    <string name="hide_navbar_gesture_bar_summary">隐藏屏幕底部的手势栏</string>
 +
 +    <!-- Three-fingers-swipe to screenshot -->
 +    <string name="three_finger_gesture">滑动屏幕截图</string>
@@ -97,12 +100,12 @@ index 0000000..f62e006
 +    <string name="screenshot_shutter_sound_title">截图声音</string>
 +
 +    <!-- One shot automatic brightness -->
-+    <string name="auto_brightness_one_shot_title">一次性自动亮度</string>
++    <string name="auto_brightness_one_shot_title">一键自动亮度</string>
 +    <string name="auto_brightness_one_shot_summary">亮度调节仅在屏幕打开时进行</string>
 +
 +    <!-- High touch polling rate -->
-+    <string name="high_touch_polling_rate_title">High touch polling rate</string>
-+    <string name="high_touch_polling_rate_summary">Increase touchscreen polling rate</string>
++    <string name="high_touch_polling_rate_title">高触摸轮询率</string>
++    <string name="high_touch_polling_rate_summary">提高触摸屏轮询率</string>
 +
 +    <!-- High touch sensitivity -->
 +    <string name="high_touch_sensitivity_title">高触摸灵敏度</string>
@@ -110,14 +113,14 @@ index 0000000..f62e006
 +
 +    <!-- Notification sound timeout -->
 +    <string name="app_notification_sound_timeout_title">通知声音之间的最短时间间隔</string>
-+    <string name="app_notification_sound_timeout_summary_template">Allow sounds or vibration no more than once every <xliff:g id="duration">%1$s</xliff:g></string>
-+    <string name="app_notification_sound_timeout_value_none">No restriction</string>
-+    <string name="app_notification_sound_timeout_value_10_seconds">10 seconds</string>
-+    <string name="app_notification_sound_timeout_value_30_seconds">30 seconds</string>
-+    <string name="app_notification_sound_timeout_value_1_minute">1 minute</string>
-+    <string name="app_notification_sound_timeout_value_5_minutes">5 minutes</string>
-+    <string name="app_notification_sound_timeout_value_15_minutes">10 minutes</string>
-+    <string name="app_notification_sound_timeout_value_30_minutes">30 minutes</string>
++    <string name="app_notification_sound_timeout_summary_template">允许发出声音或振动的次数不得超过每<xliff:g id="duration">%1$s</xliff:g>一次</string>
++    <string name="app_notification_sound_timeout_value_none">没有限制</string>
++    <string name="app_notification_sound_timeout_value_10_seconds">10秒</string>
++    <string name="app_notification_sound_timeout_value_30_seconds">30秒</string>
++    <string name="app_notification_sound_timeout_value_1_minute">1分钟</string>
++    <string name="app_notification_sound_timeout_value_5_minutes">5分钟</string>
++    <string name="app_notification_sound_timeout_value_15_minutes">10分钟</string>
++    <string name="app_notification_sound_timeout_value_30_minutes">30分钟</string>
 +
 +    <!-- Proximity wake -->
 +    <string name="proximity_wake_title">防止意外唤醒</string>
@@ -149,70 +152,70 @@ index 0000000..f62e006
 +    <!-- Generic stuff used everywhere -->
 +    <string name="reset">重置</string>
 +    <!-- Buttons -->
-+    <string name="button_pref_title">Buttons</string>
-+    <string name="hardware_keys_power_key_title">Power button</string>
-+    <string name="hardware_keys_home_key_title">Home button</string>
-+    <string name="hardware_keys_back_key_title">Back button</string>
-+    <string name="hardware_keys_menu_key_title">Menu button</string>
-+    <string name="hardware_keys_assist_key_title">Search button</string>
-+    <string name="hardware_keys_appswitch_key_title">Recents button</string>
-+    <string name="hardware_keys_camera_key_title">Camera button</string>
-+    <string name="hardware_keys_volume_keys_title">Volume buttons</string>
-+    <string name="hardware_keys_short_press_title">Short press action</string>
-+    <string name="hardware_keys_long_press_title">Long press action</string>
-+    <string name="hardware_keys_double_tap_title">Double tap action</string>
-+    <string name="hardware_keys_action_nothing">No action</string>
-+    <string name="hardware_keys_action_menu">Open/close menu</string>
-+    <string name="hardware_keys_action_app_switch">Recent apps switcher</string>
-+    <string name="hardware_keys_action_search">Search assistant</string>
-+    <string name="hardware_keys_action_voice_search">Voice search</string>
-+    <string name="hardware_keys_action_in_app_search">In-app search</string>
-+    <string name="hardware_keys_action_launch_camera">Launch camera</string>
-+    <string name="hardware_keys_action_sleep">Turn screen off</string>
-+    <string name="hardware_keys_action_last_app">Last app</string>
-+    <string name="camera_sleep_on_release_title">Screen peek</string>
-+    <string name="camera_sleep_on_release_summary">A half press will keep the screen on only while the button is held down</string>
-+    <string name="camera_launch_title">Launch camera</string>
-+    <string name="camera_launch_summary">A longpress and release will launch camera</string>
-+    <string name="volbtn_music_controls_title">Control playback</string>
-+    <string name="volbtn_music_controls_summary">Seek music tracks by long pressing the volume keys while the display is off</string>
-+    <string name="volbtn_cursor_control_title">Keyboard cursor control</string>
-+    <string name="volbtn_cursor_control_off">Disabled</string>
-+    <string name="volbtn_cursor_control_on">Volume up/down moves cursor left/right</string>
-+    <string name="volbtn_cursor_control_on_reverse">Volume up/down moves cursor right/left</string>
-+    <string name="power_end_call_title">End call</string>
-+    <string name="power_end_call_summary">End the current call by pressing the power button</string>
-+    <string name="swap_volume_buttons_title">Reorient</string>
-+    <string name="swap_volume_buttons_summary">Swap volume buttons when the screen is rotated</string>
-+    <string name="volume_panel_on_left_title">Show panel on left</string>
-+    <string name="volume_panel_on_left_summary">Display volume panel on the left side of the screen</string>
-+    <string name="button_wake_title">Wake device</string>
-+    <string name="volume_answer_call_title">Answer call</string>
-+    <string name="volume_answer_call_summary">Answer incoming calls by pressing the volume buttons</string>
-+    <string name="home_answer_call_title">Answer call</string>
-+    <string name="home_answer_call_summary">Answer incoming calls by pressing the home button</string>
-+    <string name="extras_title">Extras</string>
-+    <string name="click_partial_screenshot_title">Click to partial screenshot</string>
-+    <string name="click_partial_screenshot_summary">Short click Volume Down and Power to take partial screenshot</string>
++    <string name="button_pref_title">按键</string>
++    <string name="hardware_keys_power_key_title">电源按键</string>
++    <string name="hardware_keys_home_key_title">主页</string>
++    <string name="hardware_keys_back_key_title">返回</string>
++    <string name="hardware_keys_menu_key_title">菜单</string>
++    <string name="hardware_keys_assist_key_title">搜索</string>
++    <string name="hardware_keys_appswitch_key_title">最近的内容</string>
++    <string name="hardware_keys_camera_key_title">相机</string>
++    <string name="hardware_keys_volume_keys_title">音量</string>
++    <string name="hardware_keys_short_press_title">短按动作</string>
++    <string name="hardware_keys_long_press_title">长按动作</string>
++    <string name="hardware_keys_double_tap_title">双击动作</string>
++    <string name="hardware_keys_action_nothing">无动作</string>
++    <string name="hardware_keys_action_menu">打开/关闭菜单</string>
++    <string name="hardware_keys_action_app_switch">最近的应用程序切换器</string>
++    <string name="hardware_keys_action_search">搜索助手</string>
++    <string name="hardware_keys_action_voice_search">声音搜索</string>
++    <string name="hardware_keys_action_in_app_search">应用内搜索</string>
++    <string name="hardware_keys_action_launch_camera">启动相机</string>
++    <string name="hardware_keys_action_sleep">关闭屏幕</string>
++    <string name="hardware_keys_action_last_app">最后一个应用程序</string>
++    <string name="camera_sleep_on_release_title">屏幕预览</string>
++    <string name="camera_sleep_on_release_summary">仅在按住按钮时半按才会使屏幕保持打开状态</string>
++    <string name="camera_launch_title">启动相机</string>
++    <string name="camera_launch_summary">长按并释放将启动相机</string>
++    <string name="volbtn_music_controls_title">控制播放</string>
++    <string name="volbtn_music_controls_summary">显示屏关闭时长按音量键即可搜索音乐曲目</string>
++    <string name="volbtn_cursor_control_title">键盘光标控制</string>
++    <string name="volbtn_cursor_control_off">禁用</string>
++    <string name="volbtn_cursor_control_on">音量增大/减小向左/向右移动光标</string>
++    <string name="volbtn_cursor_control_on_reverse">音量增大/减小向右/向左移动光标</string>
++    <string name="power_end_call_title">结束通话</string>
++    <string name="power_end_call_summary">按电源键结束当前通话</string>
++    <string name="swap_volume_buttons_title">重新定位</string>
++    <string name="swap_volume_buttons_summary">旋转屏幕时交换音量键</string>
++    <string name="volume_panel_on_left_title">显示左侧面板</string>
++    <string name="volume_panel_on_left_summary">在屏幕左侧显示音量面板</string>
++    <string name="button_wake_title">唤醒设备</string>
++    <string name="volume_answer_call_title">接听电话</string>
++    <string name="volume_answer_call_summary">按音量键接听来电</string>
++    <string name="home_answer_call_title">接听电话</string>
++    <string name="home_answer_call_summary">按主页键接听来电</string>
++    <string name="extras_title">附加功能</string>
++    <string name="click_partial_screenshot_title">点击查看部分截图</string>
++    <string name="click_partial_screenshot_summary">短按音量键-和电源即可截取部分屏幕截图</string>
 +
 +    <!-- Navigation Bar -->
-+    <string name="navigation_bar_category">Navigation bar</string>
-+    <string name="navigation_bar_invert_layout_title">Invert layout</string>
-+    <string name="navigation_bar_invert_layout_summary">Inverts the layout of the navigation bar and other items, such as the IME switcher</string>
-+    <string name="navigation_bar_left_summary">Place the navigation bar on the left side of the screen in landscape mode</string>
-+    <string name="navigation_bar_arrow_keys_title">Show arrow keys while typing</string>
-+    <string name="navigation_bar_arrow_keys_summary">Display left and right cursor buttons while typing. Overrides IME switcher.</string>
-+    <string name="navigation_bar_back_long_press_title">Back long press action</string>
-+    <string name="navigation_bar_home_long_press_title">Home long press action</string>
-+    <string name="navigation_bar_home_double_tap_title">Home double tap action</string>
-+    <string name="navigation_bar_app_switch_long_press_title">Recents long press action</string>
-+    <string name="navigation_bar_edge_long_swipe_title">Edge long swipe action</string>
++    <string name="navigation_bar_category">导航栏</string>
++    <string name="navigation_bar_invert_layout_title">反转布局</string>
++    <string name="navigation_bar_invert_layout_summary">反转导航栏和其他项目（例如 IME 切换器）的布局</string>
++    <string name="navigation_bar_left_summary">横向模式下将导航栏置于屏幕左侧</string>
++    <string name="navigation_bar_arrow_keys_title">打字时显示箭头键</string>
++    <string name="navigation_bar_arrow_keys_summary">打字时显示左右光标按钮。覆盖 IME 切换器。</string>
++    <string name="navigation_bar_back_long_press_title">返回长按动作</string>
++    <string name="navigation_bar_home_long_press_title">主页长按动作</string>
++    <string name="navigation_bar_home_double_tap_title">主页双击操作</string>
++    <string name="navigation_bar_app_switch_long_press_title">最近长按动作</string>
++    <string name="navigation_bar_edge_long_swipe_title">边缘长扫动作</string>
 +
 +    <!-- Power menu -->
 +    <string name="power_menu_title">电源菜单</string>
 +    <string name="power_menu_summary">更改电源菜单中应显示的项目</string>
 +    <string name="power_menu_items_title">电源菜单项</string>
-+    <string name="power_menu_screenshot_title">截图</string>
++    <string name="power_menu_screenshot_title">截屏</string>
 +    <string name="power_menu_screenshot_summary">长按部分截图</string>
 +    <string name="power_menu_airplane_title">飞行模式</string>
 +    <string name="power_menu_users_title">用户切换器</string>
@@ -228,53 +231,53 @@ index 0000000..f62e006
 +    <!-- Description of setting that controls gesture to open camera by double tapping the power button [CHAR LIMIT=NONE] -->
 +    <string name="camera_double_tap_power_gesture_desc">无需解锁屏幕即可快速打开相机</string>
 +
-+    <string name="torch_long_press_power_gesture_title">长按电源打开手电筒</string>
-+    <string name="torch_long_press_power_gesture_desc">在屏幕关闭时长按电源按钮激活手电筒</string>
++    <string name="torch_long_press_power_gesture_title">手电筒</string>
++    <string name="torch_long_press_power_gesture_desc">在显示屏关闭时长按电源键激活手电筒</string>
 +    <string name="torch_long_press_power_timeout_title">自动关闭手电筒</string>
 +
-+    <string name="torch_long_press_power_timeout_never">Never</string>
-+    <string name="torch_long_press_power_timeout_1min">1 minute</string>
-+    <string name="torch_long_press_power_timeout_2min">2 minutes</string>
-+    <string name="torch_long_press_power_timeout_5min">5 minutes</string>
-+    <string name="torch_long_press_power_timeout_10min">10 minutes</string>
++    <string name="torch_long_press_power_timeout_never">从不</string>
++    <string name="torch_long_press_power_timeout_1min">1分钟</string>
++    <string name="torch_long_press_power_timeout_2min">2分钟</string>
++    <string name="torch_long_press_power_timeout_5min">5分钟</string>
++    <string name="torch_long_press_power_timeout_10min">10分钟</string>
 +
 +    <!-- Key backlight -->
 +    <string name="button_backlight_title">背光</string>
-+    <string name="button_backlight_enabled">Illuminate buttons</string>
-+    <string name="button_backlight_only_when_pressed_title">Illuminate buttons only when pressed</string>
-+    <string name="keyboard_backlight_enabled">Illuminate keyboard</string>
-+    <string name="button_backlight_seekbar_title">Button brightness</string>
-+    <string name="keyboard_backlight_seekbar_title">Keyboard brightness</string>
-+    <string name="backlight_timeout_title">Illumination timeout</string>
-+    <string name="backlight_timeout_unlimited">Don\'t turn off</string>
-+    <string name="backlight_summary_disabled">Disabled</string>
++    <string name="button_backlight_enabled">发光键</string>
++    <string name="button_backlight_only_when_pressed_title">仅在按下时点亮按键</string>
++    <string name="keyboard_backlight_enabled">发光键盘</string>
++    <string name="button_backlight_seekbar_title">按键亮度</string>
++    <string name="keyboard_backlight_seekbar_title">键盘亮度</string>
++    <string name="backlight_timeout_title">照明超时</string>
++    <string name="backlight_timeout_unlimited">不要关闭</string>
++    <string name="backlight_summary_disabled">禁用</string>
 +    <string name="backlight_summary_enabled_with_timeout">Enabled for <xliff:g id="timeout">%s</xliff:g></string>
-+    <string name="backlight_summary_enabled">Enabled</string>
++    <string name="backlight_summary_enabled">启用</string>
 +
 +    <!-- Buttons - Enable navbar -->
 +    <string name="disable_navkeys_title">启用屏幕导航栏</string>
-+    <string name="disable_navkeys_summary">启用屏幕导航栏并禁用硬件按钮</string>
++    <string name="disable_navkeys_summary">启用屏幕导航栏并禁用硬件按键</string>
 +
 +    <!-- Buttons - Swap capacitive keys -->
-+    <string name="swap_capacitive_keys_title">更换电容式按钮</string>
-+    <string name="swap_capacitive_keys_summary">交换最近使用按钮和后退按钮的顺序</string>
++    <string name="swap_capacitive_keys_title">更换电容式按键</string>
++    <string name="swap_capacitive_keys_summary">交换最近使用和后退按键的顺序</string>
 +
 +    <!-- Others settings -->
 +    <string name="others_settings_title">其他设置</string>
-+    <string name="additional_buttons_title">附加按钮</string>
++    <string name="additional_buttons_title">附加按键</string>
 +
 +    <!-- LiveDisplay -->
 +    <string name="advanced">高级</string>
 +    <string name="live_display_summary">根据一天中的时间和环境条件优化屏幕，以提高可读性并减少眼睛疲劳</string>
 +    <string name="live_display_mode">显示模式</string>
 +    <string name="live_display_color_temperature_title">色温</string>
-+    <string name="live_display_color_temperature_summary">Day: <xliff:g id="day_temperature">%1$d</xliff:g>K  Night: <xliff:g id="night_temperature">%2$d</xliff:g>K</string>
++    <string name="live_display_color_temperature_summary">白天: <xliff:g id="day_temperature">%1$d</xliff:g>K  夜晚: <xliff:g id="night_temperature">%2$d</xliff:g>K</string>
 +    <string name="live_display_color_temperature_label"><xliff:g id="degrees">%1$d</xliff:g>K</string>
 +    <string name="live_display_day">白天</string>
 +    <string name="live_display_night">夜晚</string>
 +    <string name="live_display_outdoor_mode_title">自动户外模式</string>
 +    <string name="live_display_outdoor_mode_summary">强光下自动增加亮度和饱和度</string>
-+    <string name="live_display_anti_flicker_title">Anti flicker</string>
++    <string name="live_display_anti_flicker_title">防忽悠</string>
 +    <string name="live_display_anti_flicker_summary">防止大量闪烁并减少弱光条件下的眼睛疲劳。它可能会降低颜色准确性并影响某些项目的显示方式。</string>
 +    <string name="live_display_low_power_title">降低功耗</string>
 +    <string name="live_display_low_power_summary">调整显示以实现最低功耗而不降低性能</string>
@@ -289,33 +292,33 @@ index 0000000..f62e006
 +    <string name="live_display_color_profile_dynamic_summary">增强的色彩和明亮的白色</string>
 +    <string name="live_display_color_profile_cinema_title">电影</string>
 +    <string name="live_display_color_profile_cinema_summary">视频的完美色彩再现</string>
-+    <string name="live_display_color_profile_astronomy_title">Astronomy</string>
++    <string name="live_display_color_profile_astronomy_title">天文学</string>
 +    <string name="live_display_color_profile_astronomy_summary">深红色有助于保持夜视能力</string>
 +    <string name="live_display_color_profile_photography_title">摄影</string>
 +    <string name="live_display_color_profile_photography_summary">完美的照片色彩再现</string>
-+    <string name="live_display_color_profile_basic_title">Basic</string>
-+    <string name="live_display_color_profile_basic_summary">Use the display uncalibrated</string>
++    <string name="live_display_color_profile_basic_title">基本</string>
++    <string name="live_display_color_profile_basic_summary">使用未校准的显示器</string>
 +    <string name="live_display_color_profile_adaptive_title">自适应</string>
 +    <string name="live_display_color_profile_adaptive_summary">颜色适应环境条件</string>
 +    <string name="live_display_color_profile_reading_title">阅读</string>
 +    <string name="live_display_color_profile_reading_summary">暖色可减轻眼睛疲劳</string>
 +    <string name="live_display_color_profile_srgb_title">sRGB</string>
-+    <string name="live_display_color_profile_srgb_summary">Colors accurate to the sRGB color space</string>
++    <string name="live_display_color_profile_srgb_summary">颜色精确到 sRGB 颜色空间</string>
 +    <string name="live_display_color_profile_dci_p3_title">DCI-P3</string>
-+    <string name="live_display_color_profile_dci_p3_summary">Colors accurate to the DCI-P3 color space</string>
-+    <string name="live_display_reading_mode_title">Reading mode</string>
-+    <string name="live_display_reading_mode_summary">Grayscale mode for long-term reading</string>
-+    <string name="color_calibration_title">Color calibration</string>
-+    <string name="color_calibration_summary">Calibrate on-screen colors</string>
-+    <string name="color_red_title">Red</string>
-+    <string name="color_green_title">Green</string>
-+    <string name="color_blue_title">Blue</string>
++    <string name="live_display_color_profile_dci_p3_summary">颜色精确到 DCI-P3 颜色空间</string>
++    <string name="live_display_reading_mode_title">阅读模式</string>
++    <string name="live_display_reading_mode_summary">适合长时间阅读的灰度模式</string>
++    <string name="color_calibration_title">色彩校准</string>
++    <string name="color_calibration_summary">校准屏幕颜色</string>
++    <string name="color_red_title">红色</string>
++    <string name="color_green_title">绿色</string>
++    <string name="color_blue_title">蓝色</string>
 +
 +    <!-- LiveDisplay : Picture Adjustment -->
 +    <string name="picture_adjustment_title">画面调整</string>
 +    <string name="picture_adjustment_summary">调整色调、饱和度、强度和对比度</string>
 +    <string name="adj_hue_title">色调</string>
-+    <string name="adj_saturation_title">饱和度</string>
++    <string name="adj_saturation_title">饱和</string>
 +    <string name="adj_intensity_title">强度</string>
 +    <string name="adj_contrast_title">对比度</string>
 +
@@ -326,8 +329,8 @@ index 0000000..f62e006
 +    <!-- Notification light dialogs -->
 +    <string name="edit_light_settings">编辑灯光设置</string>
 +    <string name="pulse_speed_title">脉冲长度和速度</string>
-+    <string name="default_time">Normal</string>
-+    <string name="custom_time">Custom</string>
++    <string name="default_time">正常</string>
++    <string name="custom_time">风格</string>
 +    <string name="dialog_delete_title">删除</string>
 +    <string name="dialog_delete_message">删除所选项目？</string>
 +    <string name="brightness">亮度等级</string>
@@ -355,7 +358,7 @@ index 0000000..f62e006
 +    <string name="charging_control_title">充电控制</string>
 +    <string name="charging_control_summary">为您的设备自定义充电时间表和限制</string>
 +    <string name="charging_control_enable_title">启用充电控制</string>
-+    <string name="charging_control_mode_title">充电模式</string>
++    <string name="charging_control_mode_title">充电方式</string>
 +    <string name="charging_control_mode_auto_title">自动排程</string>
 +    <string name="charging_control_mode_auto_summary">根据设置的警报自动确定何时开始充电</string>
 +    <string name="charging_control_mode_custom_title">定制时间表</string>
@@ -369,14 +372,14 @@ index 0000000..f62e006
 +    <string name="charging_control_limit_title">限制</string>
 +
 +    <!-- Battery light settings -->
-+    <string name="battery_light_title">电池灯光</string>
++    <string name="battery_light_title">电池灯</string>
 +    <string name="battery_light_summary">自定义电池充电指示灯行为</string>
 +    <string name="battery_light_enable_title">启用电池灯</string>
 +    <string name="battery_low_pulse_title">如果电池电量低则发出脉冲</string>
 +    <string name="battery_light_full_charge_disabled_title">充满电后关闭</string>
 +    <string name="battery_light_list_title">颜色</string>
 +    <string name="battery_light_low_color_title">电量不足</string>
-+    <string name="battery_light_medium_color_title">Charging</string>
++    <string name="battery_light_medium_color_title">充电</string>
 +    <string name="battery_light_full_color_title">充满电</string>
 +    <string name="battery_light_brightness_normal" translatable="false">@string/light_brightness_normal</string>
 +    <string name="battery_light_brightness_zen" translatable="false">@string/light_brightness_zen</string>
@@ -385,8 +388,8 @@ index 0000000..f62e006
 +    <string name="notification_light_title">通知灯</string>
 +    <string name="notification_light_summary">自定义通知灯行为</string>
 +    <string name="notification_light_enable_title">启用通知灯</string>
-+    <string name="notification_light_general_title">一般的</string>
-+    <string name="notification_light_advanced_title">先进的</string>
++    <string name="notification_light_general_title">一般</string>
++    <string name="notification_light_advanced_title">高级</string>
 +    <string name="notification_light_applist_title">应用</string>
 +    <string name="notification_light_phonelist_title">电话</string>
 +    <string name="notification_light_use_custom">使用自定义值</string>
@@ -404,7 +407,7 @@ index 0000000..f62e006
 +    <!-- Lights settings, LED notification -->
 +    <string name="led_notification_title">灯光设置</string>
 +    <string name="led_notification_text">通过设置启用 LED 灯</string>
-+    <string name="notification_light_add_apps_empty_summary">To add per app control, activate \'%1$s\' and press \'Add\'</string>
++    <string name="notification_light_add_apps_empty_summary">要添加每个应用程序控件，请激活“%1$s”并按“添加”</string>
 +
 +    <!-- Default getTimeSpentInApp string for Wellbeing to display. [CHAR LIMIT=NONE] --> 
 +    <string name="duration_less_than_one_minute">不到 1 分钟</string> 
@@ -451,18 +454,15 @@ index 0000000..f62e006
 +    <string name="usb_default_config_title">USB配置</string>
 +    <string name="usb_default_config_summary">选择通过 USB 连接到设备时的默认行为</string>
 +
-+    <!-- Hide statusbar on lockscreen -->
-+    <string name="lockscreen_hide_status_bar_title">隐藏状态栏</string>
-+    <string name="lockscreen_hide_status_bar_summary">启用后，状态栏将在锁屏上隐藏</string>
 +    <!-- Text shown for the title of the restart systemui option -->
 +    <string name="power_menu_restart_systemui_title">软重启</string>
 +
 +    <!-- Less boring heads up -->
-+    <string name="less_boring_heads_up_title">较少通知</string>
++    <string name="less_boring_heads_up_title">减少通知</string>
 +    <string name="less_boring_heads_up_summary">仅显示来电、消息、闹钟、提醒和优先对话的提醒</string>
 +
 +    <!-- Annoying Notifications -->
-+    <string name="notification_sound_vib_screen_on_title">通知声音</string>
++    <string name="notification_sound_vib_screen_on_title">烦人的通知</string>
 +    <string name="notification_sound_vib_screen_on_summary">屏幕打开时播放通知声音和振动</string>
 +
 +    <!-- Brightness control -->
@@ -473,7 +473,64 @@ index 0000000..f62e006
 +    <string name="incall_vibration_category">通话中振动选项</string>
 +    <string name="incall_vibrate_connect_title">连接时振动</string>
 +    <string name="incall_vibrate_call_wait_title">呼叫等待时振动</string>
-+    <string name="incall_vibrate_disconnect_title">断开连接时振动</string>    
++    <string name="incall_vibrate_disconnect_title">断开连接时振动</string>
++
++    <!-- Timeout entries -->
++    <string name="timeout_summary_never">从不</string>
++    <string name="timeout_summary_15secs">15秒</string>
++    <string name="timeout_summary_30secs">30秒</string>
++    <string name="timeout_summary_1min">1分钟</string>
++    <string name="timeout_summary_2mins">2分钟</string>
++    <string name="timeout_summary_5mins">5分钟</string>
++    <string name="timeout_summary_10mins">10分钟</string>
++    <string name="timeout_summary_30mins">30分钟</string>
++    <string name="timeout_summary_1hour">1小时</string>
++    <string name="timeout_summary_2hours">2小时</string>
++    <string name="timeout_summary_4hours">4小时</string>
++    <string name="timeout_summary_8hours">8小时</string>
++    <string name="timeout_summary_12hours">12小时</string>
++    <string name="timeout_summary_24hours">24小时</string>
++    <string name="timeout_summary_36hours">36小时</string>
++    <string name="timeout_summary_48hours">48小时</string>
++    <string name="timeout_summary_72hours">72小时</string>
++
++    <!-- Network preferences screen, setting option name to change wifi timeout -->
++    <string name="wifi_timeout">自动关闭 Wi-Fi</string>
++
++    <!-- Network preferences screen, setting option summary to change wifi timeout -->
++    <string name="wifi_timeout_summary">如果没有连接网络，Wi-Fi 将在 <xliff:g id="timeout_description">%1$s</xliff:g> 后关闭</string>
++    <string name="wifi_timeout_summary2">禁用</string>
++
++    <!-- Connected devices screen, setting option name to change bluetooth timeout -->
++    <string name="bluetooth_timeout">蓝牙超时</string>
++    <!-- Connected devices screen, setting option summary to change bluetooth timeout -->
++    <string name="bluetooth_timeout_summary">如果没有连接设备，蓝牙将在 <xliff:g id="timeout_description">%1$s</xliff:g> 后关闭</string>
++    <string name="bluetooth_timeout_summary2">不自动关闭蓝牙</string>
++
++    <!-- Location settings screen, setting check box label if Assisted GPS should be enabled -->
++    <string name="assisted_gps">使用辅助 GPS</string>
++    <!-- Location settings screen, setting summary for Assisted GPS switch -->
++    <string name="assisted_gps_summary">从互联网上下载卫星辅助数据，可以大大提高GPS启动性能。对于紧急呼叫，始终允许使用辅助 GPS。</string>
++
++    <!-- Name of Refresh Rate controls category in Display Settings [CHAR LIMIT=none] -->
++    <string name="category_name_refresh_rate_controls">刷新率</string>
++
++    <!-- Radio Info -->
++    <string name="radio_info_title">电台信息</string>
++
++    <!-- Summary for list to control apps that ignore battery saving restrictions -->
++    <string name="high_power_apps_summary">电池优化可用性</string>
++
++    <!-- Long press to copy wifi password -->
++    <string name="copied_to_clipboard">已复制到剪贴板</string>
++    <string name="longpress_to_clipboard">长按复制</string>
++
++    <!-- Power menu on secure lockscreen -->
++    <string name="lockscreen_enable_power_menu_title">允许锁定屏幕上打开电源菜单</string>
++    <string name="lockscreen_enable_power_menu_summary">允许在安全锁屏上访问电源菜单</string>
++
++    <!-- Blur -->
++    <string name="window_blur">启用模糊</string>
 +</resources>
 -- 
 2.34.1
