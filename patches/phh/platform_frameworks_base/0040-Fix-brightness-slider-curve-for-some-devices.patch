@@ -1,0 +1,25 @@
+From 73dab5e92f310e534ad0293b82c75e37171ceca9 Mon Sep 17 00:00:00 2001
+From: BoNic <BoNio9527@gmail.com>
+Date: Tue, 14 Nov 2023 13:35:34 +0800
+Subject: [PATCH] Fix-brightness-slider-curve-for-some-devices
+
+---
+ .../src/com/android/settingslib/display/BrightnessUtils.java    | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/packages/SettingsLib/DisplayUtils/src/com/android/settingslib/display/BrightnessUtils.java b/packages/SettingsLib/DisplayUtils/src/com/android/settingslib/display/BrightnessUtils.java
+index 68bb378b8..8cc192f4f 100644
+--- a/packages/SettingsLib/DisplayUtils/src/com/android/settingslib/display/BrightnessUtils.java
++++ b/packages/SettingsLib/DisplayUtils/src/com/android/settingslib/display/BrightnessUtils.java
+@@ -24,7 +24,7 @@ import com.android.internal.display.BrightnessSynchronizer;
+ public class BrightnessUtils {
+ 
+     public static final boolean sysUseLowGamma = Boolean.parseBoolean(
+-        SystemProperties.get("persist.sys.brightness.low.gamma", "false"));
++        SystemProperties.get("persist.sys.phh.low_gamma_brightness", "false"));
+ 
+     public static final int GAMMA_SPACE_MIN = 0;
+     public static final int GAMMA_SPACE_MAX = sysUseLowGamma ? 255 : 65535;
+-- 
+2.34.1
+

@@ -1,0 +1,95 @@
+From 7fe806a9b919e602b7ea81affffd45357700f4ac Mon Sep 17 00:00:00 2001
+From: Huy Hoang <boydaihungst@gmail.com>
+Date: Tue, 24 Oct 2023 09:09:15 +0700
+Subject: [PATCH] Revert-udfps-Restore-illumination-dot-for-global-hbm
+
+---
+ packages/SystemUI/res/layout/udfps_view.xml   |  6 ----
+ .../android/systemui/biometrics/UdfpsView.kt  | 30 +------------------
+ 2 files changed, 1 insertion(+), 35 deletions(-)
+
+diff --git a/packages/SystemUI/res/layout/udfps_view.xml b/packages/SystemUI/res/layout/udfps_view.xml
+index 0fcbfa161ddf..257d238f5c54 100644
+--- a/packages/SystemUI/res/layout/udfps_view.xml
++++ b/packages/SystemUI/res/layout/udfps_view.xml
+@@ -28,10 +28,4 @@
+         android:layout_width="match_parent"
+         android:layout_height="match_parent"/>
+ 
+-    <com.android.systemui.biometrics.UdfpsSurfaceView
+-        android:id="@+id/hbm_view"
+-        android:layout_width="match_parent"
+-        android:layout_height="match_parent"
+-        android:visibility="invisible"/>
+-
+ </com.android.systemui.biometrics.UdfpsView>
+diff --git a/packages/SystemUI/src/com/android/systemui/biometrics/UdfpsView.kt b/packages/SystemUI/src/com/android/systemui/biometrics/UdfpsView.kt
+index ef7fcc954590..7f75aec5be45 100644
+--- a/packages/SystemUI/src/com/android/systemui/biometrics/UdfpsView.kt
++++ b/packages/SystemUI/src/com/android/systemui/biometrics/UdfpsView.kt
+@@ -25,7 +25,6 @@ import android.graphics.RectF
+ import android.util.AttributeSet
+ import android.util.Log
+ import android.view.MotionEvent
+-import android.view.Surface
+ import android.widget.FrameLayout
+ import com.android.settingslib.udfps.UdfpsOverlayParams
+ import com.android.systemui.R
+@@ -62,7 +61,6 @@ class UdfpsView(
+             a.getFloat(R.styleable.UdfpsView_sensorTouchAreaCoefficient, 0f)
+         }
+ 
+-    private var ghbmView: UdfpsSurfaceView? = null
+ 
+     /** View controller (can be different for enrollment, BiometricPrompt, Keyguard, etc.). */
+     var animationViewController: UdfpsAnimationViewController<*>? = null
+@@ -90,10 +88,6 @@ class UdfpsView(
+         return (animationViewController == null || !animationViewController!!.shouldPauseAuth())
+     }
+ 
+-    override fun onFinishInflate() {
+-        ghbmView = findViewById(R.id.hbm_view)
+-    }
+-
+     override fun dozeTimeTick() {
+         animationViewController?.dozeTimeTick()
+     }
+@@ -157,34 +151,12 @@ class UdfpsView(
+     fun configureDisplay(onDisplayConfigured: Runnable) {
+         isDisplayConfigured = true
+         animationViewController?.onDisplayConfiguring()
+-        val gView = ghbmView
+-        if (gView != null) {
+-            gView.setGhbmIlluminationListener(this::doIlluminate)
+-            gView.visibility = VISIBLE
+-            gView.startGhbmIllumination(onDisplayConfigured)
+-        } else {
+-            doIlluminate(null /* surface */, onDisplayConfigured)
+-        }
+-    }
+-
+-    private fun doIlluminate(surface: Surface?, onDisplayConfigured: Runnable?) {
+-        if (ghbmView != null && surface == null) {
+-            Log.e(TAG, "doIlluminate | surface must be non-null for GHBM")
+-        }
+-
+-        mUdfpsDisplayMode?.enable {
+-            onDisplayConfigured?.run()
+-            ghbmView?.drawIlluminationDot(RectF(sensorRect))
+-        }
++        mUdfpsDisplayMode?.enable(onDisplayConfigured)
+     }
+ 
+     fun unconfigureDisplay() {
+         isDisplayConfigured = false
+         animationViewController?.onDisplayUnconfigured()
+-        ghbmView?.let { view ->
+-            view.setGhbmIlluminationListener(null)
+-            view.visibility = INVISIBLE
+-        }
+         mUdfpsDisplayMode?.disable(null /* onDisabled */)
+     }
+ }
+-- 
+2.42.0
+
