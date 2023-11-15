@@ -1,0 +1,105 @@
+From 974c0ef2314166e8e9d5515e0ed3ebffac5b22a4 Mon Sep 17 00:00:00 2001
+From: BoNic <BoNio9527@gmail.com>
+Date: Mon, 13 Nov 2023 17:12:40 +0800
+Subject: [PATCH] Add-Chinese
+
+---
+ res/values-zh-rCN/strings.xml | 49 ++++++++++++++++++++++++++++-------
+ 1 file changed, 39 insertions(+), 10 deletions(-)
+
+diff --git a/res/values-zh-rCN/strings.xml b/res/values-zh-rCN/strings.xml
+index 5d36929..a26aa9b 100644
+--- a/res/values-zh-rCN/strings.xml
++++ b/res/values-zh-rCN/strings.xml
+@@ -145,6 +145,10 @@
+     <string name="data_disabled_icon_title">显示数据网络关闭叹号</string>
+     <string name="data_disabled_icon_summary">当数据网络关闭时在信号图标上显示一个叹号</string>
+ 
++    <!-- QSTile requires unlocking before being accessible -->
++    <string name="qstile_requires_unlocking_title">需要解锁才能使用敏感图块</string>
++    <string name="qstile_requires_unlocking_summary">使用敏感图块时要求解锁锁屏</string>
++
+     <!-- Lockscreen battery info indicator  -->
+     <string name="lockscreen_battery_info_title">锁屏充电信息</string>
+     <string name="lockscreen_battery_info_summary">在锁屏时显示充电电流, 电压, 功率和电池温度</string>
+@@ -218,13 +222,16 @@
+     <string name="reticker_landscape_only_title">仅横屏时启用</string>
+     <string name="reticker_landscape_only_summary">只在设备处于横屏模式下时启用 reTicker 横幅</string>
+ 
+-    <!-- Network traffic -->
+-    <string name="network_traffic_title">网速显示</string>
+-    <string name="network_traffic_summary">启用或关闭状态栏网速显示</string>
+-    <string name="network_traffic_state_title">启用 "网速显示"</string>
+-    <string name="network_options_title">选项</string>
+-    <string name="network_traffic_autohide_title">当网络不活跃时隐藏网速显示</string>
+-    <string name="network_traffic_autohide_summary">当网速低于 1 KB/s 时隐藏网速显示</string>
++    <!-- Status bar - Network Traffic -->
++    <string name="network_traffic_settings_title">网络流量监控</string>
++    <string name="network_traffic_toggle_title">显示网络流量</string>
++    <string name="network_traffic_settings_summary">在状态栏中显示当前网络流量级别</string>
++    <string name="network_traffic_autohide">自动隐藏</string>
++    <string name="network_traffic_autohide_summary">无活动时隐藏流量监视器</string>
++    <string name="network_traffic_units_title">流量计量单位</string>
++    <string name="network_traffic_units_bits" translatable="false">kbps, Mbps, Gbps</string>
++    <string name="network_traffic_units_bytes" translatable="false">kB/s, MB/s, GB/s</string>
++    <string name="network_traffic_disabled_clock">由于时钟位置而禁用网络流量</string>
+ 
+     <!-- Media art -->
+     <string name="lockscreen_media_art_options_title">媒体封面</string>
+@@ -380,6 +387,11 @@
+     <string name="status_bar_clock_auto_hide_title">自动隐藏</string>
+     <string name="status_bar_clock_auto_hide_summary">当启动器时钟可见时自动隐藏状态栏时钟</string>
+ 
++    <!-- Hide statusbar on lockscreen -->
++    <string name="lockscreen_clock_title">锁屏界面</string>
++    <string name="lockscreen_hide_status_bar_title">隐藏状态栏</string>
++    <string name="lockscreen_hide_status_bar_summary">启用后，状态栏将在锁屏上隐藏</string>
++
+     <!-- Ambient battery bar settings -->
+     <string name="ambient_ui">熄屏显示</string>
+     <string name="ambient_battery_settings_title">电池栏</string>
+@@ -399,9 +411,9 @@
+     <string name="pulse_vertical_mirror_title">横轴镜像</string>
+     <string name="pulse_vertical_mirror_summary">将律动设置为横轴对称模式</string>
+ 
+-    <!-- Ripple Effect on lockscreen -->
+-    <string name="disable_fingerprint_ripple_effect_title">关闭水波纹特效</string>
+-    <string name="disable_fingerprint_ripple_effect_summary">使用指纹解锁时不使用水波纹解锁动画</string>
++    <!-- Fingerprint Ripple Effect -->
++    <string name="enable_fingerprint_ripple_effect_title">解锁动画</string>
++    <string name="enable_fingerprint_ripple_effect_summary">显示指纹解锁时的涟漪效果</string>
+ 
+     <!-- Charging animation -->
+     <string name="charging_animation_title">充电动画</string>
+@@ -508,6 +520,9 @@
+     <!-- Fingerprint authentication vibration -->
+     <string name="fprint_sucess_vib_title">指纹识别振动</string>
+     <string name="fprint_sucess_vib_summary">当指纹识别成功时振动</string>
++    <!-- Brightness slider styles -->
++    <string name="theme_customization_brightness_slider_title">亮度滑块样式</string>
++    <string name="theme_customization_brightness_slider_summary">设置自定义亮度滑块样式</string>
+ 
+     <!-- Navbar styles -->
+     <string name="theme_customization_navbar_title">导航栏样式</string>
+@@ -568,4 +583,18 @@
+     <string name="status_bar_battery_percent_text_next_left">在图标左侧显示</string>
+     <string name="status_bar_battery_text_charging_title">充电时显示百分比</string>
+     <string name="status_bar_battery_text_charging_summary">充电时总是显示百分比</string>
++    
++    <!-- QS battery -->
++    <string name="qs_battery_location_title">电池位置</string>
++    <string name="qs_battery_location_qs_panel">QS面板</string>
++    <string name="qs_battery_location_qs_statusbar">快速状态栏</string>
++    <string name="qs_use_status_bar_battery_style">遵循状态栏样式</string>
++
++    <!-- Custom Data icons -->
++    <string name="theme_customization_data_title">数据图标样式</string>
++    <string name="theme_customization_data_summary">设置自定义数据图标样式</string>
++
++    <!-- QS footer data usage -->
++    <string name="qs_show_data_usage_title">显示数据使用情况</string>
++    <string name="qs_show_data_usage_summary">在 QS 页脚中显示每日蜂窝/Wi-Fi 数据使用情况</string>        
+ </resources>
+-- 
+2.34.1
+

@@ -1,0 +1,216 @@
+From 1e572500fb1c5410e4e5be50857d9245544918a0 Mon Sep 17 00:00:00 2001
+From: BoNic <BoNio9527@gmail.com>
+Date: Wed, 15 Nov 2023 06:32:58 +0800
+Subject: [PATCH] add- hide-status-bar-on-lock-screen
+
+---
+ core/java/android/provider/Settings.java      |   6 ++
+ .../settings/backup/SystemSettings.java       |   1 +
+ .../validators/SystemSettingsValidators.java  |   1 +
+ .../NotificationPanelViewController.java      |   3 +
+ .../phone/KeyguardStatusBarView.java          | 102 +++++++++++++++++-
+ 5 files changed, 112 insertions(+), 1 deletion(-)
+
+diff --git a/core/java/android/provider/Settings.java b/core/java/android/provider/Settings.java
+index 98f45ab55..61ea0632b 100644
+--- a/core/java/android/provider/Settings.java
++++ b/core/java/android/provider/Settings.java
+@@ -6558,6 +6558,11 @@ public final class Settings {
+          */
+         public static final String THREE_FINGER_GESTURE = "three_finger_gesture";
+ 
++        /**
++         * @hide
++         */
++        public static final String LOCK_HIDE_STATUS_BAR = "lockscreen_hide_status_bar";
++
+         /**
+          * These are all public system settings
+          *
+@@ -6686,6 +6691,7 @@ public final class Settings {
+             PRIVATE_SETTINGS.add(STATUS_BAR_SHOW_BATTERY_PERCENT);
+             PRIVATE_SETTINGS.add(SWAP_VOLUME_KEYS_ON_ROTATION);
+             PRIVATE_SETTINGS.add(KEY_EDGE_LONG_SWIPE_ACTION);
++            PRIVATE_SETTINGS.add(LOCK_HIDE_STATUS_BAR);
+         }
+ 
+         /**
+diff --git a/packages/SettingsProvider/src/android/provider/settings/backup/SystemSettings.java b/packages/SettingsProvider/src/android/provider/settings/backup/SystemSettings.java
+index 6a5535d34..b9e630b53 100644
+--- a/packages/SettingsProvider/src/android/provider/settings/backup/SystemSettings.java
++++ b/packages/SettingsProvider/src/android/provider/settings/backup/SystemSettings.java
+@@ -100,5 +100,6 @@ public class SystemSettings {
+         Settings.System.CAMERA_FLASH_NOTIFICATION,
+         Settings.System.SCREEN_FLASH_NOTIFICATION,
+         Settings.System.SCREEN_FLASH_NOTIFICATION_COLOR,
++        Settings.System.LOCK_HIDE_STATUS_BAR,
+     };
+ }
+diff --git a/packages/SettingsProvider/src/android/provider/settings/validators/SystemSettingsValidators.java b/packages/SettingsProvider/src/android/provider/settings/validators/SystemSettingsValidators.java
+index 4a7f73832..351c75941 100644
+--- a/packages/SettingsProvider/src/android/provider/settings/validators/SystemSettingsValidators.java
++++ b/packages/SettingsProvider/src/android/provider/settings/validators/SystemSettingsValidators.java
+@@ -244,5 +244,6 @@ public class SystemSettingsValidators {
+         VALIDATORS.put(System.STATUS_BAR_SHOW_BATTERY_PERCENT, new InclusiveIntegerRangeValidator(0, 2));
+         VALIDATORS.put(System.SWAP_VOLUME_KEYS_ON_ROTATION, BOOLEAN_VALIDATOR);
+         VALIDATORS.put(System.KEY_EDGE_LONG_SWIPE_ACTION, NON_NEGATIVE_INTEGER_VALIDATOR);
++        VALIDATORS.put(System.LOCK_HIDE_STATUS_BAR, BOOLEAN_VALIDATOR);
+     }
+ }
+diff --git a/packages/SystemUI/src/com/android/systemui/shade/NotificationPanelViewController.java b/packages/SystemUI/src/com/android/systemui/shade/NotificationPanelViewController.java
+index ea269dcf5..f751ef000 100644
+--- a/packages/SystemUI/src/com/android/systemui/shade/NotificationPanelViewController.java
++++ b/packages/SystemUI/src/com/android/systemui/shade/NotificationPanelViewController.java
+@@ -4493,6 +4493,9 @@ public final class NotificationPanelViewController implements ShadeSurface, Dump
+                             /* alpha= */ 1f,
+                             keyguardShowing ? View.VISIBLE : View.INVISIBLE);
+                 }
++                if (keyguardShowing) {
++                    mKeyguardStatusBar.toggleContents(true);
++                }
+                 if (keyguardShowing && oldState != mBarState) {
+                     mQsController.hideQsImmediately();
+                 }
+diff --git a/packages/SystemUI/src/com/android/systemui/statusbar/phone/KeyguardStatusBarView.java b/packages/SystemUI/src/com/android/systemui/statusbar/phone/KeyguardStatusBarView.java
+index b694b28ef..c3ea2fb44 100644
+--- a/packages/SystemUI/src/com/android/systemui/statusbar/phone/KeyguardStatusBarView.java
++++ b/packages/SystemUI/src/com/android/systemui/statusbar/phone/KeyguardStatusBarView.java
+@@ -19,7 +19,12 @@ package com.android.systemui.statusbar.phone;
+ import static com.android.systemui.ScreenDecorations.DisplayCutoutView.boundsFromDirection;
+ import static com.android.systemui.util.Utils.getStatusBarHeaderHeightKeyguard;
+ 
++import android.animation.Animator;
++import android.animation.AnimatorSet;
++import android.animation.ObjectAnimator;
++import android.animation.AnimatorListenerAdapter;
+ import android.annotation.ColorInt;
++import android.content.ContentResolver;
+ import android.content.Context;
+ import android.content.res.Configuration;
+ import android.content.res.Resources;
+@@ -27,6 +32,8 @@ import android.graphics.Color;
+ import android.graphics.Rect;
+ import android.graphics.drawable.Drawable;
+ import android.os.Trace;
++import android.os.UserHandle;
++import android.provider.Settings;
+ import android.util.AttributeSet;
+ import android.util.Pair;
+ import android.util.TypedValue;
+@@ -103,6 +110,7 @@ public class KeyguardStatusBarView extends RelativeLayout {
+     private int mTopClipping;
+     private final Rect mClipRect = new Rect(0, 0, 0, 0);
+     private boolean mIsUserSwitcherEnabled;
++    private boolean mHideContents;
+ 
+     public KeyguardStatusBarView(Context context, AttributeSet attrs) {
+         super(context, attrs);
+@@ -219,7 +227,7 @@ public class KeyguardStatusBarView extends RelativeLayout {
+             // we only show the multi-user switch if it's enabled through UserManager as well as
+             // by the user.
+             if (mIsUserSwitcherEnabled) {
+-                mMultiUserAvatar.setVisibility(View.VISIBLE);
++                mMultiUserAvatar.setVisibility(mHideContents ? View.INVISIBLE : View.VISIBLE);
+             } else {
+                 mMultiUserAvatar.setVisibility(View.GONE);
+             }
+@@ -526,4 +534,96 @@ public class KeyguardStatusBarView extends RelativeLayout {
+         super.onMeasure(widthMeasureSpec, heightMeasureSpec);
+         Trace.endSection();
+     }
++
++    public void toggleContents(boolean hideContents) {
++        boolean shouldHideContents = Settings.System.getIntForUser(
++                getContext().getContentResolver(), Settings.System.LOCK_HIDE_STATUS_BAR, 0,
++                UserHandle.USER_CURRENT) == 1;
++        if (!shouldHideContents) {
++            hideContents = false;
++        }
++        if (mHideContents == hideContents) {
++            return;
++        }
++
++        mHideContents = hideContents;
++        if (mHideContents) {
++            Animator fadeAnimator1 = null;
++            if (mMultiUserAvatar.getVisibility() != View.GONE) {
++                fadeAnimator1 = ObjectAnimator.ofFloat(mMultiUserAvatar, "alpha", 1f, 0f);
++                fadeAnimator1.setDuration(500);
++                fadeAnimator1.setInterpolator(Interpolators.ALPHA_OUT);
++                fadeAnimator1.addListener(new AnimatorListenerAdapter() {
++                    @Override
++                    public void onAnimationEnd(Animator animation) {
++                        mMultiUserAvatar.setVisibility(View.INVISIBLE);
++                    }
++                });
++            }
++            Animator fadeAnimator2 = ObjectAnimator.ofFloat(mSystemIconsContainer, "alpha", 1f, 0f);
++            fadeAnimator2.setDuration(500);
++            fadeAnimator2.setInterpolator(Interpolators.ALPHA_OUT);
++            fadeAnimator2.addListener(new AnimatorListenerAdapter() {
++                @Override
++                public void onAnimationEnd(Animator animation) {
++                    mSystemIconsContainer.setVisibility(View.INVISIBLE);
++                }
++            });
++            Animator fadeAnimator3 = null;
++            if (mCarrierLabel.getVisibility() != View.GONE) {
++                fadeAnimator3 = ObjectAnimator.ofFloat(mCarrierLabel, "alpha", 1f, 0f);
++                fadeAnimator3.setDuration(500);
++                fadeAnimator3.setInterpolator(Interpolators.ALPHA_OUT);
++                fadeAnimator3.addListener(new AnimatorListenerAdapter() {
++                    @Override
++                    public void onAnimationEnd(Animator animation) {
++                        mCarrierLabel.setVisibility(View.INVISIBLE);
++                    }
++                });
++            }
++            AnimatorSet set = new AnimatorSet();
++            set.playTogether(fadeAnimator2);
++            if (fadeAnimator3 != null) {
++                set.playTogether(fadeAnimator3);
++            }
++            if (fadeAnimator1 != null) {
++                set.playTogether(fadeAnimator1);
++            }
++            set.start();
++        } else {
++            Animator fadeAnimator1 = null;
++            if (mMultiUserAvatar.getVisibility() != View.GONE) {
++                mMultiUserAvatar.setAlpha(0f);
++                mMultiUserAvatar.setVisibility(View.VISIBLE);
++                fadeAnimator1 = ObjectAnimator.ofFloat(mMultiUserAvatar, "alpha", 0f, 1f);
++                fadeAnimator1.setDuration(500);
++                fadeAnimator1.setInterpolator(Interpolators.ALPHA_IN);
++            }
++
++            mSystemIconsContainer.setAlpha(0f);
++            mSystemIconsContainer.setVisibility(View.VISIBLE);
++            Animator fadeAnimator2 = ObjectAnimator.ofFloat(mSystemIconsContainer, "alpha", 0f, 1f);
++            fadeAnimator2.setDuration(500);
++            fadeAnimator2.setInterpolator(Interpolators.ALPHA_IN);
++
++            Animator fadeAnimator3 = null;
++            if (mCarrierLabel.getVisibility() != View.GONE) {
++                mCarrierLabel.setAlpha(0f);
++                mCarrierLabel.setVisibility(View.VISIBLE);
++                fadeAnimator3 = ObjectAnimator.ofFloat(mCarrierLabel, "alpha", 0f, 1f);
++                fadeAnimator3.setDuration(500);
++                fadeAnimator3.setInterpolator(Interpolators.ALPHA_IN);
++            }
++
++            AnimatorSet set = new AnimatorSet();
++            set.playTogether(fadeAnimator2);
++            if (fadeAnimator3 != null) {
++                set.playTogether(fadeAnimator3);
++            }
++            if (fadeAnimator1 != null) {
++                set.playTogether(fadeAnimator1);
++            }
++            set.start();
++        }
++    }
+ }
+-- 
+2.34.1
+
