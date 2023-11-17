@@ -1,7 +1,7 @@
-From 1e572500fb1c5410e4e5be50857d9245544918a0 Mon Sep 17 00:00:00 2001
+From 6987b9fdcecb8f201ed15a6ce032b109a840ac18 Mon Sep 17 00:00:00 2001
 From: BoNic <BoNio9527@gmail.com>
-Date: Wed, 15 Nov 2023 06:32:58 +0800
-Subject: [PATCH] add- hide-status-bar-on-lock-screen
+Date: Wed, 15 Nov 2023 12:08:07 -0500
+Subject: [PATCH] add-hide-status-bar-on-lock-screen
 
 ---
  core/java/android/provider/Settings.java      |   6 ++
@@ -12,12 +12,12 @@ Subject: [PATCH] add- hide-status-bar-on-lock-screen
  5 files changed, 112 insertions(+), 1 deletion(-)
 
 diff --git a/core/java/android/provider/Settings.java b/core/java/android/provider/Settings.java
-index 98f45ab55..61ea0632b 100644
+index 5ca5013a..28e31a4d 100644
 --- a/core/java/android/provider/Settings.java
 +++ b/core/java/android/provider/Settings.java
-@@ -6558,6 +6558,11 @@ public final class Settings {
+@@ -6509,6 +6509,11 @@ public final class Settings {
           */
-         public static final String THREE_FINGER_GESTURE = "three_finger_gesture";
+         public static final String STATUSBAR_CLOCK_CHIP = "statusbar_clock_chip";
  
 +        /**
 +         * @hide
@@ -25,40 +25,40 @@ index 98f45ab55..61ea0632b 100644
 +        public static final String LOCK_HIDE_STATUS_BAR = "lockscreen_hide_status_bar";
 +
          /**
-          * These are all public system settings
-          *
-@@ -6686,6 +6691,7 @@ public final class Settings {
+          * reTicker Status
+          * @hide
+@@ -6776,6 +6781,7 @@ public final class Settings {
+             PRIVATE_SETTINGS.add(CLICK_PARTIAL_SCREENSHOT);
+             PRIVATE_SETTINGS.add(STATUS_BAR_BATTERY_STYLE);
              PRIVATE_SETTINGS.add(STATUS_BAR_SHOW_BATTERY_PERCENT);
++            PRIVATE_SETTINGS.add(LOCK_HIDE_STATUS_BAR);
              PRIVATE_SETTINGS.add(SWAP_VOLUME_KEYS_ON_ROTATION);
              PRIVATE_SETTINGS.add(KEY_EDGE_LONG_SWIPE_ACTION);
-+            PRIVATE_SETTINGS.add(LOCK_HIDE_STATUS_BAR);
-         }
- 
-         /**
+             PRIVATE_SETTINGS.add(BACK_GESTURE_HAPTIC);
 diff --git a/packages/SettingsProvider/src/android/provider/settings/backup/SystemSettings.java b/packages/SettingsProvider/src/android/provider/settings/backup/SystemSettings.java
-index 6a5535d34..b9e630b53 100644
+index 97fbad59..a0234758 100644
 --- a/packages/SettingsProvider/src/android/provider/settings/backup/SystemSettings.java
 +++ b/packages/SettingsProvider/src/android/provider/settings/backup/SystemSettings.java
-@@ -100,5 +100,6 @@ public class SystemSettings {
-         Settings.System.CAMERA_FLASH_NOTIFICATION,
-         Settings.System.SCREEN_FLASH_NOTIFICATION,
-         Settings.System.SCREEN_FLASH_NOTIFICATION_COLOR,
+@@ -104,5 +104,6 @@ public class SystemSettings {
+         Settings.System.CUSTOM_RINGTONE_VIBRATION_PATTERN,
+         Settings.System.NOTIFICATION_VIBRATION_PATTERN,
+         Settings.System.CUSTOM_NOTIFICATION_VIBRATION_PATTERN,
 +        Settings.System.LOCK_HIDE_STATUS_BAR,
      };
  }
 diff --git a/packages/SettingsProvider/src/android/provider/settings/validators/SystemSettingsValidators.java b/packages/SettingsProvider/src/android/provider/settings/validators/SystemSettingsValidators.java
-index 4a7f73832..351c75941 100644
+index df33f7db..03404c1f 100644
 --- a/packages/SettingsProvider/src/android/provider/settings/validators/SystemSettingsValidators.java
 +++ b/packages/SettingsProvider/src/android/provider/settings/validators/SystemSettingsValidators.java
-@@ -244,5 +244,6 @@ public class SystemSettingsValidators {
-         VALIDATORS.put(System.STATUS_BAR_SHOW_BATTERY_PERCENT, new InclusiveIntegerRangeValidator(0, 2));
-         VALIDATORS.put(System.SWAP_VOLUME_KEYS_ON_ROTATION, BOOLEAN_VALIDATOR);
-         VALIDATORS.put(System.KEY_EDGE_LONG_SWIPE_ACTION, NON_NEGATIVE_INTEGER_VALIDATOR);
+@@ -249,5 +249,6 @@ public class SystemSettingsValidators {
+         VALIDATORS.put(System.CUSTOM_RINGTONE_VIBRATION_PATTERN, CUSTOM_VIBRATION_PATTERN_VALIDATOR);
+         VALIDATORS.put(System.NOTIFICATION_VIBRATION_PATTERN, new InclusiveIntegerRangeValidator(0, 5));
+         VALIDATORS.put(System.CUSTOM_NOTIFICATION_VIBRATION_PATTERN, CUSTOM_VIBRATION_PATTERN_VALIDATOR);
 +        VALIDATORS.put(System.LOCK_HIDE_STATUS_BAR, BOOLEAN_VALIDATOR);
      }
  }
 diff --git a/packages/SystemUI/src/com/android/systemui/shade/NotificationPanelViewController.java b/packages/SystemUI/src/com/android/systemui/shade/NotificationPanelViewController.java
-index ea269dcf5..f751ef000 100644
+index ea269dcf..f751ef00 100644
 --- a/packages/SystemUI/src/com/android/systemui/shade/NotificationPanelViewController.java
 +++ b/packages/SystemUI/src/com/android/systemui/shade/NotificationPanelViewController.java
 @@ -4493,6 +4493,9 @@ public final class NotificationPanelViewController implements ShadeSurface, Dump
@@ -72,7 +72,7 @@ index ea269dcf5..f751ef000 100644
                      mQsController.hideQsImmediately();
                  }
 diff --git a/packages/SystemUI/src/com/android/systemui/statusbar/phone/KeyguardStatusBarView.java b/packages/SystemUI/src/com/android/systemui/statusbar/phone/KeyguardStatusBarView.java
-index b694b28ef..c3ea2fb44 100644
+index b694b28e..c3ea2fb4 100644
 --- a/packages/SystemUI/src/com/android/systemui/statusbar/phone/KeyguardStatusBarView.java
 +++ b/packages/SystemUI/src/com/android/systemui/statusbar/phone/KeyguardStatusBarView.java
 @@ -19,7 +19,12 @@ package com.android.systemui.statusbar.phone;

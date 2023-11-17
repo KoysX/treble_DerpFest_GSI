@@ -13,5 +13,9 @@ TARGET_HAS_FUSEBLK_SEPOLICY_ON_VENDOR := true
 
 TARGET_BOOT_ANIMATION_RES := 1080
 
+# Paranoid Sense
+PRODUCT_PACKAGES += \
+    ParanoidSense
+
 PRODUCT_SYSTEM_DEFAULT_PROPERTIES += \
     ro.system.ota.json_url=https://raw.githubusercontent.com/KoysX/treble_DerpFest_GSI/14/ota.json

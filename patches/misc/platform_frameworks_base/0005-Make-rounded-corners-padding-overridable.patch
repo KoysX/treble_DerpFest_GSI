@@ -1,0 +1,59 @@
+From 20974542f6d588d0a873ae1fb2de9637acfdd0a7 Mon Sep 17 00:00:00 2001
+From: BoNic <BoNio9527@gmail.com>
+Date: Wed, 15 Nov 2023 17:00:27 -0500
+Subject: [PATCH] Make-rounded-corners-padding-overridable
+
+---
+ .../src/com/android/systemui/shade/ShadeHeaderController.kt  | 5 ++++-
+ .../statusbar/phone/StatusBarContentInsetsProvider.kt        | 5 ++++-
+ 2 files changed, 8 insertions(+), 2 deletions(-)
+
+diff --git a/packages/SystemUI/src/com/android/systemui/shade/ShadeHeaderController.kt b/packages/SystemUI/src/com/android/systemui/shade/ShadeHeaderController.kt
+index ebe69ba3..02c5fa2d 100644
+--- a/packages/SystemUI/src/com/android/systemui/shade/ShadeHeaderController.kt
++++ b/packages/SystemUI/src/com/android/systemui/shade/ShadeHeaderController.kt
+@@ -27,6 +27,7 @@ import android.content.res.ColorStateList
+ import android.content.res.Configuration
+ import android.graphics.Color
+ import android.os.Bundle
++import android.os.SystemProperties
+ import android.os.Trace
+ import android.os.Trace.TRACE_TAG_APP
+ import android.os.UserHandle;
+@@ -559,7 +560,9 @@ constructor(
+     }
+ 
+     private fun updateResources() {
+-        roundedCorners = resources.getDimensionPixelSize(R.dimen.rounded_corner_content_padding)
++        roundedCorners = SystemProperties.getInt("persist.sys.phh.rounded_corners_padding", -1);
++        if(roundedCorners == -1)
++            roundedCorners = resources.getDimensionPixelSize(R.dimen.rounded_corner_content_padding)
+         sbPaddingLeft = resources.getDimensionPixelSize(R.dimen.status_bar_padding_start)
+         sbPaddingRight = resources.getDimensionPixelSize(R.dimen.status_bar_padding_end)
+         val padding = resources.getDimensionPixelSize(R.dimen.qs_panel_padding)
+diff --git a/packages/SystemUI/src/com/android/systemui/statusbar/phone/StatusBarContentInsetsProvider.kt b/packages/SystemUI/src/com/android/systemui/statusbar/phone/StatusBarContentInsetsProvider.kt
+index c850d4f9..4ee02eea 100644
+--- a/packages/SystemUI/src/com/android/systemui/statusbar/phone/StatusBarContentInsetsProvider.kt
++++ b/packages/SystemUI/src/com/android/systemui/statusbar/phone/StatusBarContentInsetsProvider.kt
+@@ -20,6 +20,7 @@ import android.content.Context
+ import android.content.res.Resources
+ import android.graphics.Point
+ import android.graphics.Rect
++import android.os.SystemProperties;
+ import android.util.LruCache
+ import android.util.Pair
+ import android.view.DisplayCutout
+@@ -231,7 +232,9 @@ class StatusBarContentInsetsProvider @Inject constructor(
+     ): Rect {
+         val currentRotation = getExactRotation(context)
+ 
+-        val roundedCornerPadding = rotatedResources
++        var roundedCornerPadding = SystemProperties.getInt("persist.sys.phh.rounded_corners_padding", -1);
++        if(roundedCornerPadding == -1)
++            roundedCornerPadding = rotatedResources
+                 .getDimensionPixelSize(R.dimen.rounded_corner_content_padding)
+         val minDotPadding = if (isPrivacyDotEnabled)
+                 rotatedResources.getDimensionPixelSize(R.dimen.ongoing_appops_dot_min_padding)
+-- 
+2.34.1
+

@@ -39,18 +39,18 @@ index c3ea2fb44..a0e61aaad 100644
                  R.dimen.status_bar_padding_end);
          mMinDotWidth = res.getDimensionPixelSize(
 diff --git a/packages/SystemUI/src/com/android/systemui/statusbar/phone/PhoneStatusBarView.java b/packages/SystemUI/src/com/android/systemui/statusbar/phone/PhoneStatusBarView.java
-index cd83b5600..a50a1f90e 100644
+index a7dd3c01..7b2f1ad4 100644
 --- a/packages/SystemUI/src/com/android/systemui/statusbar/phone/PhoneStatusBarView.java
 +++ b/packages/SystemUI/src/com/android/systemui/statusbar/phone/PhoneStatusBarView.java
-@@ -21,6 +21,7 @@ import android.annotation.Nullable;
- import android.content.Context;
+@@ -22,6 +22,7 @@ import android.content.Context;
  import android.content.res.Configuration;
+ import android.content.res.Resources;
  import android.graphics.Rect;
 +import android.os.SystemProperties;
- import android.util.AttributeSet;
- import android.util.Log;
- import android.util.Pair;
-@@ -220,18 +221,23 @@ public class PhoneStatusBarView extends FrameLayout {
+ import android.inputmethodservice.InputMethodService;
+ import android.os.IBinder;
+ import android.os.RemoteException;
+@@ -310,17 +311,22 @@ public class PhoneStatusBarView extends FrameLayout implements Callbacks {
          mStatusBarHeight = SystemBarUtils.getStatusBarHeight(mContext);
          layoutParams.height = mStatusBarHeight - waterfallTopInset;
  
@@ -72,8 +72,7 @@ index cd83b5600..a50a1f90e 100644
 +        if(statusBarPaddingEnd == -1)
 +        statusBarPaddingEnd = getResources().getDimensionPixelSize(R.dimen.status_bar_padding_end);
  
-         View sbContents = findViewById(R.id.status_bar_contents);
-         sbContents.setPaddingRelative(
+         mStatusBarContents.setPaddingRelative(
 -                statusBarPaddingStart,
 -                statusBarPaddingTop,
 -                statusBarPaddingEnd,
