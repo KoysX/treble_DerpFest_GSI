@@ -1,15 +1,18 @@
-From 1f3fd8d1bac132d8fd899cc3611c3e8fb14496cc Mon Sep 17 00:00:00 2001
-From: BoNic <BoNio9527@gmail.com>
-Date: Tue, 7 Nov 2023 14:17:42 +0800
-Subject: [PATCH] Re-implement-fnmatch-like-behaviour-for-RRO-java-sid
+From f7e611c55ada8bd59c49fd843806a5b0912a29f2 Mon Sep 17 00:00:00 2001
+From: Pierre-Hugues Husson <phh@phh.me>
+Date: Sun, 25 Oct 2020 23:57:26 +0100
+Subject: [PATCH 15/44] Re-implement fnmatch-like behaviour for RRO java-side
 
+T: Also apply to FrameworkParsingPackageUtils (@PeterCxy)
+
+Change-Id: Id38292a9a1453aa87b8401c1fdb390fa4e63c7d1
 ---
  .../android/content/pm/PackageParser.java     | 13 +++++++++--
  .../parsing/FrameworkParsingPackageUtils.java | 22 +++++++++----------
  2 files changed, 22 insertions(+), 13 deletions(-)
 
 diff --git a/core/java/android/content/pm/PackageParser.java b/core/java/android/content/pm/PackageParser.java
-index 223953a1..d37ad6f9 100644
+index 223953a1c71c..d37ad6f90432 100644
 --- a/core/java/android/content/pm/PackageParser.java
 +++ b/core/java/android/content/pm/PackageParser.java
 @@ -2545,8 +2545,17 @@ public class PackageParser {
@@ -33,7 +36,7 @@ index 223953a1..d37ad6f9 100644
          }
          return true;
 diff --git a/core/java/android/content/pm/parsing/FrameworkParsingPackageUtils.java b/core/java/android/content/pm/parsing/FrameworkParsingPackageUtils.java
-index b75ba82a..fb6f1922 100644
+index b75ba82ad091..fb6f1922bc70 100644
 --- a/core/java/android/content/pm/parsing/FrameworkParsingPackageUtils.java
 +++ b/core/java/android/content/pm/parsing/FrameworkParsingPackageUtils.java
 @@ -214,17 +214,17 @@ public class FrameworkParsingPackageUtils {
@@ -66,5 +69,5 @@ index b75ba82a..fb6f1922 100644
          }
          return true;
 -- 
-2.34.1
+2.42.1
 

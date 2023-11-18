@@ -30,9 +30,8 @@ repo sync -c -j$(nproc --all) --force-sync --no-clone-bundle --no-tags
 
 ### Apply the patches
 ```bash
-bash treble_DerpFest_GSI/apply-patches.sh treble_DerpFest_GSI misc
 bash treble_DerpFest_GSI/apply-patches.sh treble_DerpFest_GSI phh
-bash treble_DerpFest_GSI/apply-patches.sh treble_DerpFest_GSI ponces
+bash treble_DerpFest_GSI/apply-patches.sh treble_DerpFest_GSI misc
 ```
 
 ## Adapting for DerpFest

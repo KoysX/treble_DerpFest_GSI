@@ -1,8 +1,9 @@
-From 7d7a058666e2c19a2ae4f3f20f19336a688acdcc Mon Sep 17 00:00:00 2001
-From: Huy Hoang <boydaihungst@gmail.com>
-Date: Thu, 2 Nov 2023 00:13:24 +0700
-Subject: [PATCH] Disable vendor mismatch warning
+From 3ad41fc01d3beb45a655059a4877877736a07d9d Mon Sep 17 00:00:00 2001
+From: Andy CrossGate Yan <GeForce8800Ultra@gmail.com>
+Date: Thu, 5 Apr 2018 10:01:19 +0800
+Subject: [PATCH 01/44] Disable vendor mismatch warning
 
+Change-Id: Ieb8fe91e2f02462f074312ed0f4885d183e9780b
 ---
  .../server/wm/ActivityTaskManagerService.java | 21 ++-----------------
  1 file changed, 2 insertions(+), 19 deletions(-)
@@ -40,5 +41,5 @@ index a99716f49f11..cad3e0675eba 100644
              }
          }
 -- 
-2.42.0
+2.42.1
 
