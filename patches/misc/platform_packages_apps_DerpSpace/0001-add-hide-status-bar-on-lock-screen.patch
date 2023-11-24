@@ -9,10 +9,10 @@ Subject: [PATCH] add-hide-status-bar-on-lock-screen
  2 files changed, 17 insertions(+)
 
 diff --git a/res/values/strings.xml b/res/values/strings.xml
-index 81e051c..a9a22b3 100644
+index f7e5f8a..23d6507 100644
 --- a/res/values/strings.xml
 +++ b/res/values/strings.xml
-@@ -302,6 +302,11 @@
+@@ -306,6 +306,11 @@
      <string name="status_bar_clock_auto_hide_title">Auto hide</string>
      <string name="status_bar_clock_auto_hide_summary">Hide clock if launcher is visible</string>
  
@@ -21,9 +21,9 @@ index 81e051c..a9a22b3 100644
 +    <string name="lockscreen_hide_status_bar_title">Hide Statusbar</string>
 +    <string name="lockscreen_hide_status_bar_summary">When enabled, statusbar will be hidden on lockscreen</string>
 +
-     <!-- Pulse Gravity and mirror options -->
-     <string name="pulse_custom_gravity_title">Gravity</string>
-     <string name="pulse_custom_gravity_bottom">Bottom</string>
+     <!-- Ambient battery bar settings -->
+     <string name="ambient_ui">Ambient/Always on display</string>
+     <string name="ambient_battery_settings_title">Battery bar</string>
 diff --git a/res/xml/lockscreen_ui.xml b/res/xml/lockscreen_ui.xml
 index 5ec12d2..f6e7846 100644
 --- a/res/xml/lockscreen_ui.xml

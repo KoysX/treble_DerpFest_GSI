@@ -9,7 +9,7 @@ Subject: [PATCH] Make-rounded-corners-padding-overridable
  2 files changed, 8 insertions(+), 2 deletions(-)
 
 diff --git a/packages/SystemUI/src/com/android/systemui/shade/ShadeHeaderController.kt b/packages/SystemUI/src/com/android/systemui/shade/ShadeHeaderController.kt
-index ebe69ba3..02c5fa2d 100644
+index 8973d435..db012a8d 100644
 --- a/packages/SystemUI/src/com/android/systemui/shade/ShadeHeaderController.kt
 +++ b/packages/SystemUI/src/com/android/systemui/shade/ShadeHeaderController.kt
 @@ -27,6 +27,7 @@ import android.content.res.ColorStateList
@@ -20,7 +20,7 @@ index ebe69ba3..02c5fa2d 100644
  import android.os.Trace
  import android.os.Trace.TRACE_TAG_APP
  import android.os.UserHandle;
-@@ -559,7 +560,9 @@ constructor(
+@@ -557,7 +558,9 @@ constructor(
      }
  
      private fun updateResources() {
@@ -28,9 +28,9 @@ index ebe69ba3..02c5fa2d 100644
 +        roundedCorners = SystemProperties.getInt("persist.sys.phh.rounded_corners_padding", -1);
 +        if(roundedCorners == -1)
 +            roundedCorners = resources.getDimensionPixelSize(R.dimen.rounded_corner_content_padding)
-         sbPaddingLeft = resources.getDimensionPixelSize(R.dimen.status_bar_padding_start)
-         sbPaddingRight = resources.getDimensionPixelSize(R.dimen.status_bar_padding_end)
          val padding = resources.getDimensionPixelSize(R.dimen.qs_panel_padding)
+         header.setPadding(padding, header.paddingTop, padding, header.paddingBottom)
+         updateQQSPaddings()
 diff --git a/packages/SystemUI/src/com/android/systemui/statusbar/phone/StatusBarContentInsetsProvider.kt b/packages/SystemUI/src/com/android/systemui/statusbar/phone/StatusBarContentInsetsProvider.kt
 index c850d4f9..4ee02eea 100644
 --- a/packages/SystemUI/src/com/android/systemui/statusbar/phone/StatusBarContentInsetsProvider.kt
