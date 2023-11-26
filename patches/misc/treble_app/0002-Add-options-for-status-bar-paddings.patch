@@ -54,16 +54,16 @@ index 916679e..7973426 100644
                  val value = sp.getBoolean(key, false)
                  SystemProperties.set("persist.sys.phh.low_gamma_brightness", if (value) "true" else "false")
 diff --git a/app/src/main/java/me/phh/treble/app/MiscSettings.kt b/app/src/main/java/me/phh/treble/app/MiscSettings.kt
-index bbf35cb..1bcd344 100644
+index 0aff027..f8dd42b 100644
 --- a/app/src/main/java/me/phh/treble/app/MiscSettings.kt
 +++ b/app/src/main/java/me/phh/treble/app/MiscSettings.kt
-@@ -40,6 +40,9 @@ object MiscSettings : Settings {
-     val fodColor = "key_misc_fod_color"
+@@ -41,6 +41,9 @@ object MiscSettings : Settings {
      val mtkTouchHintIsRotate = "key_misc_mediatek_touch_hint_rotate"
+     val mtkGedKpi = "key_misc_mediatek_ged_kpi"
      val allowBinderThread = "key_misc_allow_binder_thread_on_incoming_calls"
 +    val statusbarpaddingtop = "key_misc_sb_padding_top"
 +    val statusbarpaddingstart = "key_misc_sb_padding_start"
-+    val statusbarpaddingend = "key_misc_sb_padding_end"
++    val statusbarpaddingend = "key_misc_sb_padding_end"    
      val lowGammaBrightness = "key_misc_low_gamma_brightness"
      val linearBrightness = "key_misc_linear_brightness"
      val forceDisplay5g = "key_misc_force_display_5g"

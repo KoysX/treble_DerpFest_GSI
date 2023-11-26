@@ -40,18 +40,18 @@ index e9cc55056e14..2e4ef5a994af 100644
      manifest: "AndroidManifest.xml",
      additional_manifests: ["DerpFestManifest.xml"],
 diff --git a/packages/SystemUI/src/com/android/systemui/biometrics/UdfpsController.java b/packages/SystemUI/src/com/android/systemui/biometrics/UdfpsController.java
-index 10e45dadee60..efb88b9fe1ec 100644
+index a625ae09..9f45c2e9 100644
 --- a/packages/SystemUI/src/com/android/systemui/biometrics/UdfpsController.java
 +++ b/packages/SystemUI/src/com/android/systemui/biometrics/UdfpsController.java
-@@ -47,6 +47,7 @@ import android.os.Handler;
+@@ -49,6 +49,7 @@ import android.os.Handler;
  import android.os.PowerManager;
  import android.os.Process;
  import android.os.Trace;
 +import android.os.SystemProperties;
  import android.os.VibrationAttributes;
  import android.os.VibrationEffect;
- import android.util.Log;
-@@ -110,9 +111,13 @@ import java.util.HashSet;
+ import android.util.BoostFramework;
+@@ -113,9 +114,13 @@ import java.util.HashSet;
  import java.util.Optional;
  import java.util.Set;
  import java.util.concurrent.Executor;
@@ -65,7 +65,7 @@ index 10e45dadee60..efb88b9fe1ec 100644
  
  /**
   * Shows and hides the under-display fingerprint sensor (UDFPS) overlay, handles UDFPS touch events,
-@@ -243,6 +248,46 @@ public class UdfpsController implements DozeReceiver, Dumpable {
+@@ -252,6 +257,46 @@ public class UdfpsController implements DozeReceiver, Dumpable {
              mScreenOn = false;
          }
      };
@@ -112,13 +112,13 @@ index 10e45dadee60..efb88b9fe1ec 100644
  
      @Override
      public void dump(@NonNull PrintWriter pw, @NonNull String[] args) {
-@@ -1188,10 +1233,17 @@ public class UdfpsController implements DozeReceiver, Dumpable {
+@@ -1222,10 +1267,17 @@ public class UdfpsController implements DozeReceiver, Dumpable {
                  view.configureDisplay(() -> dispatchOnUiReady(requestId));
              }
          }
 +        if(SystemProperties.get("ro.vendor.build.fingerprint").contains("nubia/NX669")) {
 +          processCmd(13, 0, 0, new byte[0], 0);
-+        }
++        }        
  
          for (Callback cb : mCallbacks) {
              cb.onFingerDown();
@@ -126,18 +126,18 @@ index 10e45dadee60..efb88b9fe1ec 100644
 +        if(SystemProperties.get("ro.vendor.build.fingerprint").contains("nubia/NX669")) {
 +          processCmd(14, 0, 0, new byte[0], 0);
 +        }
-+
++        
      }
  
      private void onFingerUp(long requestId, @NonNull UdfpsView view) {
-@@ -1242,6 +1294,10 @@ public class UdfpsController implements DozeReceiver, Dumpable {
+@@ -1276,6 +1328,10 @@ public class UdfpsController implements DozeReceiver, Dumpable {
                      mFingerprintManager.onPointerUp(requestId, mSensorProps.sensorId);
                  }
              }
 +        if(SystemProperties.get("ro.vendor.build.fingerprint").contains("nubia/NX669")) {
 +          processCmd(15, 0, 0, new byte[0], 0);
 +        }
-+
++            
              for (Callback cb : mCallbacks) {
                  cb.onFingerUp();
              }

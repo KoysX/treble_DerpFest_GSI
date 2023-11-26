@@ -18,7 +18,7 @@ index fbffc74..9238e96 100644
 -    <string name="maintainer_name" translatable="false">Unknown</string>
 -    <string name="maintainer_telegram" translatable="false">https://t.me/DerpFest5T</string>
 +    <string name="maintainer_name" translatable="false">KoysX</string>
-+    <string name="maintainer_telegram" translatable="false">https://github.com/KoysX/treble_DerpFest_GSI</string>
++    <string name="maintainer_telegram" translatable="false">https://github.com/DerpFest-AOSP</string>
  
      <!-- Doze on charge -->
      <string name="doze_on_charge_title">Always on when charging</string>
