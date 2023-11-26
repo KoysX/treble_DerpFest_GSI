@@ -19,10 +19,10 @@ Change-Id: Ibd0f9ea8fba584a38c060fd9271549a5e106b4eb
  .../systemui/biometrics/UdfpsController.java  |  56 ++++
  .../biometrics/UdfpsControllerOverlay.kt      |   7 +-
  .../android/systemui/biometrics/UdfpsView.kt  | 233 ++++++++++++--
- services/core/Android.bp                      |   5 +
+  services/core/Android.bp                     | 7 ++++++-
  .../server/biometrics/AuthService.java        | 295 +++++++++++++++++-
  .../fingerprint/FingerprintService.java       |   3 +-
- 7 files changed, 579 insertions(+), 24 deletions(-)
+ 7 files changed, 580 insertions(+), 25 deletions(-)
 
 diff --git a/packages/SystemUI/Android.bp b/packages/SystemUI/Android.bp
 index e9cc55056e14..2e4ef5a994af 100644
@@ -456,18 +456,20 @@ index ef7fcc954..3949d7baa 100644
      }
  }
 diff --git a/services/core/Android.bp b/services/core/Android.bp
-index 05782235ea1c..18a9fe12ecb7 100644
+index 72e8b157..94d1b3a4 100644
 --- a/services/core/Android.bp
 +++ b/services/core/Android.bp
-@@ -189,6 +189,11 @@ java_library_static {
+@@ -190,7 +190,12 @@ java_library_static {
+         "vendor.aospa.biometrics.face",
          // HIDL
          "vendor.mediatek.hardware.mtkpower-V1.1-java",
-         "vendor.samsung.hardware.sysinput-V1.2-java",
+-        "vendor.samsung.hardware.sysinput-V1.2-java",        
++        "vendor.samsung.hardware.sysinput-V1.2-java",
 +        "vendor.goodix.hardware.biometrics.fingerprint-V2.1-java",
 +        "vendor.samsung.hardware.biometrics.fingerprint-V3.0-java",
 +        "vendor.oplus.hardware.biometrics.fingerprint-V2.1-java",
 +        "vendor.oppo.hardware.biometrics.fingerprint-V2.1-java",
-+        "vendor.xiaomi.hardware.fingerprintextension-V1.0-java",
++        "vendor.xiaomi.hardware.fingerprintextension-V1.0-java",                
      ],
      javac_shard_size: 50,
      javacflags: [

@@ -11,14 +11,14 @@ This fixes touchscreen not waking up on Galaxy F23
  2 files changed, 33 insertions(+)
 
 diff --git a/services/core/Android.bp b/services/core/Android.bp
-index f8d19ec9903d..735959270c11 100644
+index 3fb279e8..c3f8103a 100644
 --- a/services/core/Android.bp
 +++ b/services/core/Android.bp
-@@ -186,6 +186,7 @@ java_library_static {
-         "com.android.sysprop.watchdog",
+@@ -188,6 +188,7 @@ java_library_static {
          "ImmutabilityAnnotation",
          "securebox",
-+        "vendor.samsung.hardware.sysinput-V1.2-java", // HIDL
+         "vendor.aospa.biometrics.face",
++        "vendor.samsung.hardware.sysinput-V1.2-java", // HIDL        
      ],
      javac_shard_size: 50,
      javacflags: [

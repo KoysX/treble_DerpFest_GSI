@@ -27,17 +27,17 @@ Change-Id: I9f1eac5a20b98920a5d0c8204fe4d165ba069f5a
  2 files changed, 53 insertions(+), 1 deletion(-)
 
 diff --git a/services/core/Android.bp b/services/core/Android.bp
-index 735959270c11..05782235ea1c 100644
+index c3f8103a..72e8b157 100644
 --- a/services/core/Android.bp
 +++ b/services/core/Android.bp
-@@ -186,7 +186,9 @@ java_library_static {
-         "com.android.sysprop.watchdog",
+@@ -188,7 +188,9 @@ java_library_static {
          "ImmutabilityAnnotation",
          "securebox",
--        "vendor.samsung.hardware.sysinput-V1.2-java", // HIDL
+         "vendor.aospa.biometrics.face",
+-        "vendor.samsung.hardware.sysinput-V1.2-java", // HIDL        
 +        // HIDL
 +        "vendor.mediatek.hardware.mtkpower-V1.1-java",
-+        "vendor.samsung.hardware.sysinput-V1.2-java",
++        "vendor.samsung.hardware.sysinput-V1.2-java",        
      ],
      javac_shard_size: 50,
      javacflags: [
