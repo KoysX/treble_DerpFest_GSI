@@ -23,21 +23,21 @@ smoother.
 Change-Id: I9f1eac5a20b98920a5d0c8204fe4d165ba069f5a
 ---
  services/core/Android.bp                      |  4 +-
- .../com/android/server/wm/DisplayPolicy.java  | 50 +++++++++++++++++++
- 2 files changed, 53 insertions(+), 1 deletion(-)
+ .../com/android/server/wm/DisplayPolicy.java  | 49 +++++++++++++++++++
+ 2 files changed, 52 insertions(+), 1 deletion(-)
 
 diff --git a/services/core/Android.bp b/services/core/Android.bp
-index c3f8103a..72e8b157 100644
+index 911df41d..4a4b3188 100644
 --- a/services/core/Android.bp
 +++ b/services/core/Android.bp
 @@ -188,7 +188,9 @@ java_library_static {
          "ImmutabilityAnnotation",
          "securebox",
          "vendor.aospa.biometrics.face",
--        "vendor.samsung.hardware.sysinput-V1.2-java", // HIDL        
+-        "vendor.samsung.hardware.sysinput-V1.2-java", // HIDL
 +        // HIDL
 +        "vendor.mediatek.hardware.mtkpower-V1.1-java",
-+        "vendor.samsung.hardware.sysinput-V1.2-java",        
++        "vendor.samsung.hardware.sysinput-V1.2-java",
      ],
      javac_shard_size: 50,
      javacflags: [
@@ -48,7 +48,7 @@ index cc04f853..51e4008e 100644
 @@ -231,6 +231,9 @@ public class DisplayPolicy {
       */
      private boolean mRemoteInsetsControllerControlsSystemBars;
- 
+
 +    private vendor.mediatek.hardware.mtkpower.V1_1.IMtkPerf mMtkPerf;
 +    private vendor.mediatek.hardware.mtkpower.V1_0.IMtkPower mOldMtkPerf;
 +
@@ -58,7 +58,7 @@ index cc04f853..51e4008e 100644
 @@ -489,6 +492,20 @@ public class DisplayPolicy {
              mScreenOnFully = true;
          }
- 
+
 +        try {
 +            mMtkPerf = vendor.mediatek.hardware.mtkpower.V1_1.IMtkPerf.getService();
 +        } catch(Throwable t) {
@@ -90,9 +90,9 @@ index cc04f853..51e4008e 100644
 +                        } catch(Throwable t) {
 +                            android.util.Log.d("PHH-Power", "Failed sending touch power hint", t);
 +                        }
-+                    }                    
++                    }
                  }
- 
+
                  @Override
 @@ -596,6 +624,28 @@ public class DisplayPolicy {
                      if (listener != null) {
@@ -119,10 +119,10 @@ index cc04f853..51e4008e 100644
 +                        } catch(Throwable t) {
 +                            android.util.Log.d("PHH-Power", "Failed sending touch power hint", t);
 +                        }
-+                    }                    
++                    }
                  }
- 
+
                      @Override
--- 
+--
 2.25.1
 

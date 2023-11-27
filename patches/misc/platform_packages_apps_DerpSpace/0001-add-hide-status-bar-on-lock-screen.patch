@@ -1,6 +1,6 @@
-From a79a19fcb1d3346329a4aaba204b36b96474a323 Mon Sep 17 00:00:00 2001
+From fce2d1641c75b7e5b9962c784cf59a74a525acf5 Mon Sep 17 00:00:00 2001
 From: BoNic <BoNio9527@gmail.com>
-Date: Mon, 13 Nov 2023 11:52:40 +0800
+Date: Sun, 26 Nov 2023 21:57:02 -0500
 Subject: [PATCH] add-hide-status-bar-on-lock-screen
 
 ---
@@ -9,26 +9,26 @@ Subject: [PATCH] add-hide-status-bar-on-lock-screen
  2 files changed, 17 insertions(+)
 
 diff --git a/res/values/strings.xml b/res/values/strings.xml
-index f7e5f8a..23d6507 100644
+index 5720851..17a5b90 100644
 --- a/res/values/strings.xml
 +++ b/res/values/strings.xml
-@@ -306,6 +306,11 @@
-     <string name="status_bar_clock_auto_hide_title">Auto hide</string>
-     <string name="status_bar_clock_auto_hide_summary">Hide clock if launcher is visible</string>
+@@ -388,6 +388,11 @@
+     <string name="status_bar_battery_text_charging_title">Battery percentage when charging</string>
+     <string name="status_bar_battery_text_charging_summary">Always display battery percentage when charging</string>
  
 +    <!-- Hide statusbar on lockscreen -->
 +    <string name="lockscreen_clock_title">lockscreen clock</string>
 +    <string name="lockscreen_hide_status_bar_title">Hide Statusbar</string>
 +    <string name="lockscreen_hide_status_bar_summary">When enabled, statusbar will be hidden on lockscreen</string>
 +
-     <!-- Ambient battery bar settings -->
-     <string name="ambient_ui">Ambient/Always on display</string>
-     <string name="ambient_battery_settings_title">Battery bar</string>
+     <!-- QS battery -->
+     <string name="qs_use_status_bar_battery_style">Follow status bar style</string>
+ 
 diff --git a/res/xml/lockscreen_ui.xml b/res/xml/lockscreen_ui.xml
-index 5ec12d2..f6e7846 100644
+index 01f47d4..0cdd082 100644
 --- a/res/xml/lockscreen_ui.xml
 +++ b/res/xml/lockscreen_ui.xml
-@@ -51,6 +51,18 @@
+@@ -57,6 +57,18 @@
  
      </PreferenceCategory>
  
@@ -48,5 +48,5 @@ index 5ec12d2..f6e7846 100644
          android:key="lockscreen_media_art_options"
          android:title="@string/lockscreen_media_art_options_title">
 -- 
-2.34.1
+2.25.1
 

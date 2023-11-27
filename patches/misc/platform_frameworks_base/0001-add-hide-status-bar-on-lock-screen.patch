@@ -12,13 +12,13 @@ Subject: [PATCH] add-hide-status-bar-on-lock-screen
  5 files changed, 112 insertions(+), 1 deletion(-)
 
 diff --git a/core/java/android/provider/Settings.java b/core/java/android/provider/Settings.java
-index 163952ea..6244ee03 100644
+index b82afea3..2b94c8f0 100644
 --- a/core/java/android/provider/Settings.java
 +++ b/core/java/android/provider/Settings.java
-@@ -6660,6 +6660,11 @@ public final class Settings {
+@@ -6666,6 +6666,11 @@ public final class Settings {
           */
          public static final String THREE_FINGER_GESTURE = "three_finger_gesture";
- 
+
 +        /**
 +         * @hide
 +         */
@@ -27,13 +27,13 @@ index 163952ea..6244ee03 100644
          /**
           * Which notification Vibration Pattern to use
           * 0: default provided value
-@@ -6811,6 +6816,7 @@ public final class Settings {
-             PRIVATE_SETTINGS.add(OMNI_KEYGUARD_SHOW_BATTERY_BAR_ALWAYS);
+@@ -6817,6 +6822,7 @@ public final class Settings {
              PRIVATE_SETTINGS.add(BACK_GESTURE_HAPTIC);
              PRIVATE_SETTINGS.add(SENSOR_BLOCK);
+             PRIVATE_SETTINGS.add(FORCE_FULLSCREEN_CUTOUT_APPS);
 +            PRIVATE_SETTINGS.add(LOCK_HIDE_STATUS_BAR);
          }
- 
+
          /**
 diff --git a/packages/SettingsProvider/src/android/provider/settings/backup/SystemSettings.java b/packages/SettingsProvider/src/android/provider/settings/backup/SystemSettings.java
 index f547b40f..e977b1e8 100644
@@ -80,7 +80,7 @@ index b694b28e..c3ea2fb4 100644
 @@ -19,7 +19,12 @@ package com.android.systemui.statusbar.phone;
  import static com.android.systemui.ScreenDecorations.DisplayCutoutView.boundsFromDirection;
  import static com.android.systemui.util.Utils.getStatusBarHeaderHeightKeyguard;
- 
+
 +import android.animation.Animator;
 +import android.animation.AnimatorSet;
 +import android.animation.ObjectAnimator;
@@ -104,7 +104,7 @@ index b694b28e..c3ea2fb4 100644
      private final Rect mClipRect = new Rect(0, 0, 0, 0);
      private boolean mIsUserSwitcherEnabled;
 +    private boolean mHideContents;
- 
+
      public KeyguardStatusBarView(Context context, AttributeSet attrs) {
          super(context, attrs);
 @@ -219,7 +227,7 @@ public class KeyguardStatusBarView extends RelativeLayout {
@@ -213,6 +213,6 @@ index b694b28e..c3ea2fb4 100644
 +        }
 +    }
  }
--- 
+--
 2.34.1
 

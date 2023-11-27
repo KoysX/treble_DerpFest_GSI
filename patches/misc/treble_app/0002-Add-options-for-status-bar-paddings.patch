@@ -63,7 +63,7 @@ index 0aff027..f8dd42b 100644
      val allowBinderThread = "key_misc_allow_binder_thread_on_incoming_calls"
 +    val statusbarpaddingtop = "key_misc_sb_padding_top"
 +    val statusbarpaddingstart = "key_misc_sb_padding_start"
-+    val statusbarpaddingend = "key_misc_sb_padding_end"    
++    val statusbarpaddingend = "key_misc_sb_padding_end"
      val lowGammaBrightness = "key_misc_low_gamma_brightness"
      val linearBrightness = "key_misc_linear_brightness"
      val forceDisplay5g = "key_misc_force_display_5g"
@@ -108,6 +108,6 @@ index 4f89dcd..89d123a 100644
  		<ListPreference
  			android:defaultValue="1"
  			android:entries="@array/pref_misc_fps_divisor"
--- 
+--
 2.34.1
 
