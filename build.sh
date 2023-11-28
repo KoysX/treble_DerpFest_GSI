@@ -34,11 +34,11 @@ syncRepos() {
 }
 
 applyPatches() {
-    echo "--> Applying misc patches"
+    echo "--> Applying phh patches"
     bash $BL/apply-patches.sh $BL phh
     echo
 
-    echo "--> Applying phh patches"
+    echo "--> Applying misc patches"
     bash $BL/apply-patches.sh $BL misc
     echo
 
