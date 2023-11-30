@@ -9,20 +9,20 @@ Subject: [PATCH] Make-rounded-corners-padding-overridable
  2 files changed, 8 insertions(+), 2 deletions(-)
 
 diff --git a/packages/SystemUI/src/com/android/systemui/shade/ShadeHeaderController.kt b/packages/SystemUI/src/com/android/systemui/shade/ShadeHeaderController.kt
-index e46a0ecd..f8db0784 100644
+index 42c34d05..8a484d60 100644
 --- a/packages/SystemUI/src/com/android/systemui/shade/ShadeHeaderController.kt
 +++ b/packages/SystemUI/src/com/android/systemui/shade/ShadeHeaderController.kt
 @@ -28,6 +28,7 @@ import android.content.res.Configuration
- import android.net.Uri
  import android.graphics.Color
+ import android.net.Uri
  import android.os.Bundle
 +import android.os.SystemProperties
  import android.os.Trace
  import android.os.Trace.TRACE_TAG_APP
  import android.os.UserHandle;
-@@ -603,7 +604,9 @@ constructor(
+@@ -569,7 +570,9 @@ constructor(
      }
- 
+
      private fun updateResources() {
 -        roundedCorners = resources.getDimensionPixelSize(R.dimen.rounded_corner_content_padding)
 +        roundedCorners = SystemProperties.getInt("persist.sys.phh.rounded_corners_padding", -1);
@@ -46,7 +46,7 @@ index c850d4f9..4ee02eea 100644
 @@ -231,7 +232,9 @@ class StatusBarContentInsetsProvider @Inject constructor(
      ): Rect {
          val currentRotation = getExactRotation(context)
- 
+
 -        val roundedCornerPadding = rotatedResources
 +        var roundedCornerPadding = SystemProperties.getInt("persist.sys.phh.rounded_corners_padding", -1);
 +        if(roundedCornerPadding == -1)
@@ -54,6 +54,6 @@ index c850d4f9..4ee02eea 100644
                  .getDimensionPixelSize(R.dimen.rounded_corner_content_padding)
          val minDotPadding = if (isPrivacyDotEnabled)
                  rotatedResources.getDimensionPixelSize(R.dimen.ongoing_appops_dot_min_padding)
--- 
+--
 2.34.1
 

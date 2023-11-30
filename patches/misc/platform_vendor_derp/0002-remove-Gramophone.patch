@@ -1,0 +1,27 @@
+From 741be3ab87f7ba4eab821835fb6850ab5dff7329 Mon Sep 17 00:00:00 2001
+From: BoNic <BoNio9527@gmail.com>
+Date: Tue, 28 Nov 2023 06:16:19 -0500
+Subject: [PATCH] remove-Gramophone
+
+---
+ config/common_full.mk | 4 ----
+ 1 file changed, 4 deletions(-)
+
+diff --git a/config/common_full.mk b/config/common_full.mk
+index 28ece34..006ec45 100644
+--- a/config/common_full.mk
++++ b/config/common_full.mk
+@@ -3,10 +3,6 @@ $(call inherit-product, vendor/derp/config/common_mobile.mk)
+ 
+ PRODUCT_SIZE := full
+ 
+-# Apps
+-PRODUCT_PACKAGES += \
+-    Gramophone
+-
+ ifneq ($(PRODUCT_NO_CAMERA),true)
+ PRODUCT_PACKAGES += \
+     Flash
+-- 
+2.25.1
+
