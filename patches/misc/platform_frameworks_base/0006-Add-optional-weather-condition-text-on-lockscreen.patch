@@ -1,0 +1,173 @@
+From dc9d533b8f8a5941592f55594dc4179e8dcfd010 Mon Sep 17 00:00:00 2001
+From: BoNic <BoNio9527@gmail.com>
+Date: Sat, 2 Dec 2023 23:00:24 -0500
+Subject: [PATCH] Add-optional-weather-condition-text-on-lockscreen
+
+---
+ core/java/android/provider/Settings.java      |  5 +++
+ .../layout/current_weather_view.xml           |  8 ++++
+ packages/SystemUI/res/values/derp_strings.xml |  9 +++++
+ .../systemui/derp/CurrentWeatherView.java     | 38 +++++++++++++++++--
+ 4 files changed, 57 insertions(+), 3 deletions(-)
+
+diff --git a/core/java/android/provider/Settings.java b/core/java/android/provider/Settings.java
+index f593ae56a..08d747696 100644
+--- a/core/java/android/provider/Settings.java
++++ b/core/java/android/provider/Settings.java
+@@ -6692,6 +6692,11 @@ public final class Settings {
+          */
+         public static final String LOCKSCREEN_WEATHER_LOCATION = "lockscreen_weather_location";
+
++        /**
++         * @hide
++         */
++        public static final String LOCKSCREEN_WEATHER_TEXT = "lockscreen_weather_text";
++
+         /**
+          * Which notification Vibration Pattern to use
+          * 0: default provided value
+diff --git a/packages/SystemUI/res-keyguard/layout/current_weather_view.xml b/packages/SystemUI/res-keyguard/layout/current_weather_view.xml
+index afee3275f..0d4c2e3c5 100644
+--- a/packages/SystemUI/res-keyguard/layout/current_weather_view.xml
++++ b/packages/SystemUI/res-keyguard/layout/current_weather_view.xml
+@@ -54,6 +54,14 @@
+             android:singleLine="true"
+             android:paddingStart="8dp"
+             style="@style/TextAppearance.Keyguard.Secondary" />
++
++        <TextView
++            android:id="@+id/weather_text"
++            android:layout_width="wrap_content"
++            android:layout_height="wrap_content"
++            android:textColor="?attr/wallpaperTextColor"
++            android:singleLine="true"
++            style="@style/TextAppearance.Keyguard.Secondary" />
+     </LinearLayout>
+
+ </com.android.systemui.derp.CurrentWeatherView>
+diff --git a/packages/SystemUI/res/values/derp_strings.xml b/packages/SystemUI/res/values/derp_strings.xml
+index bb04f295d..eeb0b5d9b 100644
+--- a/packages/SystemUI/res/values/derp_strings.xml
++++ b/packages/SystemUI/res/values/derp_strings.xml
+@@ -211,4 +211,13 @@
+
+     <!-- Name of the roaming status bar icon. -->
+     <string name="status_bar_roaming">Roaming indicator</string>
++
++    <!-- OmniJaws -->
++    <string name="weather_condition_clouds">Cloudy</string>
++    <string name="weather_condition_rain">Rainy</string>
++    <string name="weather_condition_clear">Sunny</string>
++    <string name="weather_condition_storm">Stormy</string>
++    <string name="weather_condition_snow">Snowy</string>
++    <string name="weather_condition_wind">Windy</string>
++    <string name="weather_condition_mist">Misty</string>
+ </resources>
+diff --git a/packages/SystemUI/src/com/android/systemui/derp/CurrentWeatherView.java b/packages/SystemUI/src/com/android/systemui/derp/CurrentWeatherView.java
+index 109bb9aea..d20e6c307 100644
+--- a/packages/SystemUI/src/com/android/systemui/derp/CurrentWeatherView.java
++++ b/packages/SystemUI/src/com/android/systemui/derp/CurrentWeatherView.java
+@@ -39,10 +39,14 @@ public class CurrentWeatherView extends FrameLayout implements OmniJawsClient.Om
+     private OmniJawsClient.WeatherInfo mWeatherInfo;
+     private TextView mLeftText;
+     private TextView mRightText;
++    private TextView mWeatherText;
+
+     private SettingsObserver mSettingsObserver;
+
+     private boolean mShowWeatherLocation;
++    private boolean mShowWeatherText;
++
++    private Context mContext;
+
+     public CurrentWeatherView(Context context) {
+         this(context, null);
+@@ -54,6 +58,7 @@ public class CurrentWeatherView extends FrameLayout implements OmniJawsClient.Om
+
+     public CurrentWeatherView(Context context, AttributeSet attrs, int defStyle) {
+         super(context, attrs, defStyle);
++        mContext = context;
+         if (mWeatherClient == null) {
+             mWeatherClient = new OmniJawsClient(context);
+         }
+@@ -78,6 +83,7 @@ public class CurrentWeatherView extends FrameLayout implements OmniJawsClient.Om
+         mCurrentImage  = (ImageView) findViewById(R.id.current_image);
+         mLeftText = (TextView) findViewById(R.id.left_text);
+         mRightText = (TextView) findViewById(R.id.right_text);
++        mWeatherText = (TextView) findViewById(R.id.weather_text);
+         if (mSettingsObserver == null) {
+             mSettingsObserver = new SettingsObserver(new Handler());
+             mSettingsObserver.observe();
+@@ -88,6 +94,7 @@ public class CurrentWeatherView extends FrameLayout implements OmniJawsClient.Om
+         mCurrentImage.setImageDrawable(null);
+         mLeftText.setText("");
+         mRightText.setText("");
++        mWeatherText.setText("");
+     }
+
+     @Override
+@@ -121,11 +128,29 @@ public class CurrentWeatherView extends FrameLayout implements OmniJawsClient.Om
+             mWeatherClient.queryWeather();
+             mWeatherInfo = mWeatherClient.getWeatherInfo();
+             if (mWeatherInfo != null) {
++                String formattedCondition = mWeatherInfo.condition;
++                if (formattedCondition.toLowerCase().contains("clouds")) {
++                    formattedCondition = mContext.getResources().getString(R.string.weather_condition_clouds);
++                } else if (formattedCondition.toLowerCase().contains("rain")) {
++                    formattedCondition = mContext.getResources().getString(R.string.weather_condition_rain);
++                } else if (formattedCondition.toLowerCase().contains("clear")) {
++                    formattedCondition = mContext.getResources().getString(R.string.weather_condition_clear);
++                } else if (formattedCondition.toLowerCase().contains("storm")) {
++                    formattedCondition = mContext.getResources().getString(R.string.weather_condition_storm);
++                } else if (formattedCondition.toLowerCase().contains("snow")) {
++                    formattedCondition = mContext.getResources().getString(R.string.weather_condition_snow);
++                } else if (formattedCondition.toLowerCase().contains("wind")) {
++                    formattedCondition = mContext.getResources().getString(R.string.weather_condition_wind);
++                } else if (formattedCondition.toLowerCase().contains("mist")) {
++                    formattedCondition = mContext.getResources().getString(R.string.weather_condition_mist);
++                }
+                 Drawable d = mWeatherClient.getWeatherConditionImage(mWeatherInfo.conditionCode);
+                 mCurrentImage.setImageDrawable(d);
+                 mRightText.setText(mWeatherInfo.temp + mWeatherInfo.tempUnits);
+                 mLeftText.setText(mWeatherInfo.city);
+                 mLeftText.setVisibility(mShowWeatherLocation ? View.VISIBLE : View.GONE);
++                mWeatherText.setText(" · "  + formattedCondition);
++                mWeatherText.setVisibility(mShowWeatherText ? View.VISIBLE : View.GONE);
+             }
+         } catch(Exception e) {
+             // Do nothing
+@@ -138,21 +163,28 @@ public class CurrentWeatherView extends FrameLayout implements OmniJawsClient.Om
+         }
+
+         void observe() {
+-            getContext().getContentResolver().registerContentObserver(Settings.System.getUriFor(
++            mContext.getContentResolver().registerContentObserver(Settings.System.getUriFor(
+                     Settings.System.LOCKSCREEN_WEATHER_LOCATION), false, this,
+                     UserHandle.USER_ALL);
++            mContext.getContentResolver().registerContentObserver(Settings.System.getUriFor(
++                    Settings.System.LOCKSCREEN_WEATHER_TEXT), false, this,
++                    UserHandle.USER_ALL);
+             updateWeatherSettings();
+         }
+
+         void unobserve() {
+-            getContext().getContentResolver().unregisterContentObserver(this);
++            mContext.getContentResolver().unregisterContentObserver(this);
+         }
+
+         void updateWeatherSettings() {
+-            mShowWeatherLocation = Settings.System.getIntForUser(getContext().getContentResolver(),
++            mShowWeatherLocation = Settings.System.getIntForUser(mContext.getContentResolver(),
+                     Settings.System.LOCKSCREEN_WEATHER_LOCATION,
+                     0, UserHandle.USER_CURRENT) != 0;
++            mShowWeatherText = Settings.System.getIntForUser(mContext.getContentResolver(),
++                    Settings.System.LOCKSCREEN_WEATHER_TEXT,
++                    1, UserHandle.USER_CURRENT) != 0;
+             mLeftText.setVisibility(mShowWeatherLocation ? View.VISIBLE : View.GONE);
++            mWeatherText.setVisibility(mShowWeatherText ? View.VISIBLE : View.GONE);
+         }
+
+         @Override
+--
+2.25.1
+

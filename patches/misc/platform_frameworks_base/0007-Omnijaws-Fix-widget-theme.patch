@@ -1,0 +1,34 @@
+From ea2ef311657f99bde85ed0f0320d73f277500f96 Mon Sep 17 00:00:00 2001
+From: BoNic <BoNio9527@gmail.com>
+Date: Sun, 3 Dec 2023 00:36:41 -0500
+Subject: [PATCH] Fix-widget-theme
+
+---
+ core/java/com/android/internal/util/derp/OmniJawsClient.java | 5 +++--
+ 1 file changed, 3 insertions(+), 2 deletions(-)
+
+diff --git a/core/java/com/android/internal/util/derp/OmniJawsClient.java b/core/java/com/android/internal/util/derp/OmniJawsClient.java
+index f40498982..131ddee72 100644
+--- a/core/java/com/android/internal/util/derp/OmniJawsClient.java
++++ b/core/java/com/android/internal/util/derp/OmniJawsClient.java
+@@ -54,6 +54,7 @@ public class OmniJawsClient {
+             = Uri.parse("content://org.omnirom.omnijaws.provider/control");
+     private static final String ICON_PACKAGE_DEFAULT = "org.omnirom.omnijaws";
+     private static final String ICON_PREFIX_DEFAULT = "google";
++    private static final String ICON_PREFIX_OUTLINE = "outline";
+     private static final String EXTRA_ERROR = "error";
+     public static final int EXTRA_ERROR_NETWORK = 0;
+     public static final int EXTRA_ERROR_LOCATION = 1;
+@@ -429,7 +430,7 @@ public class OmniJawsClient {
+         }
+     }
+
+-    public boolean isDefaultIconPackage() {
+-        return mIconPrefix.equals(ICON_PREFIX_DEFAULT);
++    public boolean isOutlineIconPackage() {
++        return mIconPrefix.equals(ICON_PREFIX_OUTLINE);
+     }
+ }
+--
+2.25.1
+
