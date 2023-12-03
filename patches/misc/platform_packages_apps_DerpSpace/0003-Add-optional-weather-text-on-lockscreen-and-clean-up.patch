@@ -1,0 +1,53 @@
+From 00ed4dc6c9b56c245c506ab62f8d6f6dff604a05 Mon Sep 17 00:00:00 2001
+From: BoNic <BoNio9527@gmail.com>
+Date: Sun, 3 Dec 2023 07:09:28 -0500
+Subject: [PATCH] Add-optional-weather-text-on-lockscreen-and-clean-up
+
+---
+ res/values/strings.xml        | 4 +++-
+ res/xml/lockscreen_ui.xml     | 9 +++++++++
+ 2 files changed, 12 insertions(+), 1 deletions(-)
+
+diff --git a/res/values/strings.xml b/res/values/strings.xml
+index 09399c8..37a32dd 100644
+--- a/res/values/strings.xml
++++ b/res/values/strings.xml
+@@ -463,6 +463,8 @@
+     <string name="lockscreen_weather_title">Weather condition</string>
+     <string name="lockscreen_weather_summary">Display current weather condition and temperature</string>
+     <string name="lockscreen_weather_enabled_info">Requires weather service to be enabled</string>
+-    <string name="lockscreen_weather_location_title">Weather location</string>
++    <string name="lockscreen_weather_location_title">Current location</string>
+     <string name="lockscreen_weather_location_summary">Display current weather location</string>
++    <string name="lockscreen_weather_text_title">Current condition</string>
++    <string name="lockscreen_weather_text_summary">Display current weather condition summary</string>
+ </resources>
+diff --git a/res/xml/lockscreen_ui.xml b/res/xml/lockscreen_ui.xml
+index f52cdc6..27014fc 100644
+--- a/res/xml/lockscreen_ui.xml
++++ b/res/xml/lockscreen_ui.xml
+@@ -70,12 +70,21 @@
+         <org.derpfest.support.preferences.SystemSettingSwitchPreference
+             android:key="lockscreen_weather_enabled"
+             android:title="@string/lockscreen_weather_title"
++            android:defaultValue="false"
+             android:summary="@string/lockscreen_weather_summary" />
+
+         <org.derpfest.support.preferences.SystemSettingSwitchPreference
+             android:key="lockscreen_weather_location"
+             android:title="@string/lockscreen_weather_location_title"
+             android:summary="@string/lockscreen_weather_location_summary"
++            android:defaultValue="false"
++            android:dependency="lockscreen_weather_enabled" />
++
++        <org.derpfest.support.preferences.SystemSettingSwitchPreference
++            android:key="lockscreen_weather_text"
++            android:title="@string/lockscreen_weather_text_title"
++            android:summary="@string/lockscreen_weather_text_summary"
++            android:defaultValue="true"
+             android:dependency="lockscreen_weather_enabled" />
+
+         <Preference
+--
+2.25.1
+

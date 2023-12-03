@@ -1,6 +1,6 @@
-From 65e7cbeddd57419d4a4759bb28fbe46fae95cf01 Mon Sep 17 00:00:00 2001
+From 29a69abb998674b71034906db8001264c59e6033 Mon Sep 17 00:00:00 2001
 From: BoNic <BoNio9527@gmail.com>
-Date: Sun, 12 Nov 2023 08:44:00 +0800
+Date: Sat, 2 Dec 2023 21:30:53 -0500
 Subject: [PATCH] slim
 
 ---
@@ -8,7 +8,7 @@ Subject: [PATCH] slim
  1 file changed, 10 deletions(-)
 
 diff --git a/common/common-vendor.mk b/common/common-vendor.mk
-index 105391e..167fd53 100644
+index 8ab1b99..2cef4e6 100644
 --- a/common/common-vendor.mk
 +++ b/common/common-vendor.mk
 @@ -6,7 +6,6 @@ PRODUCT_SOONG_NAMESPACES += \
@@ -19,13 +19,13 @@ index 105391e..167fd53 100644
      vendor/gms/common/proprietary/product/app/TrichromeLibrary/TrichromeLibrary.apk.gz:$(TARGET_COPY_OUT_PRODUCT)/app/TrichromeLibrary/TrichromeLibrary.apk.gz \
      vendor/gms/common/proprietary/product/app/WebViewGoogle/WebViewGoogle.apk.gz:$(TARGET_COPY_OUT_PRODUCT)/app/WebViewGoogle/WebViewGoogle.apk.gz \
      vendor/gms/common/proprietary/product/etc/default-permissions/default-permissions.xml:$(TARGET_COPY_OUT_PRODUCT)/etc/default-permissions/default-permissions.xml \
-@@ -89,19 +88,15 @@ PRODUCT_COPY_FILES += \
+@@ -90,37 +89,30 @@ PRODUCT_COPY_FILES += \
  PRODUCT_PACKAGES += \
      GoogleExtShared \
      GooglePrintRecommendationService \
 -    DocumentsUIGoogle \
      GoogleExtServices \
--    GooglePackageInstaller \
+     GooglePackageInstaller \
      TagGoogle \
      CalculatorGooglePrebuilt \
      CalendarGooglePrebuilt \
@@ -39,9 +39,7 @@ index 105391e..167fd53 100644
      MarkupGoogle \
      ModuleMetadataGoogle \
      NgaResources \
-@@ -109,19 +104,15 @@ PRODUCT_PACKAGES += \
-     PixelThemesStub \
-     PixelWallpapers2020 \
+     Photos \
      PrebuiltDeskClockGoogle \
 -    PrebuiltGmail \
      SoundAmplifierPrebuilt \
@@ -59,7 +57,7 @@ index 105391e..167fd53 100644
      GoogleDialer \
      GoogleOneTimeInitializer \
      GoogleRestorePrebuilt \
-@@ -140,7 +131,6 @@ PRODUCT_PACKAGES += \
+@@ -138,12 +130,10 @@ PRODUCT_PACKAGES += \
      PrebuiltGmsCoreSc_MeasurementDynamite \
      AndroidPlatformServices \
      RecorderPrebuilt \
@@ -67,6 +65,11 @@ index 105391e..167fd53 100644
      ScribePrebuilt \
      SettingsIntelligenceGooglePrebuilt \
      SetupWizardPrebuilt \
+     TurboPrebuilt \
+-    Velvet \
+     WellbeingPrebuilt \
+     EmergencyInfoGoogleNoUi \
+     Flipendo \
 -- 
-2.34.1
+2.25.1
 

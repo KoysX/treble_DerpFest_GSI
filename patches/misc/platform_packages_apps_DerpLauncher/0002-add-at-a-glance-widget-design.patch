@@ -1,0 +1,365 @@
+From eeb8a1a1e6c1653d362a6c548b3147b48bb424c8 Mon Sep 17 00:00:00 2001
+From: BoNic <BoNio9527@gmail.com>
+Date: Sun, 3 Dec 2023 00:24:56 -0500
+Subject: [PATCH] add-at-a-glance-widget-design
+
+---
+ AndroidManifest-common.xml                    |   2 +
+ privapp_whitelist_derp_launcher3.xml          |   2 +
+ res/drawable/baseline_audiotrack_24.xml       |  10 ++
+ res/values/derp_strings.xml                   | 138 ++++++++++++++----
+ res/values/dimens.xml                         |   6 +-
+ res/xml/launcher_preferences.xml              |  32 +++-
+ src/com/android/launcher3/Utilities.java      |  12 ++
+ .../launcher3/settings/SettingsActivity.java  |   2 +
+ 8 files changed, 165 insertions(+), 39 deletions(-)
+ create mode 100644 res/drawable/baseline_audiotrack_24.xml
+
+diff --git a/AndroidManifest-common.xml b/AndroidManifest-common.xml
+index c93a9fb..ee530a4 100644
+--- a/AndroidManifest-common.xml
++++ b/AndroidManifest-common.xml
+@@ -53,6 +53,8 @@
+     <uses-permission android:name="android.permission.DEVICE_POWER" />
+     <uses-permission android:name="android.permission.MEDIA_CONTENT_CONTROL" />
+     <uses-permission android:name="org.omnirom.omnijaws.READ_WEATHER" />
++    <uses-permission android:name="android.permission.GET_INTENT_SENDER_INTENT" />
++    <uses-permission android:name="com.android.alarm.permission.SET_ALARM" />
+
+     <permission android:name="com.google.android.apps.nexuslauncher.permission.QSB" android:protectionLevel="signatureOrSystem"/>
+     <uses-permission android:name="com.google.android.apps.nexuslauncher.permission.QSB"/>
+diff --git a/privapp_whitelist_derp_launcher3.xml b/privapp_whitelist_derp_launcher3.xml
+index 085304a..10db7e6 100644
+--- a/privapp_whitelist_derp_launcher3.xml
++++ b/privapp_whitelist_derp_launcher3.xml
+@@ -9,6 +9,8 @@
+     <privapp-permissions package="com.android.launcher3">
+         <permission name="android.permission.FORCE_STOP_PACKAGES"/>
+         <permission name="android.permission.MEDIA_CONTENT_CONTROL"/>
++        <permission name="android.permission.GET_INTENT_SENDER_INTENT"/>
++        <permission name="com.android.alarm.permission.SET_ALARM"/>
+     </privapp-permissions>
+
+ </permissions>
+diff --git a/res/drawable/baseline_audiotrack_24.xml b/res/drawable/baseline_audiotrack_24.xml
+new file mode 100644
+index 0000000..bd8e9da
+--- /dev/null
++++ b/res/drawable/baseline_audiotrack_24.xml
+@@ -0,0 +1,10 @@
++<vector xmlns:android="http://schemas.android.com/apk/res/android"
++    android:width="24dp"
++    android:height="24dp"
++    android:viewportWidth="24"
++    android:viewportHeight="24"
++    android:tint="?attr/colorControlNormal">
++  <path
++      android:fillColor="@android:color/white"
++      android:pathData="M12,3v9.28c-0.47,-0.17 -0.97,-0.28 -1.5,-0.28C8.01,12 6,14.01 6,16.5S8.01,21 10.5,21c2.31,0 4.2,-1.75 4.45,-4H15V6h4V3h-7z"/>
++</vector>
+diff --git a/res/values/derp_strings.xml b/res/values/derp_strings.xml
+index 79558b8..18b7472 100644
+--- a/res/values/derp_strings.xml
++++ b/res/values/derp_strings.xml
+@@ -98,11 +98,12 @@
+     <!-- QuickSpace -->
+     <string name="show_quickspace_title">At A Glance</string>
+     <string name="show_quickspace_summary">Show at the top of your home screen</string>
+-    <string name="quickspace_date_format" translatable="false">EEEE, MMM d</string>
+-    <string name="quickspace_date_format_minimalistic" translatable="false">EEE, MMM d</string>
++    <string name="quickspace_date_format" translatable="false">EEE, MMM d</string>
++    <string name="quickspace_date_format_minimalistic" translatable="false">EEEE, MMMM d</string>
+
+     <!-- QuickSpace: QuickEvent: Device Intro Event -->
+     <string name="quick_event_rom_intro_welcome">Welcome to DerpFest!</string>
++    <string name="quick_event_rom_intro_welcome_ext">DerpFest time!</string>
+     <string-array name="welcome_message_variants">
+         <item>Have a great day</item>
+         <item>Thank you for choosing us</item>
+@@ -113,17 +114,30 @@
+         <item>We love you 3000</item>
+     </string-array>
+
++    <!-- QuickSpace: QuickEvent: Greetings -->
++    <string name="quickspace_grt_morning">Good morning.</string>
++    <string name="quickspace_grt_evening">Good evening.</string>
++    <string name="quickspace_grt_afternoon">Good afternoon.</string>
++    <string name="quickspace_grt_night">Good night.</string>
++    <string name="quickspace_grt_midnight">Solemn midnight.</string>
++    <string name="quickspace_grt_general">Good day.</string>
++    <string name="quickspace_ext_one">Today is</string>
++    <string name="quickspace_ext_two">It\'s</string>
++    <string name="quickspace_ext_three">It\'s</string>
++
+     <!-- QuickSpace: QuickEvent: Ambient Play -->
+-    <string name="quick_event_ambient_now_playing">Now Playing</string>
+-    <string name="quick_event_ambient_song_artist">%1$s by %2$s</string>
++    <string name="qe_now_playing_unknown_artist">Unknown Artist</string>
++    <string name="qe_now_playing_ext_one">Now playing</string>
++    <string name="qe_now_playing_ext_two"></string>
++    <string name="qe_now_playing_by">By</string>
+
+     <!-- Quickspace Now Playing -->
+     <string name="quickspace_now_playing_title">Now playing</string>
+     <string name="quickspace_now_playing_summary">Show the song you\'re playing</string>
+
+     <!-- Quickspace alternative view -->
+-    <string name="quickspace_alternate_style_title">Minimalistic style</string>
+-    <string name="quickspace_alternate_style_summary">Switch to modern style</string>
++    <string name="quickspace_alternate_style_title">Extended style</string>
++    <string name="quickspace_alternate_style_summary">Switch to extended style</string>
+
+     <!-- Quickspace PSA - Custom messages for the glance -->
+     <string name="quickspace_psa_title">Random messages</string>
+@@ -140,33 +154,64 @@
+         <item>Looks like it\'s a beautiful day, isn\'t it?</item>
+         <item>Let\'s get this bread.</item>
+         <item>Check the weather just in case</item>
+-        <item>Feeling a bit sleepy yet</item>
+-        <item>Have you looked outside yet?</item>
+-        <item>Let\'s get this done.</item>
++        <item>Good luck today!</item>
++        <item>Toggling the switch can fix stucked responses.</item>
++        <item>Start your day snuke.</item>
++        <item>Don\'t forget about mental health.</item>
++        <item>Life is good.</item>
++        <item>Enjoy your breakfast.</item>
++    </string-array>
++    <string-array name="quickspace_psa_noon">
++        <item>Don\'t forget to stay hydrated!</item>
++        <item>Remember to eat some snacks.</item>
++        <item>UV rays are more harmful in the afternoon.</item>
++        <item>It is afternoon right now.</item>
++        <item>Always check device\'s battery levels!</item>
++        <item>Remember to check your email/messages.</item>
++        <item>Please check your to-do list if you have one.</item>
++        <item>Don\'t forget to prepare your dinner.</item>
++        <item>Enjoy your day.</item>
++        <item>Hang on! The day is almost done!</item>
++        <item>Have some fun.</item>
++    </string-array>
++    <string-array name="quickspace_psa_early_evening">
++        <item>Always stay hydrated!</item>
++        <item>8 hours of sleep is a must.</item>
++        <item>It is evening right now.</item>
++        <item>Remember to full charge me before you sleep.</item>
++        <item>Remember to check your email/messages.</item>
++        <item>Please check your to-do list if you have one.</item>
++        <item>Remember to eat dinner.</item>
++        <item>Always check the lights and sockets.</item>
++        <item>Enjoy the night.</item>
++        <item>Hey there! Give yourself some rest!</item>
++        <item>Relax and do some rest.</item>
+     </string-array>
+
+     <string-array name="quickspace_psa_evening">
+-        <item>Good night!</item>
+-        <item>Sleep well!</item>
+-        <item>See you tomorrow!</item>
+-        <item>Sweet dreams!</item>
+-        <item>Don\'t stay up too long</item>
+-        <item>Have a good sleep</item>
+-        <item>Get some sleep</item>
+-        <item>Time to relax</item>
+-        <item>Enjoy the night!</item>
+-        <item>Time to charge the batteries!</item>
+-        <item>Tomorrow might be a great day</item>
+-        <item>Get your bones ready for tomorrow</item>
++        <item>Don\'t drink too much water before sleeping.</item>
++        <item>It is evening right now.</item>
++        <item>Try to avoid overnight charging if possible.</item>
++        <item>Remember to check your email/messages.</item>
++        <item>Please check your to-do list if you have one.</item>
++        <item>Remember to eat dinner.</item>
++        <item>8 hours of sleep is a must.</item>
++        <item>Enjoy the night.</item>
++        <item>Lugaw is a nice recipe for dinner.</item>
++        <item>Enjoy your sleep.</item>
+     </string-array>
+-
+     <string-array name="quickspace_psa_midnight">
+-        <item>Um... good night?</item>
+-        <item>It\'s a bit late now</item>
+-        <item>You should fix your sleep schedule</item>
+-        <item>Are you more productive at this time?</item>
++        <item>Sleep defficiency is bad for your health.</item>
++        <item>Don\'t forget to stay hydrated.</item>
++        <item>Being sleep deficit can break melatonin production.</item>
++        <item>It is midnight right now.</item>
++        <item>Sleeping late is not healthy.</item>
++        <item>You need to sleep now.</item>
++        <item>Don\'t forget to sleep/prepare your breakfast.</item>
++        <item>Enjoy the midnight.</item>
++        <item>Sleep deficiency affects your body clock.</item>
++        <item>Please take care of yourself.</item>
+     </string-array>
+-
+     <string-array name="quickspace_psa_random">
+         <item>Ignorance is Bliss</item>
+         <item>Is it time to flash another update already?</item>
+@@ -202,12 +247,47 @@
+         <item>Wubba Lubba Dub Dub</item>
+         <item>Winner Winner ....?</item>
+         <item>rm -rf \/</item>
++        <item>There are easter eggs hidden on this ROM.</item>
++        <item>Try checking the weather settings.</item>
++        <item>Try to avoid UV rays during noon.</item>
++        <item>Stay Hydrated!</item>
++        <item>Pringles aren\'t actually potato chips..</item>
++        <item>Laughing can increase bloodflow.</item>
++        <item>Coffee contains antioxidants.</item>
++        <item>Ketchup was once sold as medicine.</item>
++        <item>Cotton candy was invented by a dentist.</item>
++        <item>Don\'t skip your meal!</item>
++        <item>Remember to check device\'s battery levels!</item>
++        <item>Check your email/messages.</item>
++        <item>Check your to-do list if you have one.</item>
++        <item>You can disable quickspace via home settings.</item>
++        <item>Go get them!</item>
++        <item>Time to buy some rice!</item>
++        <item>Time for lunch!</item>
++        <item>All white rice starts brown.</item>
++        <item>Want some soda?</item>
++        <item>Always bring water to stay hydrated.</item>
++        <item>Space smells like seared steak..</item>
++        <item>Enjoy your day!</item>
+     </string-array>
+
+     <!-- QuickSpace: QuickEvent: Weather -->
+-    <string name="quick_event_ambient_weather_title">Weather condition</string>
+-    <string name="quick_event_ambient_weather_summary">Display current weather condition and temperature</string>
++    <string name="quick_event_ambient_weather_title">Weather update</string>
++    <string name="quick_event_ambient_weather_summary">Display current weather update</string>
+     <string name="quick_event_ambient_weather_enabled_info">Requires weather service to be enabled</string>
++    <string name="quick_event_weather_clouds">Cloudy</string>
++    <string name="quick_event_weather_rain">Rainy</string>
++    <string name="quick_event_weather_clear">Sunny</string>
++    <string name="quick_event_weather_storm">Stormy</string>
++    <string name="quick_event_weather_snow">Snowy</string>
++    <string name="quick_event_weather_wind">Windy</string>
++    <string name="quick_event_weather_mist">Misty</string>
++    <string name="quick_event_weather_city_title">Current location</string>
++    <string name="quick_event_weather_city_summary">Display current weather location</string>
++    <string name="quick_event_weather_text_title">Current condition</string>
++    <string name="quick_event_weather_text_summary">Display current weather condition summary</string>
++
++    <string name="intent_no_app_clock_found">Unable to find calendar or clock activity</string>
+
+     <!-- Force monocrome icons -->
+     <string name="pref_force_mono_icons_title">Force monochrome icons</string>
+diff --git a/res/values/dimens.xml b/res/values/dimens.xml
+index 611e523..d6fb564 100644
+--- a/res/values/dimens.xml
++++ b/res/values/dimens.xml
+@@ -455,6 +455,8 @@
+     <dimen name="folder_footer_horiz_padding">20dp</dimen>
+
+     <!-- QuickSpace -->
+-    <dimen name="quickspace_title_size">24dp</dimen>
+-    <dimen name="quickspace_alternate_title_size">22dp</dimen>
++    <dimen name="quickspace_title_size">20sp</dimen>
++    <dimen name="quickspace_subtitle_size">16sp</dimen>
++    <dimen name="quickspace_alternate_title_size">18sp</dimen>
++    <dimen name="quickspace_alternate_subtitle_size">16sp</dimen>
+ </resources>
+diff --git a/res/xml/launcher_preferences.xml b/res/xml/launcher_preferences.xml
+index 7e5dc4e..ad37f36 100644
+--- a/res/xml/launcher_preferences.xml
++++ b/res/xml/launcher_preferences.xml
+@@ -215,14 +215,6 @@
+             android:defaultValue="true"
+             android:persistent="true"/>
+
+-        <SwitchPreference
+-            android:key="pref_show_alt_quickspace"
+-            android:title="@string/quickspace_alternate_style_title"
+-            android:summary="@string/quickspace_alternate_style_summary"
+-            android:dependency="pref_show_quickspace"
+-            android:defaultValue="false"
+-            android:persistent="true"/>
+-
+         <SwitchPreference
+             android:key="pref_quickspace_psonality"
+             android:title="@string/quickspace_psa_title"
+@@ -231,6 +223,14 @@
+             android:defaultValue="true"
+             android:persistent="true" />
+
++        <SwitchPreference
++            android:key="pref_show_alt_quickspace"
++            android:title="@string/quickspace_alternate_style_title"
++            android:summary="@string/quickspace_alternate_style_summary"
++            android:dependency="pref_show_quickspace"
++            android:defaultValue="false"
++            android:persistent="true"/>
++
+         <SwitchPreference
+             android:key="pref_quickspace_np"
+             android:title="@string/quickspace_now_playing_title"
+@@ -247,6 +247,22 @@
+             android:defaultValue="true"
+             android:persistent="true" />
+
++        <SwitchPreference
++            android:key="pref_quickspace_weather_city"
++            android:title="@string/quick_event_weather_city_title"
++            android:summary="@string/quick_event_weather_city_summary"
++            android:dependency="pref_quickspace_weather"
++            android:defaultValue="false"
++            android:persistent="true" />
++
++        <SwitchPreference
++            android:key="pref_quickspace_weather_text"
++            android:title="@string/quick_event_weather_text_title"
++            android:summary="@string/quick_event_weather_text_summary"
++            android:dependency="pref_quickspace_weather"
++            android:defaultValue="true"
++            android:persistent="true" />
++
+     </androidx.preference.PreferenceCategory>
+
+ </androidx.preference.PreferenceScreen>
+diff --git a/src/com/android/launcher3/Utilities.java b/src/com/android/launcher3/Utilities.java
+index 1c4bfea..8814439 100644
+--- a/src/com/android/launcher3/Utilities.java
++++ b/src/com/android/launcher3/Utilities.java
+@@ -183,6 +183,8 @@ public final class Utilities {
+     public static final String KEY_SHOW_QUICKSPACE_PSONALITY = "pref_quickspace_psonality";
+     public static final String KEY_SHOW_QUICKSPACE_NOWPLAYING = "pref_quickspace_np";
+     public static final String KEY_SHOW_QUICKSPACE_WEATHER = "pref_quickspace_weather";
++    public static final String KEY_SHOW_QUICKSPACE_WEATHER_CITY = "pref_quickspace_weather_city";
++    public static final String KEY_SHOW_QUICKSPACE_WEATHER_TEXT = "pref_quickspace_weather_text";
+
+     /**
+      * Returns true if theme is dark.
+@@ -939,4 +941,14 @@ public final class Utilities {
+         SharedPreferences prefs = LauncherPrefs.getPrefs(context.getApplicationContext());
+         return prefs.getBoolean(KEY_SHOW_QUICKSPACE_WEATHER, true);
+     }
++
++    public static boolean QuickSpaceShowCity(Context context) {
++        SharedPreferences prefs = LauncherPrefs.getPrefs(context.getApplicationContext());
++        return prefs.getBoolean(KEY_SHOW_QUICKSPACE_WEATHER_CITY, false);
++    }
++
++    public static boolean QuickSpaceShowWeatherText(Context context) {
++        SharedPreferences prefs = LauncherPrefs.getPrefs(context.getApplicationContext());
++        return prefs.getBoolean(KEY_SHOW_QUICKSPACE_WEATHER_TEXT, true);
++    }
+ }
+diff --git a/src/com/android/launcher3/settings/SettingsActivity.java b/src/com/android/launcher3/settings/SettingsActivity.java
+index 068e4e5..7dbb4ed 100644
+--- a/src/com/android/launcher3/settings/SettingsActivity.java
++++ b/src/com/android/launcher3/settings/SettingsActivity.java
+@@ -166,6 +166,8 @@ public class SettingsActivity extends CollapsingToolbarBaseActivity
+             case Utilities.KEY_SHOW_QUICKSPACE_NOWPLAYING:
+             case Utilities.KEY_SHOW_QUICKSPACE_WEATHER:
+             case Utilities.KEY_SHOW_QUICKSPACE_PSONALITY:
++            case Utilities.KEY_SHOW_QUICKSPACE_WEATHER_CITY:
++            case Utilities.KEY_SHOW_QUICKSPACE_WEATHER_TEXT:
+                 LauncherAppState.getInstanceNoCreate().setNeedsRestart();
+                 break;
+             default:
+--
+2.25.1
+
