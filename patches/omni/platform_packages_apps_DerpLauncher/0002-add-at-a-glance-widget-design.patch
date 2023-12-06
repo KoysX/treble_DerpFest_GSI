@@ -16,11 +16,11 @@ Subject: [PATCH] add-at-a-glance-widget-design
  create mode 100644 res/drawable/baseline_audiotrack_24.xml
 
 diff --git a/AndroidManifest-common.xml b/AndroidManifest-common.xml
-index c93a9fb..ee530a4 100644
+index 77b7046..c5fa596 100644
 --- a/AndroidManifest-common.xml
 +++ b/AndroidManifest-common.xml
-@@ -53,6 +53,8 @@
-     <uses-permission android:name="android.permission.DEVICE_POWER" />
+@@ -57,6 +57,8 @@
+     <uses-permission android:name="android.permission.USE_BIOMETRIC" />
      <uses-permission android:name="android.permission.MEDIA_CONTENT_CONTROL" />
      <uses-permission android:name="org.omnirom.omnijaws.READ_WEATHER" />
 +    <uses-permission android:name="android.permission.GET_INTENT_SENDER_INTENT" />
@@ -29,12 +29,12 @@ index c93a9fb..ee530a4 100644
      <permission android:name="com.google.android.apps.nexuslauncher.permission.QSB" android:protectionLevel="signatureOrSystem"/>
      <uses-permission android:name="com.google.android.apps.nexuslauncher.permission.QSB"/>
 diff --git a/privapp_whitelist_derp_launcher3.xml b/privapp_whitelist_derp_launcher3.xml
-index 085304a..10db7e6 100644
+index a49460e..5f3c5f8 100644
 --- a/privapp_whitelist_derp_launcher3.xml
 +++ b/privapp_whitelist_derp_launcher3.xml
-@@ -9,6 +9,8 @@
-     <privapp-permissions package="com.android.launcher3">
-         <permission name="android.permission.FORCE_STOP_PACKAGES"/>
+@@ -12,6 +12,8 @@
+         <permission name="android.permission.INTERACT_ACROSS_USERS_FULL"/>
+         <permission name="android.permission.MANAGE_USERS"/>
          <permission name="android.permission.MEDIA_CONTENT_CONTROL"/>
 +        <permission name="android.permission.GET_INTENT_SENDER_INTENT"/>
 +        <permission name="com.android.alarm.permission.SET_ALARM"/>

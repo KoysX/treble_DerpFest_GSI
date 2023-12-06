@@ -1,23 +1,22 @@
-From cf0d5ad0fe27fb618027741a2dae4e8eb34a1ecf Mon Sep 17 00:00:00 2001
+From 1a52354bb858946555626fdf8bb75aa023a703bb Mon Sep 17 00:00:00 2001
 From: BoNic <BoNio9527@gmail.com>
-Date: Sat, 2 Dec 2023 21:42:59 -0500
-Subject: [PATCH]  add-omnijaws-lockscreen-customization
+Date: Mon, 4 Dec 2023 01:07:28 -0500
+Subject: [PATCH] add-omnijaws-lockscreen-customization
 
 ---
- res/values/strings.xml                        | 10 +++++++
- res/xml/lockscreen_ui.xml                     | 19 +++++++++++++
- .../derpspace/fragments/LockscreenUI.java     | 27 +++++++++++++++----
- 3 files changed, 51 insertions(+), 5 deletions(-)
+ res/values/strings.xml                        | 12 ++++++++
+ res/xml/lockscreen_ui.xml                     | 28 +++++++++++++++++++
+ .../derpspace/fragments/LockscreenUI.java     | 27 ++++++++++++++----
+ 3 files changed, 62 insertions(+), 5 deletions(-)
 
 diff --git a/res/values/strings.xml b/res/values/strings.xml
-index 62c2006..ff1f676 100644
+index 03bb108..7da77a5 100644
 --- a/res/values/strings.xml
 +++ b/res/values/strings.xml
-@@ -455,4 +455,14 @@
-     <string name="qs_tile_round">Round</string>
+@@ -456,6 +456,18 @@
      <string name="qs_tile_rect">Rounded Rectangle</string>
      <string name="qs_tile_mix">Round for active tiles and Rounded Rectangle for inactive tiles</string>
-+
+
 +    <!-- Weather -->
 +    <string name="weather_category_title">Weather</string>
 +    <string name="weather_settings_title">Weather settings</string>
@@ -25,26 +24,40 @@ index 62c2006..ff1f676 100644
 +    <string name="lockscreen_weather_title">Weather condition</string>
 +    <string name="lockscreen_weather_summary">Display current weather condition and temperature</string>
 +    <string name="lockscreen_weather_enabled_info">Requires weather service to be enabled</string>
-+    <string name="lockscreen_weather_location_title">Weather location</string>
++    <string name="lockscreen_weather_location_title">Current location</string>
 +    <string name="lockscreen_weather_location_summary">Display current weather location</string>
- </resources>
++    <string name="lockscreen_weather_text_title">Current condition</string>
++    <string name="lockscreen_weather_text_summary">Display current weather condition summary</string>
++
+     <!-- Statusbar lyric -->
+     <string name="status_bar_lyric_title">Status bar lyric</string>
+     <string name="status_bar_lyric_summary">Show lyric in status bar (need app support)</string>
 diff --git a/res/xml/lockscreen_ui.xml b/res/xml/lockscreen_ui.xml
-index 0cdd082..f52cdc6 100644
+index 0cdd082..01c96fc 100644
 --- a/res/xml/lockscreen_ui.xml
 +++ b/res/xml/lockscreen_ui.xml
-@@ -67,6 +67,25 @@
+@@ -67,6 +67,34 @@
              android:summary="@string/lockscreen_hide_status_bar_summary"
              android:defaultValue="false" />
 
 +        <org.derpfest.support.preferences.SystemSettingSwitchPreference
 +            android:key="lockscreen_weather_enabled"
 +            android:title="@string/lockscreen_weather_title"
++            android:defaultValue="false"
 +            android:summary="@string/lockscreen_weather_summary" />
 +
 +        <org.derpfest.support.preferences.SystemSettingSwitchPreference
 +            android:key="lockscreen_weather_location"
 +            android:title="@string/lockscreen_weather_location_title"
 +            android:summary="@string/lockscreen_weather_location_summary"
++            android:defaultValue="false"
++            android:dependency="lockscreen_weather_enabled" />
++
++        <org.derpfest.support.preferences.SystemSettingSwitchPreference
++            android:key="lockscreen_weather_text"
++            android:title="@string/lockscreen_weather_text_title"
++            android:summary="@string/lockscreen_weather_text_summary"
++            android:defaultValue="true"
 +            android:dependency="lockscreen_weather_enabled" />
 +
 +        <Preference
@@ -59,7 +72,7 @@ index 0cdd082..f52cdc6 100644
 
      <PreferenceCategory
 diff --git a/src/org/derpfest/derpspace/fragments/LockscreenUI.java b/src/org/derpfest/derpspace/fragments/LockscreenUI.java
-index ee09a0a..5cabc2a 100644
+index ee09a0a..7988899 100644
 --- a/src/org/derpfest/derpspace/fragments/LockscreenUI.java
 +++ b/src/org/derpfest/derpspace/fragments/LockscreenUI.java
 @@ -49,6 +49,7 @@ import com.android.settings.search.BaseSearchIndexProvider;

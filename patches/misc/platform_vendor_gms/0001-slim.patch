@@ -1,14 +1,14 @@
-From 29a69abb998674b71034906db8001264c59e6033 Mon Sep 17 00:00:00 2001
+From b231fd73737e16412e3b1c61452fc15469ccae6e Mon Sep 17 00:00:00 2001
 From: BoNic <BoNio9527@gmail.com>
-Date: Sat, 2 Dec 2023 21:30:53 -0500
+Date: Tue, 5 Dec 2023 04:50:44 -0500
 Subject: [PATCH] slim
 
 ---
- common/common-vendor.mk | 10 ----------
- 1 file changed, 10 deletions(-)
+ common/common-vendor.mk | 11 -----------
+ 1 file changed, 11 deletions(-)
 
 diff --git a/common/common-vendor.mk b/common/common-vendor.mk
-index 8ab1b99..2cef4e6 100644
+index 8ab1b99..f5aec05 100644
 --- a/common/common-vendor.mk
 +++ b/common/common-vendor.mk
 @@ -6,7 +6,6 @@ PRODUCT_SOONG_NAMESPACES += \
@@ -19,13 +19,13 @@ index 8ab1b99..2cef4e6 100644
      vendor/gms/common/proprietary/product/app/TrichromeLibrary/TrichromeLibrary.apk.gz:$(TARGET_COPY_OUT_PRODUCT)/app/TrichromeLibrary/TrichromeLibrary.apk.gz \
      vendor/gms/common/proprietary/product/app/WebViewGoogle/WebViewGoogle.apk.gz:$(TARGET_COPY_OUT_PRODUCT)/app/WebViewGoogle/WebViewGoogle.apk.gz \
      vendor/gms/common/proprietary/product/etc/default-permissions/default-permissions.xml:$(TARGET_COPY_OUT_PRODUCT)/etc/default-permissions/default-permissions.xml \
-@@ -90,37 +89,30 @@ PRODUCT_COPY_FILES += \
+@@ -90,37 +89,29 @@ PRODUCT_COPY_FILES += \
  PRODUCT_PACKAGES += \
      GoogleExtShared \
      GooglePrintRecommendationService \
 -    DocumentsUIGoogle \
      GoogleExtServices \
-     GooglePackageInstaller \
+-    GooglePackageInstaller \
      TagGoogle \
      CalculatorGooglePrebuilt \
      CalendarGooglePrebuilt \
@@ -57,7 +57,7 @@ index 8ab1b99..2cef4e6 100644
      GoogleDialer \
      GoogleOneTimeInitializer \
      GoogleRestorePrebuilt \
-@@ -138,12 +130,10 @@ PRODUCT_PACKAGES += \
+@@ -138,12 +129,10 @@ PRODUCT_PACKAGES += \
      PrebuiltGmsCoreSc_MeasurementDynamite \
      AndroidPlatformServices \
      RecorderPrebuilt \

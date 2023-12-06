@@ -1,0 +1,26 @@
+From 6d18632cda6bc026b411341f76e1bd77d3896962 Mon Sep 17 00:00:00 2001
+From: BoNic <BoNio9527@gmail.com>
+Date: Tue, 5 Dec 2023 04:47:22 -0500
+Subject: [PATCH] add omnijaws
+
+---
+ config/packages.mk | 3 ++-
+ 1 file changed, 2 insertions(+), 1 deletion(-)
+
+diff --git a/config/packages.mk b/config/packages.mk
+index 28bb76b..61cfd3f 100644
+--- a/config/packages.mk
++++ b/config/packages.mk
+@@ -9,7 +9,8 @@ PRODUCT_PACKAGES += \
+     RepainterServicePriv \
+     Ripple \
+     TouchGestures \
+-    Updater
++    Updater \
++    OmniJaws
+ 
+ # Themes
+ PRODUCT_PACKAGES += \
+-- 
+2.25.1
+

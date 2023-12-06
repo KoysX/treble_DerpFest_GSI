@@ -46,10 +46,10 @@ index afee3275f..0d4c2e3c5 100644
 
  </com.android.systemui.derp.CurrentWeatherView>
 diff --git a/packages/SystemUI/res/values/derp_strings.xml b/packages/SystemUI/res/values/derp_strings.xml
-index bb04f295d..eeb0b5d9b 100644
+index 6791768ef..51906932a 100644
 --- a/packages/SystemUI/res/values/derp_strings.xml
 +++ b/packages/SystemUI/res/values/derp_strings.xml
-@@ -211,4 +211,13 @@
+@@ -213,4 +213,13 @@
 
      <!-- Name of the roaming status bar icon. -->
      <string name="status_bar_roaming">Roaming indicator</string>
