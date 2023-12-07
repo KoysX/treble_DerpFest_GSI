@@ -1,16 +1,16 @@
 {
-  "version": "v2023.11.26",
-  "date": "1701008123",
+  "version": "v2023.12.06",
+  "date": "1701847485",
   "variants": [
     {
       "name": "treble_arm64_bvN",
-      "size": "1498039304",
-      "url": "https://github.com/KoysX/treble_DerpFest_GSI/releases/download/v2023.11.26/DerpFest_arm64-ab-14.0-unofficial-20231126.img.xz"
+      "size": "1382162440",
+      "url": "https://github.com/KoysX/treble_DerpFest_GSI/releases/download/v2023.12.06/DerpFest_arm64-ab-14.0-unofficial-20231206.img.xz"
     },
     {
       "name": "treble_arm64_bvN-vndklite",
-      "size": "1458833008",
-      "url": "https://github.com/KoysX/treble_DerpFest_GSI/releases/download/v2023.11.26/DerpFest_arm64-ab-vndklite-14.0-unofficial-20231126.img.xz"
+      "size": "1346647660",
+      "url": "https://github.com/KoysX/treble_DerpFest_GSI/releases/download/v2023.12.06/DerpFest_arm64-ab-vndklite-14.0-unofficial-20231206.img.xz"
     }
   ]
 }
