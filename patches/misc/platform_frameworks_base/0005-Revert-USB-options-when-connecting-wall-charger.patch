@@ -1,0 +1,76 @@
+From ea4491bb56ecdda6268cc0da7d7f1edde98401ee Mon Sep 17 00:00:00 2001
+From: BoNic <BoNio9527@gmail.com>
+Date: Wed, 6 Dec 2023 23:53:52 -0500
+Subject: [PATCH] Revert USB options when connecting wall charger
+
+---
+ .../phone/NotificationIconAreaController.java     |  6 +++++-
+ .../com/android/server/usb/UsbDeviceManager.java  | 15 ---------------
+ 2 files changed, 5 insertions(+), 16 deletions(-)
+
+diff --git a/packages/SystemUI/src/com/android/systemui/statusbar/phone/NotificationIconAreaController.java b/packages/SystemUI/src/com/android/systemui/statusbar/phone/NotificationIconAreaController.java
+index 28b35f503..2475994ee 100644
+--- a/packages/SystemUI/src/com/android/systemui/statusbar/phone/NotificationIconAreaController.java
++++ b/packages/SystemUI/src/com/android/systemui/statusbar/phone/NotificationIconAreaController.java
+@@ -428,7 +428,11 @@ public class NotificationIconAreaController implements
+                         hideRepliedMessages, hideCurrentMedia, hidePulsing)) {
+                     StatusBarIconView iconView = function.apply(entry);
+                     if (iconView != null) {
+-                        toShow.add(iconView);
++                        // Filter out duplicate icons.
++                        if (!toShow.stream().anyMatch(
++                                v -> v.equalIcons(v.getSourceIcon(), iconView.getSourceIcon()))) {
++                            toShow.add(iconView);
++                        }
+                     }
+                 }
+             }
+diff --git a/services/usb/java/com/android/server/usb/UsbDeviceManager.java b/services/usb/java/com/android/server/usb/UsbDeviceManager.java
+index b418127dd..0c6811b0b 100644
+--- a/services/usb/java/com/android/server/usb/UsbDeviceManager.java
++++ b/services/usb/java/com/android/server/usb/UsbDeviceManager.java
+@@ -553,8 +553,6 @@ public class UsbDeviceManager implements ActivityTaskManagerInternal.ScreenObser
+         private boolean mSinkPower;
+         private boolean mAudioAccessoryConnected;
+         private boolean mAudioAccessorySupported;
+-        private boolean mConnectedToDataDisabledPort;
+-        private int mPowerBrickConnectionStatus;
+ 
+         private UsbAccessory mCurrentAccessory;
+         private int mUsbNotificationId;
+@@ -1078,19 +1076,12 @@ public class UsbDeviceManager implements ActivityTaskManagerInternal.ScreenObser
+                                 && status.isRoleCombinationSupported(POWER_ROLE_SOURCE,
+                                 DATA_ROLE_DEVICE)
+                                 && status.isRoleCombinationSupported(POWER_ROLE_SINK, DATA_ROLE_DEVICE);
+-
+-                        boolean usbDataDisabled =
+-                                status.getUsbDataStatus() != UsbPortStatus.DATA_STATUS_ENABLED;
+-                        mConnectedToDataDisabledPort = status.isConnected() && usbDataDisabled;
+-                        mPowerBrickConnectionStatus = status.getPowerBrickConnectionStatus();
+                     } else {
+                         mHostConnected = false;
+                         mSourcePower = false;
+                         mSinkPower = false;
+                         mAudioAccessoryConnected = false;
+                         mSupportsAllCombinations = false;
+-                        mConnectedToDataDisabledPort = false;
+-                        mPowerBrickConnectionStatus = UsbPortStatus.POWER_BRICK_STATUS_UNKNOWN;
+                     }
+ 
+                     if (mHostConnected) {
+@@ -1419,12 +1410,6 @@ public class UsbDeviceManager implements ActivityTaskManagerInternal.ScreenObser
+             } else if (mHostConnected && mSinkPower && (mUsbCharging || mUsbAccessoryConnected)) {
+                 titleRes = com.android.internal.R.string.usb_charging_notification_title;
+                 id = SystemMessage.NOTE_USB_CHARGING;
+-            } else if (mSinkPower && mConnectedToDataDisabledPort
+-                    && mPowerBrickConnectionStatus != UsbPortStatus.POWER_BRICK_STATUS_CONNECTED) {
+-                // Show charging notification when USB Data is disabled on the port, and not
+-                // connected to a wall charger.
+-                titleRes = com.android.internal.R.string.usb_charging_notification_title;
+-                id = SystemMessage.NOTE_USB_CHARGING;
+             }
+             if (id != mUsbNotificationId || force) {
+                 // clear notification if title needs changing
+-- 
+2.25.1
+
