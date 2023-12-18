@@ -1,27 +1,25 @@
-From da024b08c6b1f40ba317addbf7e60e910bf94424 Mon Sep 17 00:00:00 2001
-From: BoNic <BoNio9527@gmail.com>
-Date: Tue, 7 Nov 2023 13:54:14 +0800
+From 6ee330ad99738d9c780e8fa5759e75f78a4c2892 Mon Sep 17 00:00:00 2001
+From: BoNic <BoNio9527@gmaul.com>
+Date: Mon, 18 Dec 2023 09:55:12 +0800
 Subject: [PATCH] Add-maintainer-name
 
 ---
- res/values/derp_strings.xml | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
+ res/values/derp_strings.xml | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
 diff --git a/res/values/derp_strings.xml b/res/values/derp_strings.xml
-index fbffc74..9238e96 100644
+index 427ec0b..d9e3f58 100644
 --- a/res/values/derp_strings.xml
 +++ b/res/values/derp_strings.xml
-@@ -18,8 +18,8 @@
+@@ -21,7 +21,7 @@
  
      <!-- DerpFest maintainer -->
      <string name="maintainer">Maintainer</string>
 -    <string name="maintainer_name" translatable="false">Unknown</string>
--    <string name="maintainer_telegram" translatable="false">https://t.me/DerpFest5T</string>
 +    <string name="maintainer_name" translatable="false">KoysX</string>
-+    <string name="maintainer_telegram" translatable="false">https://github.com/DerpFest-AOSP</string>
+     <string name="maintainer_telegram" translatable="false">https://t.me/DerpFest5T</string>
  
-     <!-- Doze on charge -->
-     <string name="doze_on_charge_title">Always on when charging</string>
+     <!-- DerpFest Updater -->
 -- 
 2.34.1
 

@@ -1,0 +1,47 @@
+From 3816f6c34f09432e50b79c28e52ad8d76552445a Mon Sep 17 00:00:00 2001
+From: BoNic <BoNio9527@gmaul.com>
+Date: Sun, 17 Dec 2023 15:29:53 +0800
+Subject: [PATCH] slim
+
+---
+ gms-vendor.mk | 4 ----
+ 1 file changed, 4 deletions(-)
+
+diff --git a/gms-vendor.mk b/gms-vendor.mk
+index 333eff6..2950220 100644
+--- a/gms-vendor.mk
++++ b/gms-vendor.mk
+@@ -6,7 +6,6 @@ PRODUCT_SOONG_NAMESPACES += \
+     vendor/google/gms
+ 
+ PRODUCT_COPY_FILES += \
+-    vendor/google/gms/proprietary/product/app/Chrome/Chrome.apk.gz:$(TARGET_COPY_OUT_PRODUCT)/app/Chrome/Chrome.apk.gz \
+     vendor/google/gms/proprietary/product/app/TrichromeLibrary/TrichromeLibrary.apk.gz:$(TARGET_COPY_OUT_PRODUCT)/app/TrichromeLibrary/TrichromeLibrary.apk.gz \
+     vendor/google/gms/proprietary/product/app/WebViewGoogle/WebViewGoogle.apk.gz:$(TARGET_COPY_OUT_PRODUCT)/app/WebViewGoogle/WebViewGoogle.apk.gz \
+     vendor/google/gms/proprietary/product/etc/permissions/com.google.android.dialer.support.xml:$(TARGET_COPY_OUT_PRODUCT)/etc/permissions/com.google.android.dialer.support.xml \
+@@ -70,14 +69,12 @@ PRODUCT_PACKAGES += \
+     TagGoogle \
+     CalculatorGooglePrebuilt \
+     CalendarGooglePrebuilt \
+-    Chrome-Stub \
+     GoogleContacts \
+     GoogleTTS \
+     LatinIMEGooglePrebuilt \
+     LocationHistoryPrebuilt \
+     Photos \
+     PrebuiltDeskClockGoogle \
+-    PrebuiltGmail \
+     TrichromeLibrary-Stub \
+     WebViewGoogle-Stub \
+     CarrierServices \
+@@ -91,7 +88,6 @@ PRODUCT_PACKAGES += \
+     PrebuiltGmsCore \
+     AndroidPlatformServices \
+     SetupWizardPrebuilt \
+-    Velvet \
+     WellbeingPrebuilt \
+     GoogleFeedback \
+     GoogleServicesFramework \
+-- 
+2.34.1
+

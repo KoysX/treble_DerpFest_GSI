@@ -1,0 +1,24 @@
+From d8f444f2839bdaece1375481fcb8ecfe992f15e5 Mon Sep 17 00:00:00 2001
+From: BoNic <BoNio9527@gmaul.com>
+Date: Sun, 17 Dec 2023 12:48:44 +0800
+Subject: [PATCH] slim
+
+---
+ pixel-vendor.mk | 1 -
+ 1 file changed, 1 deletion(-)
+
+diff --git a/pixel-vendor.mk b/pixel-vendor.mk
+index 5ce0519..5d198ed 100644
+--- a/pixel-vendor.mk
++++ b/pixel-vendor.mk
+@@ -96,7 +96,6 @@ PRODUCT_COPY_FILES += \
+ PRODUCT_PACKAGES += \
+     MarkupGoogle \
+     SoundPickerPrebuilt \
+-    AndroidAutoStubPrebuilt \
+     DeviceIntelligenceNetworkPrebuilt \
+     DevicePersonalizationPrebuiltPixel2020 \
+     TurboPrebuilt \
+-- 
+2.34.1
+

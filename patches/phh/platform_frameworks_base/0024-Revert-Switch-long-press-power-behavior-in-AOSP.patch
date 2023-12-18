@@ -1,7 +1,7 @@
-From 71fd89fd4dbfddbe231a75bd5fc25931a042b25c Mon Sep 17 00:00:00 2001
+From 1efd969efcef058be0dfaadbbff06e0bbf56b63c Mon Sep 17 00:00:00 2001
 From: Andy CrossGate Yan <GeForce8800Ultra@gmail.com>
 Date: Sat, 4 Sep 2021 08:26:30 +0000
-Subject: [PATCH 24/44] Revert "Switch long-press power behavior in AOSP."
+Subject: [PATCH 24/46] Revert "Switch long-press power behavior in AOSP."
 
 This reverts commit 803c77a0a24624111944832098c6f65158051dc4.
 ---
@@ -9,10 +9,10 @@ This reverts commit 803c77a0a24624111944832098c6f65158051dc4.
  1 file changed, 2 insertions(+), 2 deletions(-)
 
 diff --git a/core/res/res/values/config.xml b/core/res/res/values/config.xml
-index b10ed4cb7d78..1dc34f242108 100644
+index a9122a058..015d363ff 100644
 --- a/core/res/res/values/config.xml
 +++ b/core/res/res/values/config.xml
-@@ -1093,7 +1093,7 @@
+@@ -1100,7 +1100,7 @@
              5 - Go to assistant (Settings.Secure.ASSISTANT)
              6 - Toggle torch on / off (if screen is off)
      -->
@@ -21,7 +21,7 @@ index b10ed4cb7d78..1dc34f242108 100644
  
      <!-- The time in milliseconds after which a press on power button is considered "long". -->
      <integer name="config_longPressOnPowerDurationMs">500</integer>
-@@ -1125,7 +1125,7 @@
+@@ -1132,7 +1132,7 @@
              1 - Mute toggle
              2 - Global actions menu
      -->
@@ -31,5 +31,5 @@ index b10ed4cb7d78..1dc34f242108 100644
      <!-- Allows activities to be launched on a long press on power during device setup. -->
      <bool name="config_allowStartActivityForLongPressOnPowerInSetup">false</bool>
 -- 
-2.42.1
+2.34.1
 

@@ -9,18 +9,20 @@ Subject: [PATCH] add-omnijaws-lockscreen-customization
  2 files changed, 13 insertions(+)
 
 diff --git a/res/values/strings.xml b/res/values/strings.xml
-index fae7e54..113fb32 100644
+index 26c3b69..e59f678 100644
 --- a/res/values/strings.xml
 +++ b/res/values/strings.xml
-@@ -475,4 +475,8 @@
-     <string name="statusbar_top_padding">Top padding</string>
-     <string name="statusbar_left_padding">Left padding</string>
-     <string name="statusbar_right_padding">Right padding</string>
-+
+@@ -382,6 +382,10 @@
+     <string name="fprint_sucess_vib_title">Fingerprint authentication vibration</string>
+     <string name="fprint_sucess_vib_summary">Vibrate on successful fingerprint authentication</string>
+ 
 +    <!-- Weather -->
 +    <string name="weather_settings_title">Weather settings</string>
 +    <string name="weather_settings_summary">Setup icon pack and weather service</string>
- </resources>
++
+     <!-- QS Battery estimates -->
+     <string name="qs_show_battery_estimate_title">Battery estimates</string>
+     <string name="qs_show_battery_estimate_summary_on">Show battery estimates in QS</string>
 diff --git a/res/xml/customisation.xml b/res/xml/customisation.xml
 index 9355a9c..a9d4eae 100644
 --- a/res/xml/customisation.xml

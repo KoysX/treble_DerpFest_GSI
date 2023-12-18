@@ -25,10 +25,10 @@ Change-Id: Ibd0f9ea8fba584a38c060fd9271549a5e106b4eb
  7 files changed, 585 insertions(+), 6 deletions(-)
 
 diff --git a/packages/SystemUI/Android.bp b/packages/SystemUI/Android.bp
-index f20e5a03..c0dce86d 100644
+index 66b8f3042..1ed948467 100644
 --- a/packages/SystemUI/Android.bp
 +++ b/packages/SystemUI/Android.bp
-@@ -199,6 +199,10 @@ android_library {
+@@ -202,6 +202,10 @@ android_library {
          "motion_tool_lib",
          "bcsmartspace-google",
          "vendor.lineage.powershare-V1.0-java",
@@ -40,10 +40,10 @@ index f20e5a03..c0dce86d 100644
      manifest: "AndroidManifest.xml",
      additional_manifests: ["DerpFestManifest.xml"],
 diff --git a/packages/SystemUI/src/com/android/systemui/biometrics/UdfpsController.java b/packages/SystemUI/src/com/android/systemui/biometrics/UdfpsController.java
-index a625ae09..f7db6c5e 100644
+index b322e944b..6c51218a4 100644
 --- a/packages/SystemUI/src/com/android/systemui/biometrics/UdfpsController.java
 +++ b/packages/SystemUI/src/com/android/systemui/biometrics/UdfpsController.java
-@@ -49,6 +49,7 @@ import android.os.Handler;
+@@ -50,6 +50,7 @@ import android.os.Handler;
  import android.os.PowerManager;
  import android.os.Process;
  import android.os.Trace;
@@ -51,21 +51,21 @@ index a625ae09..f7db6c5e 100644
  import android.os.VibrationAttributes;
  import android.os.VibrationEffect;
  import android.util.BoostFramework;
-@@ -113,9 +114,13 @@ import java.util.HashSet;
+@@ -117,9 +118,13 @@ import java.util.HashSet;
  import java.util.Optional;
  import java.util.Set;
  import java.util.concurrent.Executor;
 +import java.io.File;
 +import java.io.FileWriter;
 +import java.io.IOException;
-
+ 
  import javax.inject.Inject;
  import javax.inject.Provider;
 +import vendor.nubia.ifaa.V1_0.IIfaa;
-
+ 
  /**
   * Shows and hides the under-display fingerprint sensor (UDFPS) overlay, handles UDFPS touch events,
-@@ -252,6 +257,46 @@ public class UdfpsController implements DozeReceiver, Dumpable {
+@@ -262,6 +267,46 @@ public class UdfpsController implements DozeReceiver, Dumpable {
              mScreenOn = false;
          }
      };
@@ -109,17 +109,17 @@ index a625ae09..f7db6c5e 100644
 +            return null;
 +        }
 +    };
-
+ 
      @Override
      public void dump(@NonNull PrintWriter pw, @NonNull String[] args) {
-@@ -1222,10 +1267,17 @@ public class UdfpsController implements DozeReceiver, Dumpable {
+@@ -1275,10 +1320,17 @@ public class UdfpsController implements DozeReceiver, Dumpable {
                  view.configureDisplay(() -> dispatchOnUiReady(requestId));
              }
          }
 +        if(SystemProperties.get("ro.vendor.build.fingerprint").contains("nubia/NX669")) {
 +          processCmd(13, 0, 0, new byte[0], 0);
 +        }
-
+ 
          for (Callback cb : mCallbacks) {
              cb.onFingerDown();
          }
@@ -128,9 +128,9 @@ index a625ae09..f7db6c5e 100644
 +        }
 +
      }
-
+ 
      private void onFingerUp(long requestId, @NonNull UdfpsView view) {
-@@ -1276,6 +1328,10 @@ public class UdfpsController implements DozeReceiver, Dumpable {
+@@ -1329,6 +1381,10 @@ public class UdfpsController implements DozeReceiver, Dumpable {
                      mFingerprintManager.onPointerUp(requestId, mSensorProps.sensorId);
                  }
              }
@@ -444,10 +444,10 @@ index ef7fcc954590..1a8af2d4a177 100644
      }
  }
 diff --git a/services/core/Android.bp b/services/core/Android.bp
-index 4a4b3188..766c0c54 100644
+index 10fcbfffdb5d..23d5e7d5b97a 100644
 --- a/services/core/Android.bp
 +++ b/services/core/Android.bp
-@@ -191,6 +191,11 @@ java_library_static {
+@@ -190,6 +190,11 @@ java_library_static {
          // HIDL
          "vendor.mediatek.hardware.mtkpower-V1.1-java",
          "vendor.samsung.hardware.sysinput-V1.2-java",
@@ -824,23 +824,19 @@ index c692f5f9472c..9d93683015c3 100644
              @BiometricManager.Authenticators.Types int strength) {
          final int maxEnrollmentsPerUser = 1;
 diff --git a/services/core/java/com/android/server/biometrics/sensors/fingerprint/FingerprintService.java b/services/core/java/com/android/server/biometrics/sensors/fingerprint/FingerprintService.java
-index ece35c522ec7..8c20b9e1bf40 100644
+index 5ce0c8b38..df99478da 100644
 --- a/services/core/java/com/android/server/biometrics/sensors/fingerprint/FingerprintService.java
 +++ b/services/core/java/com/android/server/biometrics/sensors/fingerprint/FingerprintService.java
-@@ -873,7 +873,6 @@ public class FingerprintService extends SystemService {
-
-             mRegistry.registerAll(() -> {
+@@ -885,8 +885,9 @@ public class FingerprintService extends SystemService {
+                         filteredInstances = filterAvailableHalInstances(hidlSensors, aidlSensors);
+ 
                  final List<ServiceProvider> providers = new ArrayList<>();
--                providers.addAll(getHidlProviders(hidlSensors));
-                 List<String> aidlSensors = new ArrayList<>();
-                 final String[] instances = mAidlInstanceNameSupplier.get();
-                 if (instances != null) {
-@@ -881,6 +880,8 @@ public class FingerprintService extends SystemService {
-                 }
-                 providers.addAll(getAidlProviders(
-                         Utils.filterAvailableHalInstances(getContext(), aidlSensors)));
+-                providers.addAll(getHidlProviders(filteredInstances.first));
+                 providers.addAll(getAidlProviders(filteredInstances.second));
 +                if (providers.isEmpty())
-+                    providers.addAll(getHidlProviders(hidlSensors));
++                    providers.addAll(getHidlProviders(filteredInstances.first));
+ 
                  return providers;
              });
-         }
+-- 
+2.34.1

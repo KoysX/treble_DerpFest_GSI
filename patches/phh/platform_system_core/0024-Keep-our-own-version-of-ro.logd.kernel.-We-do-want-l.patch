@@ -9,7 +9,7 @@ Subject: [PATCH 24/24] Keep our own version of ro.logd.kernel. We do want
  1 file changed, 1 insertion(+), 1 deletion(-)
 
 diff --git a/init/property_service.cpp b/init/property_service.cpp
-index a1993c822..eb8767582 100644
+index a1993c8224..eb87675828 100644
 --- a/init/property_service.cpp
 +++ b/init/property_service.cpp
 @@ -800,7 +800,7 @@ static void LoadProperties(char* data, const char* filter, const char* filename,
@@ -22,5 +22,5 @@ index a1993c822..eb8767582 100644
                      } else {
                          it->second = value;
 -- 
-2.25.1
+2.34.1
 

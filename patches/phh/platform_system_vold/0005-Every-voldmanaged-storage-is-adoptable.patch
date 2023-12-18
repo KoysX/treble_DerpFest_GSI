@@ -1,7 +1,7 @@
-From 298e09247e4587a3d9417c14a27a41b25315427d Mon Sep 17 00:00:00 2001
-From: BoNic <BoNio9527@gmail.com>
-Date: Tue, 7 Nov 2023 15:22:41 +0800
-Subject: [PATCH] Every-voldmanaged-storage-is-adoptable
+From e47069dfc9692434e89fa79996d058563a788611 Mon Sep 17 00:00:00 2001
+From: Pierre-Hugues Husson <phh@phh.me>
+Date: Wed, 11 Mar 2020 14:02:35 +0100
+Subject: [PATCH 2/2] Every voldmanaged storage is adoptable
 
 ---
  main.cpp | 2 +-

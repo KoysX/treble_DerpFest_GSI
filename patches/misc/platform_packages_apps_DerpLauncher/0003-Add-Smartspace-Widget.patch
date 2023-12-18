@@ -1,0 +1,33 @@
+From b84dca8ef254b48ffc461206ece9e1fa4eaf4fa9 Mon Sep 17 00:00:00 2001
+From: BoNic <BoNio9527@gmaul.com>
+Date: Sun, 17 Dec 2023 12:36:01 +0800
+Subject: [PATCH] Add Smartspace Widget
+
+---
+ res/xml/default_workspace_2x2.xml | 10 ++++++++++
+ 1 file changed, 10 insertions(+)
+
+diff --git a/res/xml/default_workspace_2x2.xml b/res/xml/default_workspace_2x2.xml
+index 51d9e07..e4bbe2e 100644
+--- a/res/xml/default_workspace_2x2.xml
++++ b/res/xml/default_workspace_2x2.xml
+@@ -19,6 +19,16 @@
+     <!-- Hotseat (We use the screen as the position of the item in the hotseat) -->
+     <!-- Messaging, Dialer -->
+ 
++    <!-- Smartspace Widget -->
++    <appwidget
++        launcher:screen="0"
++        launcher:x="0"
++        launcher:y="0"
++        launcher:spanX="4"
++        launcher:spanY="1"
++        launcher:packageName="com.google.android.googlequicksearchbox"
++        launcher:className="com.google.android.apps.gsa.staticplugins.smartspace.widget.SmartspaceWidgetProvider" />
++
+     <resolve
+         launcher:container="-101"
+         launcher:screen="0"
+-- 
+2.34.1
+

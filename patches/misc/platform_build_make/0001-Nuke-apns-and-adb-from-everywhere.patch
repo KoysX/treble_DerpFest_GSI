@@ -1,0 +1,75 @@
+From 895f2decd2dc7d946a9fc0da9d1c55f4b9e290d8 Mon Sep 17 00:00:00 2001
+From: BoNic <BoNio9527@gmaul.com>
+Date: Sun, 17 Dec 2023 10:48:04 +0800
+Subject: [PATCH] Nuke-apns-and-adb-from-everywhere
+
+---
+ core/main.mk                          | 4 ----
+ target/product/aosp_product.mk        | 7 -------
+ target/product/full_base_telephony.mk | 5 -----
+ target/product/handheld_product.mk    | 2 --
+ 4 files changed, 18 deletions(-)
+
+diff --git a/core/main.mk b/core/main.mk
+index a36a021..f07d779 100644
+--- a/core/main.mk
++++ b/core/main.mk
+@@ -380,10 +380,6 @@ ifneq (,$(user_variant))
+   ADDITIONAL_SYSTEM_PROPERTIES += ro.secure=1
+   ADDITIONAL_SYSTEM_PROPERTIES += security.perf_harden=1
+ 
+-  ifeq ($(user_variant),user)
+-    ADDITIONAL_SYSTEM_PROPERTIES += ro.adb.secure=1
+-  endif
+-
+   ifeq ($(user_variant),userdebug)
+     # Pick up some extra useful tools
+     tags_to_install += debug
+diff --git a/target/product/aosp_product.mk b/target/product/aosp_product.mk
+index b04b693..bc54ad9 100644
+--- a/target/product/aosp_product.mk
++++ b/target/product/aosp_product.mk
+@@ -34,10 +34,3 @@ PRODUCT_PACKAGES += \
+     PhotoTable \
+     preinstalled-packages-platform-aosp-product.xml \
+     WallpaperPicker \
+-
+-# Telephony:
+-#   Provide a APN configuration to GSI product
+-ifeq ($(DERP_BUILD),)
+-PRODUCT_COPY_FILES += \
+-    device/sample/etc/apns-full-conf.xml:$(TARGET_COPY_OUT_PRODUCT)/etc/apns-conf.xml
+-endif
+diff --git a/target/product/full_base_telephony.mk b/target/product/full_base_telephony.mk
+index 740c9b2..5470ad2 100644
+--- a/target/product/full_base_telephony.mk
++++ b/target/product/full_base_telephony.mk
+@@ -26,10 +26,5 @@ PRODUCT_VENDOR_PROPERTIES := \
+ PRODUCT_COPY_FILES := \
+     frameworks/native/data/etc/handheld_core_hardware.xml:$(TARGET_COPY_OUT_VENDOR)/etc/permissions/handheld_core_hardware.xml
+ 
+-ifeq ($(DERP_BUILD),)
+-PRODUCT_COPY_FILES += \
+-    device/sample/etc/apns-full-conf.xml:system/etc/apns-conf.xml
+-endif
+-
+ $(call inherit-product, $(SRC_TARGET_DIR)/product/aosp_base.mk)
+ $(call inherit-product, $(SRC_TARGET_DIR)/product/telephony.mk)
+diff --git a/target/product/handheld_product.mk b/target/product/handheld_product.mk
+index 68379fa..08440d9 100644
+--- a/target/product/handheld_product.mk
++++ b/target/product/handheld_product.mk
+@@ -22,10 +22,8 @@ $(call inherit-product, $(SRC_TARGET_DIR)/product/media_product.mk)
+ 
+ # /product packages
+ PRODUCT_PACKAGES += \
+-    Calendar \
+     Contacts \
+     DeskClock \
+-    Gallery2 \
+     Music \
+     preinstalled-packages-platform-handheld-product.xml \
+     SettingsIntelligence \
+-- 
+2.34.1
+

@@ -8,7 +8,7 @@ Subject: [PATCH 22/24] fix: Nubia 6 series custom rc action prop validation
  1 file changed, 1 insertion(+)
 
 diff --git a/init/action_parser.cpp b/init/action_parser.cpp
-index 49fe24a43..f683790e9 100644
+index 49fe24a436..f683790e99 100644
 --- a/init/action_parser.cpp
 +++ b/init/action_parser.cpp
 @@ -47,6 +47,7 @@ bool IsActionableProperty(Subcontext* subcontext, const std::string& prop_name)
@@ -20,5 +20,5 @@ index 49fe24a43..f683790e9 100644
  
      for (const auto& prefix : kPartnerPrefixes) {
 -- 
-2.25.1
+2.34.1
 

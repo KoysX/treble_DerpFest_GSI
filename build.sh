@@ -17,7 +17,7 @@ BD=$PWD/treble_DerpFest_GSI/GSI
 initRepos() {
     if [ ! -d .repo ]; then
         echo "--> Initializing workspace"
-        repo init -u https://github.com/DerpFest-AOSP/manifest.git -b 14 --depth=1
+        repo init -u https://github.com/DerpFest-AOSP/manifest.git -b 14 --git-lfs
         echo
 
         echo "--> Preparing local manifest"

@@ -1,15 +1,15 @@
-From c991ef6ec759133fd4f10475be72b7d33565a80c Mon Sep 17 00:00:00 2001
-From: BoNic <BoNio9527@gmail.com>
-Date: Fri, 8 Dec 2023 22:28:40 -0500
-Subject: [PATCH] Add-seekbar-for-Left-Right-statusbar-Paddings-2-2
+From 7034633e5942e6127a835a9f083c920000876a44 Mon Sep 17 00:00:00 2001
+From: BoNic <BoNio9527@gmaul.com>
+Date: Mon, 18 Dec 2023 11:08:08 +0800
+Subject: [PATCH] Add seekbar for Left/Right statusbar Paddings [2/2]
 
 ---
  res/values/attrs.xml                          |   9 +
- res/values/strings.xml                        |  12 +
+ res/values/strings.xml                        |  18 +-
  res/xml/customisation.xml                     |  27 ++
- .../fragments/StatusBar.java                  |  69 ++++
+ .../derpspace/fragments/StatusBar.java        |  68 ++++
  .../preferences/CustomSeekBarPreference.java  | 379 ++++++++++++++++++
- 5 files changed, 496 insertions(+)
+ 5 files changed, 498 insertions(+), 3 deletions(-)
  create mode 100644 src/org/derpfest/derpspace/fragments/StatusBar.java
  create mode 100644 src/org/derpfest/derpspace/preferences/CustomSeekBarPreference.java
 
@@ -20,7 +20,7 @@ index c25dc32..d2f6de2 100644
 @@ -47,4 +47,13 @@
          <attr name="digits" format="integer" />
      </declare-styleable>
-
+ 
 +    <!-- Base attributes available to CustomSeekBarPreference. -->
 +    <declare-styleable name="CustomSeekBarPreference">
 +        <attr name="defaultValueText" format="string" />
@@ -32,13 +32,40 @@ index c25dc32..d2f6de2 100644
 +
  </resources>
 diff --git a/res/values/strings.xml b/res/values/strings.xml
-index 92f4d7d..186e708 100644
+index a9f86dd..374efff 100644
 --- a/res/values/strings.xml
 +++ b/res/values/strings.xml
-@@ -463,4 +463,16 @@
-     <string name="status_bar_lyric_options_title">Options</string>
-     <string name="disguise_props_for_music_app_title">Disguise device for music apps</string>
-     <string name="disguise_props_for_music_app_summary">Disguise device in some music applications for support status bar lyric. After changing this toggle, you have to restart applications for the change to take effect.</string>
+@@ -18,7 +18,7 @@
+  -->
+ 
+ <resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+-    
++
+     <!-- General app strings -->
+     <string name="derpspace_title" translatable="false">DerpSpace</string>
+     <string name="add">Add</string>
+@@ -95,7 +95,7 @@
+     <string name="battery_title">Battery</string>
+ 
+     <!-- Battery Settings -->
+-    <string name="battery_settings_title">Battery Settings</string>   
++    <string name="battery_settings_title">Battery Settings</string>
+ 
+     <!-- App info dialog -->
+     <string name="derpspace_dialog_title">Help us help you!</string>
+@@ -336,7 +336,7 @@
+ 
+     <!-- Statusbar Clock background chip -->
+     <string name="statusbar_clock_chip_title">Background chip</string>
+-    <string name="statusbar_clock_chip_summary">Display accented chip behind clock</string> 
++    <string name="statusbar_clock_chip_summary">Display accented chip behind clock</string>
+ 
+     <!-- Statusbar colored icons -->
+     <string name="statusbar_colored_icons_title">Colored icons</string>
+@@ -469,4 +469,16 @@
+     <!-- Ignore window secure -->
+     <string name="ignore_window_secure_title">Ignore window secure flags</string>
+     <string name="ignore_window_secure_summary">Remove screenshot and screenrecord limits for all apps. This can be convenient in some cases but may lead to privacy leaks.</string>
 +
 +    <!-- Custom seekbar -->
 +    <string name="custom_seekbar_value">Value: <xliff:g id="v">%s</xliff:g></string>
@@ -53,13 +80,13 @@ index 92f4d7d..186e708 100644
 +    <string name="statusbar_right_padding">Right padding</string>
  </resources>
 diff --git a/res/xml/customisation.xml b/res/xml/customisation.xml
-index cb4c834..9355a9c 100644
+index cb4c834..6330285 100644
 --- a/res/xml/customisation.xml
 +++ b/res/xml/customisation.xml
 @@ -82,5 +82,32 @@
-
+ 
      </PreferenceCategory>
-
+ 
 +   <PreferenceCategory
 +        android:key="statusbar_padding"
 +        android:title="@string/statusbar_padding">
@@ -88,10 +115,10 @@ index cb4c834..9355a9c 100644
 +    </PreferenceCategory>
 +
  </PreferenceScreen>
-
+ 
 diff --git a/src/org/derpfest/derpspace/fragments/StatusBar.java b/src/org/derpfest/derpspace/fragments/StatusBar.java
 new file mode 100644
-index 0000000..bc5e1ec
+index 0000000..ca743da
 --- /dev/null
 +++ b/src/org/derpfest/derpspace/fragments/StatusBar.java
 @@ -0,0 +1,69 @@
@@ -115,14 +142,13 @@ index 0000000..bc5e1ec
 +import android.content.Context;
 +import android.os.Bundle;
 +import android.os.UserHandle;
-+import com.android.settings.R;
 +
 +import androidx.preference.Preference;
 +import androidx.preference.PreferenceScreen;
 +import androidx.preference.SwitchPreference;
 +
 +import com.android.internal.logging.nano.MetricsProto;
-+
++import com.android.settings.R;
 +import com.android.settings.SettingsPreferenceFragment;
 +import org.derpfest.support.preferences.SystemSettingListPreference;
 +import org.derpfest.support.preferences.CustomSeekBarPreference;
@@ -144,29 +170,30 @@ index 0000000..bc5e1ec
 +        final PreferenceScreen prefScreen = getPreferenceScreen();
 +
 +((CustomSeekBarPreference) findPreference(KEY_STATUSBAR_LEFT_PADDING)).setDefaultValue(
-+        getResources().getDimensionPixelSize(com.android.internal.R.dimen.status_bar_padding_start));
++    getResources().getDimensionPixelSize(com.android.internal.R.dimen.status_bar_padding_start));
++
 +
 +((CustomSeekBarPreference) findPreference(KEY_STATUSBAR_RIGHT_PADDING)).setDefaultValue(
 +        getResources().getDimensionPixelSize(com.android.internal.R.dimen.status_bar_padding_end));
 +
 +((CustomSeekBarPreference) findPreference(KEY_STATUSBAR_TOP_PADDING)).setDefaultValue(
 +        getResources().getDimensionPixelSize(com.android.internal.R.dimen.status_bar_padding_top));
-+    }
++}
 +
 +    @Override
 +    public int getMetricsCategory() {
 +        return MetricsProto.MetricsEvent.DERP;
-+    }
++}
 +
 +    @Override
 +    public boolean onPreferenceChange(Preference preference, Object newValue) {
 +        return true;
 +    }
 +}
-+
+\ No newline at end of file
 diff --git a/src/org/derpfest/derpspace/preferences/CustomSeekBarPreference.java b/src/org/derpfest/derpspace/preferences/CustomSeekBarPreference.java
 new file mode 100644
-index 0000000..41f0e42
+index 0000000..e2654ed
 --- /dev/null
 +++ b/src/org/derpfest/derpspace/preferences/CustomSeekBarPreference.java
 @@ -0,0 +1,379 @@
@@ -549,6 +576,7 @@ index 0000000..41f0e42
 +        setValue(newValue, mSeekBar != null);
 +    }
 +}
---
-2.25.1
+\ No newline at end of file
+-- 
+2.34.1
 

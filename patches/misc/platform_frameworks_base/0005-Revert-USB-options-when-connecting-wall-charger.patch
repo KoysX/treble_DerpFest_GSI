@@ -1,30 +1,12 @@
-From ea4491bb56ecdda6268cc0da7d7f1edde98401ee Mon Sep 17 00:00:00 2001
-From: BoNic <BoNio9527@gmail.com>
-Date: Wed, 6 Dec 2023 23:53:52 -0500
-Subject: [PATCH] Revert USB options when connecting wall charger
+From 5a317f48a9844c53af63c78e5ad3b3dd2550e293 Mon Sep 17 00:00:00 2001
+From: BoNic <BoNio9527@gmaul.com>
+Date: Sun, 17 Dec 2023 11:43:38 +0800
+Subject: [PATCH] Revert-USB-options-when-connecting-wall-charger
 
 ---
- .../phone/NotificationIconAreaController.java     |  6 +++++-
  .../com/android/server/usb/UsbDeviceManager.java  | 15 ---------------
- 2 files changed, 5 insertions(+), 16 deletions(-)
+ 1 file changed, 15 deletions(-)
 
-diff --git a/packages/SystemUI/src/com/android/systemui/statusbar/phone/NotificationIconAreaController.java b/packages/SystemUI/src/com/android/systemui/statusbar/phone/NotificationIconAreaController.java
-index 28b35f503..2475994ee 100644
---- a/packages/SystemUI/src/com/android/systemui/statusbar/phone/NotificationIconAreaController.java
-+++ b/packages/SystemUI/src/com/android/systemui/statusbar/phone/NotificationIconAreaController.java
-@@ -428,7 +428,11 @@ public class NotificationIconAreaController implements
-                         hideRepliedMessages, hideCurrentMedia, hidePulsing)) {
-                     StatusBarIconView iconView = function.apply(entry);
-                     if (iconView != null) {
--                        toShow.add(iconView);
-+                        // Filter out duplicate icons.
-+                        if (!toShow.stream().anyMatch(
-+                                v -> v.equalIcons(v.getSourceIcon(), iconView.getSourceIcon()))) {
-+                            toShow.add(iconView);
-+                        }
-                     }
-                 }
-             }
 diff --git a/services/usb/java/com/android/server/usb/UsbDeviceManager.java b/services/usb/java/com/android/server/usb/UsbDeviceManager.java
 index b418127dd..0c6811b0b 100644
 --- a/services/usb/java/com/android/server/usb/UsbDeviceManager.java
@@ -72,5 +54,5 @@ index b418127dd..0c6811b0b 100644
              if (id != mUsbNotificationId || force) {
                  // clear notification if title needs changing
 -- 
-2.25.1
+2.34.1
 

@@ -1,7 +1,7 @@
-From fce2d1641c75b7e5b9962c784cf59a74a525acf5 Mon Sep 17 00:00:00 2001
-From: BoNic <BoNio9527@gmail.com>
-Date: Sun, 26 Nov 2023 21:57:02 -0500
-Subject: [PATCH] add-hide-status-bar-on-lock-screen
+From c120c103946feda52bafd05366137ad8cbf866eb Mon Sep 17 00:00:00 2001
+From: BoNic <BoNio9527@gmaul.com>
+Date: Sun, 17 Dec 2023 11:47:47 +0800
+Subject: [PATCH] SystemUI-config-to-hide-status-bar-on-lock-screen-1-2
 
 ---
  res/values/strings.xml    |  5 +++++
@@ -9,21 +9,21 @@ Subject: [PATCH] add-hide-status-bar-on-lock-screen
  2 files changed, 17 insertions(+)
 
 diff --git a/res/values/strings.xml b/res/values/strings.xml
-index 5720851..17a5b90 100644
+index 23c1ab0..fe1a0ff 100644
 --- a/res/values/strings.xml
 +++ b/res/values/strings.xml
-@@ -388,6 +388,11 @@
-     <string name="status_bar_battery_text_charging_title">Battery percentage when charging</string>
-     <string name="status_bar_battery_text_charging_summary">Always display battery percentage when charging</string>
+@@ -373,6 +373,11 @@
+     <string name="show_battery_percent_charging_title">Show percent when charging</string>
+     <string name="show_battery_percent_charging_summary">Enforce showing the percent next to the icon when charging</string>
  
 +    <!-- Hide statusbar on lockscreen -->
 +    <string name="lockscreen_clock_title">lockscreen clock</string>
 +    <string name="lockscreen_hide_status_bar_title">Hide Statusbar</string>
 +    <string name="lockscreen_hide_status_bar_summary">When enabled, statusbar will be hidden on lockscreen</string>
 +
-     <!-- QS battery -->
-     <string name="qs_use_status_bar_battery_style">Follow status bar style</string>
- 
+     <!-- Fingerprint authentication vibration -->
+     <string name="fprint_sucess_vib_title">Fingerprint authentication vibration</string>
+     <string name="fprint_sucess_vib_summary">Vibrate on successful fingerprint authentication</string>
 diff --git a/res/xml/lockscreen_ui.xml b/res/xml/lockscreen_ui.xml
 index 01f47d4..0cdd082 100644
 --- a/res/xml/lockscreen_ui.xml
@@ -48,5 +48,5 @@ index 01f47d4..0cdd082 100644
          android:key="lockscreen_media_art_options"
          android:title="@string/lockscreen_media_art_options_title">
 -- 
-2.25.1
+2.34.1
 

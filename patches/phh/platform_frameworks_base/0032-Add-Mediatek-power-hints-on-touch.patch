@@ -1,7 +1,7 @@
-From 467394074f7a84c3b1863c31816be8233f9ae94b Mon Sep 17 00:00:00 2001
+From a501d218943c17e76bb36d09083a133228eaf186 Mon Sep 17 00:00:00 2001
 From: Pierre-Hugues Husson <phh@phh.me>
 Date: Sat, 17 Jun 2023 08:31:55 -0400
-Subject: [PATCH 32/45] Add Mediatek power hints on touch
+Subject: [PATCH 32/46] Add Mediatek power hints on touch
 
 Mediatek has multiple HALs (which existed concurrently), so it is a bit
 of a mess.
@@ -27,7 +27,7 @@ Change-Id: I9f1eac5a20b98920a5d0c8204fe4d165ba069f5a
  2 files changed, 52 insertions(+), 1 deletion(-)
 
 diff --git a/services/core/Android.bp b/services/core/Android.bp
-index 911df41d..4a4b3188 100644
+index 911df41dd..4a4b3188d 100644
 --- a/services/core/Android.bp
 +++ b/services/core/Android.bp
 @@ -188,7 +188,9 @@ java_library_static {
@@ -42,23 +42,23 @@ index 911df41d..4a4b3188 100644
      javac_shard_size: 50,
      javacflags: [
 diff --git a/services/core/java/com/android/server/wm/DisplayPolicy.java b/services/core/java/com/android/server/wm/DisplayPolicy.java
-index cc04f853..51e4008e 100644
+index 95c9e9bbf..c2f5181f3 100644
 --- a/services/core/java/com/android/server/wm/DisplayPolicy.java
 +++ b/services/core/java/com/android/server/wm/DisplayPolicy.java
-@@ -231,6 +231,9 @@ public class DisplayPolicy {
+@@ -236,6 +236,9 @@ public class DisplayPolicy {
       */
      private boolean mRemoteInsetsControllerControlsSystemBars;
-
+ 
 +    private vendor.mediatek.hardware.mtkpower.V1_1.IMtkPerf mMtkPerf;
 +    private vendor.mediatek.hardware.mtkpower.V1_0.IMtkPower mOldMtkPerf;
 +
      StatusBarManagerInternal getStatusBarManagerInternal() {
          synchronized (mServiceAcquireLock) {
              if (mStatusBarManagerInternal == null) {
-@@ -489,6 +492,20 @@ public class DisplayPolicy {
+@@ -496,6 +499,19 @@ public class DisplayPolicy {
+             mScreenOnEarly = true;
              mScreenOnFully = true;
          }
-
 +        try {
 +            mMtkPerf = vendor.mediatek.hardware.mtkpower.V1_1.IMtkPerf.getService();
 +        } catch(Throwable t) {
@@ -72,11 +72,10 @@ index cc04f853..51e4008e 100644
 +            android.util.Log.d("PHH-Power", "Retrieving mtkpower 1.0", t);
 +            mOldMtkPerf = null;
 +        }
-+
+ 
          if (mPerf != null) {
              SCROLL_BOOST_SS_ENABLE = Boolean.parseBoolean(mPerf.perfGetProp("vendor.perf.gestureflingboost.enable", "false"));
-             SILKY_SCROLLS_ENABLE = Boolean.parseBoolean(mPerf.perfGetProp("ro.vendor.perf.ss", "false"));
-@@ -578,6 +595,17 @@ public class DisplayPolicy {
+@@ -586,6 +602,17 @@ public class DisplayPolicy {
                          mService.mPowerManagerInternal.setPowerBoost(
                                  Boost.INTERACTION, duration);
                      }
@@ -92,9 +91,9 @@ index cc04f853..51e4008e 100644
 +                        }
 +                    }
                  }
-
+ 
                  @Override
-@@ -596,6 +624,28 @@ public class DisplayPolicy {
+@@ -604,6 +631,28 @@ public class DisplayPolicy {
                      if (listener != null) {
                          listener.onTouchStart();
                      }
@@ -121,8 +120,8 @@ index cc04f853..51e4008e 100644
 +                        }
 +                    }
                  }
-
+ 
                      @Override
---
-2.25.1
+-- 
+2.34.1
 

@@ -1,6 +1,6 @@
-From 10e4190733e7b6cccd80bd80dde00fab3916b5d4 Mon Sep 17 00:00:00 2001
-From: BoNic <BoNio9527@gmail.com>
-Date: Mon, 27 Nov 2023 20:50:36 -0500
+From a846a93e47595defd4a406bc04ca6b13a915faca Mon Sep 17 00:00:00 2001
+From: BoNic <BoNio9527@gmaul.com>
+Date: Sun, 17 Dec 2023 11:38:32 +0800
 Subject: [PATCH] Use-App-icon-for-per-app-volume
 
 ---
@@ -8,10 +8,10 @@ Subject: [PATCH] Use-App-icon-for-per-app-volume
  1 file changed, 22 insertions(+), 1 deletion(-)
 
 diff --git a/packages/SystemUI/src/com/android/systemui/volume/VolumeDialogImpl.java b/packages/SystemUI/src/com/android/systemui/volume/VolumeDialogImpl.java
-index 58931e7e..1d66df00 100644
+index 9c0b1f379..72ac4b7ea 100644
 --- a/packages/SystemUI/src/com/android/systemui/volume/VolumeDialogImpl.java
 +++ b/packages/SystemUI/src/com/android/systemui/volume/VolumeDialogImpl.java
-@@ -263,6 +263,7 @@ public class VolumeDialogImpl implements VolumeDialog, Dumpable,
+@@ -273,6 +273,7 @@ public class VolumeDialogImpl implements VolumeDialog, Dumpable,
      private FrameLayout mZenIcon;
      private View mAppVolumeView;
      private ImageButton mAppVolumeIcon;
@@ -19,7 +19,7 @@ index 58931e7e..1d66df00 100644
      private final List<VolumeRow> mRows = new ArrayList<>();
      private ConfigurableTexts mConfigurableTexts;
      private final SparseBooleanArray mDynamic = new SparseBooleanArray();
-@@ -1378,19 +1379,32 @@ public class VolumeDialogImpl implements VolumeDialog, Dumpable,
+@@ -1430,19 +1431,32 @@ public class VolumeDialogImpl implements VolumeDialog, Dumpable,
          ContentResolver cr = mContext.getContentResolver();
          int showAppVolume = Settings.System.getInt(cr, Settings.System.SHOW_APP_VOLUME, 0);
          boolean ret = showAppVolume == 1;
@@ -38,7 +38,7 @@ index 58931e7e..1d66df00 100644
          }
          return ret;
      }
-
+ 
 +    private Drawable getApplicationIcon(String packageName) {
 +        PackageManager pm = mContext.getPackageManager();
 +        Drawable icon = null;
@@ -53,7 +53,7 @@ index 58931e7e..1d66df00 100644
      public void initAppVolumeH() {
          if (mAppVolumeView != null) {
              mAppVolumeView.setVisibility(shouldShowAppVolume() ? VISIBLE : GONE);
-@@ -1404,6 +1418,13 @@ public class VolumeDialogImpl implements VolumeDialog, Dumpable,
+@@ -1456,6 +1470,13 @@ public class VolumeDialogImpl implements VolumeDialog, Dumpable,
                  Dependency.get(ActivityStarter.class).startActivity(intent,
                          true /* dismissShade */);
              });
@@ -66,7 +66,7 @@ index 58931e7e..1d66df00 100644
 +            }
          }
      }
-
---
-2.25.1
+ 
+-- 
+2.34.1
 
