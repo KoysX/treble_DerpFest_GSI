@@ -118,10 +118,10 @@ index cb4c834..6330285 100644
  
 diff --git a/src/org/derpfest/derpspace/fragments/StatusBar.java b/src/org/derpfest/derpspace/fragments/StatusBar.java
 new file mode 100644
-index 0000000..ca743da
+index 0000000..306e095
 --- /dev/null
 +++ b/src/org/derpfest/derpspace/fragments/StatusBar.java
-@@ -0,0 +1,69 @@
+@@ -0,0 +1,68 @@
 +/*
 + * Copyright (C) 2016-2023 crDroid Android Project
 + *

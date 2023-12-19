@@ -1,0 +1,31 @@
+From fd696c07a3d1ff67afb0f39cc54eb1bf56545854 Mon Sep 17 00:00:00 2001
+From: BoNic <BoNio9527@gmaul.com>
+Date: Mon, 18 Dec 2023 22:03:57 +0800
+Subject: [PATCH] Force-PHH-updater-as-the-default-updater
+
+---
+ res/values/derp_strings.xml | 8 ++++----
+ 1 file changed, 4 insertions(+), 4 deletions(-)
+
+diff --git a/res/values/derp_strings.xml b/res/values/derp_strings.xml
+index d9e3f58..27d100d 100644
+--- a/res/values/derp_strings.xml
++++ b/res/values/derp_strings.xml
+@@ -25,10 +25,10 @@
+     <string name="maintainer_telegram" translatable="false">https://t.me/DerpFest5T</string>
+ 
+     <!-- DerpFest Updater -->
+-    <string name="update_settings_title">DerpFest Updater</string>
+-    <string name="update_settings_summary">Check for the latest version of DerpFest</string>
+-    <string name="update_package" translatable="false">org.lineageos.updater</string>
+-    <string name="update_activity" translatable="false">org.lineageos.updater.UpdatesActivity</string>
++    <string name="update_settings_title">PHH Updater</string>
++    <string name="update_settings_summary">Check for the latest version of the GSI</string>
++    <string name="update_package" translatable="false">me.phh.treble.app</string>
++    <string name="update_activity" translatable="false">me.phh.treble.app.UpdaterActivity</string>
+ 
+     <!-- Summary text for system preference tile, showing important setting items under system setting [CHAR LIMIT=NONE]-->
+     <string name="system_dashboard_custom_summary">Languages, gestures, updater, time, backup</string>
+-- 
+2.34.1
+
