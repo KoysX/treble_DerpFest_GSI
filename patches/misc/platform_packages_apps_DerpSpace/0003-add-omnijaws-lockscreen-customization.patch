@@ -1,36 +1,63 @@
-From e925bd7f5e9640f743d360d0d1ef4725ee97c162 Mon Sep 17 00:00:00 2001
-From: BoNic <BoNio9527@gmail.com>
-Date: Fri, 8 Dec 2023 22:53:05 -0500
-Subject: [PATCH] add-omnijaws-lockscreen-customization
+From 16082dd54217c7b65218518c268303ebb1768521 Mon Sep 17 00:00:00 2001
+From: BoNic <BoNio9527@gmaul.com>
+Date: Wed, 20 Dec 2023 22:13:34 +0800
+Subject: [PATCH] add omnijaws lockscreen customization
 
 ---
- res/values/strings.xml    | 4 ++++
- res/xml/customisation.xml | 9 +++++++++
- 2 files changed, 13 insertions(+)
+ res/values/strings.xml                        | 12 ++++++++
+ res/xml/lockscreen_ui.xml                     | 29 +++++++++++++++++++
+ .../derpspace/fragments/LockscreenUI.java     | 27 +++++++++++++----
+ 3 files changed, 63 insertions(+), 5 deletions(-)
 
 diff --git a/res/values/strings.xml b/res/values/strings.xml
-index 26c3b69..e59f678 100644
+index 374efff..98c3357 100644
 --- a/res/values/strings.xml
 +++ b/res/values/strings.xml
-@@ -382,6 +382,10 @@
-     <string name="fprint_sucess_vib_title">Fingerprint authentication vibration</string>
-     <string name="fprint_sucess_vib_summary">Vibrate on successful fingerprint authentication</string>
- 
+@@ -481,4 +481,16 @@
+     <string name="statusbar_top_padding">Top padding</string>
+     <string name="statusbar_left_padding">Left padding</string>
+     <string name="statusbar_right_padding">Right padding</string>
++
 +    <!-- Weather -->
++    <string name="weather_category_title">Weather</string>
 +    <string name="weather_settings_title">Weather settings</string>
 +    <string name="weather_settings_summary">Setup icon pack and weather service</string>
++    <string name="lockscreen_weather_title">Weather condition</string>
++    <string name="lockscreen_weather_summary">Display current weather condition and temperature</string>
++    <string name="lockscreen_weather_enabled_info">Requires weather service to be enabled</string>
++    <string name="lockscreen_weather_location_title">Current location</string>
++    <string name="lockscreen_weather_location_summary">Display current weather location</string>
++    <string name="lockscreen_weather_text_title">Current condition</string>
++    <string name="lockscreen_weather_text_summary">Display current weather condition summary</string>
+ </resources>
+diff --git a/res/xml/lockscreen_ui.xml b/res/xml/lockscreen_ui.xml
+index 0cdd082..81e13c9 100644
+--- a/res/xml/lockscreen_ui.xml
++++ b/res/xml/lockscreen_ui.xml
+@@ -67,6 +67,35 @@
+             android:summary="@string/lockscreen_hide_status_bar_summary"
+             android:defaultValue="false" />
+ 
++        <org.derpfest.support.preferences.SystemSettingSwitchPreference
++            android:key="lockscreen_weather_enabled"
++            android:title="@string/lockscreen_weather_title"
++            android:defaultValue="false"
++            android:summary="@string/lockscreen_weather_summary" />
 +
-     <!-- QS Battery estimates -->
-     <string name="qs_show_battery_estimate_title">Battery estimates</string>
-     <string name="qs_show_battery_estimate_summary_on">Show battery estimates in QS</string>
-diff --git a/res/xml/customisation.xml b/res/xml/customisation.xml
-index 9355a9c..a9d4eae 100644
---- a/res/xml/customisation.xml
-+++ b/res/xml/customisation.xml
-@@ -80,6 +80,15 @@
-             android:summary="@string/theme_customization_icon_shape_summary"
-             android:fragment="org.derpfest.derpspace.fragments.IconShapes"/>
-
++        <org.derpfest.support.preferences.SystemSettingSwitchPreference
++            android:key="lockscreen_weather_location"
++            android:title="@string/lockscreen_weather_location_title"
++            android:summary="@string/lockscreen_weather_location_summary"
++            android:defaultValue="false"
++            android:dependency="lockscreen_weather_enabled" />
++
++        <org.derpfest.support.preferences.SystemSettingSwitchPreference
++            android:key="lockscreen_weather_text"
++            android:title="@string/lockscreen_weather_text_title"
++            android:summary="@string/lockscreen_weather_text_summary"
++            android:defaultValue="true"
++            android:dependency="lockscreen_weather_enabled" />
++
 +        <Preference
 +            android:title="@string/weather_settings_title"
 +            android:summary="@string/weather_settings_summary">
@@ -41,8 +68,76 @@ index 9355a9c..a9d4eae 100644
 +        </Preference>
 +
      </PreferenceCategory>
-
-    <PreferenceCategory
---
-2.25.1
+ 
+     <PreferenceCategory
+diff --git a/src/org/derpfest/derpspace/fragments/LockscreenUI.java b/src/org/derpfest/derpspace/fragments/LockscreenUI.java
+index ee09a0a..0322540 100644
+--- a/src/org/derpfest/derpspace/fragments/LockscreenUI.java
++++ b/src/org/derpfest/derpspace/fragments/LockscreenUI.java
+@@ -49,6 +49,7 @@ import com.android.settings.search.BaseSearchIndexProvider;
+ 
+ import com.android.settingslib.search.Indexable;
+ import com.android.settingslib.search.SearchIndexable;
++import com.android.internal.util.derp.OmniJawsClient;
+ 
+ import java.util.ArrayList;
+ import java.util.List;
+@@ -60,8 +61,11 @@ import java.util.regex.Pattern;
+ public class LockscreenUI extends SettingsPreferenceFragment implements OnPreferenceChangeListener {
+ 
+     private static final String FINGERPRINT_VIB = "fingerprint_success_vib";
++    private static final String KEY_WEATHER = "lockscreen_weather_enabled";
+ 
+     private SwitchPreference mFingerprintVib;
++    private Preference mWeather;
++    private OmniJawsClient mWeatherClient;
+ 
+     @Override
+     public void onCreate(Bundle savedInstanceState) {
+@@ -76,6 +80,9 @@ public class LockscreenUI extends SettingsPreferenceFragment implements OnPrefer
+         mFingerprintVib.setChecked((Settings.System.getInt(getContentResolver(),
+                 Settings.System.FINGERPRINT_SUCCESS_VIB, 1) == 1));
+         mFingerprintVib.setOnPreferenceChangeListener(this);
++        mWeather = (Preference) findPreference(KEY_WEATHER);
++        mWeatherClient = new OmniJawsClient(getContext());
++        updateWeatherSettings();
+     }
+ 
+     @Override
+@@ -83,11 +90,6 @@ public class LockscreenUI extends SettingsPreferenceFragment implements OnPrefer
+         return MetricsEvent.DERP;
+     }
+ 
+-    @Override
+-    public void onResume() {
+-        super.onResume();
+-    }
+-
+     @Override
+     public boolean onPreferenceChange(Preference preference, Object objValue) {
+         if (preference == mFingerprintVib) {
+@@ -99,6 +101,21 @@ public class LockscreenUI extends SettingsPreferenceFragment implements OnPrefer
+         return false;
+     }
+ 
++    private void updateWeatherSettings() {
++        if (mWeatherClient == null || mWeather == null) return;
++
++        boolean weatherEnabled = mWeatherClient.isOmniJawsEnabled();
++        mWeather.setEnabled(weatherEnabled);
++        mWeather.setSummary(weatherEnabled ? R.string.lockscreen_weather_summary :
++            R.string.lockscreen_weather_enabled_info);
++    }
++
++    @Override
++    public void onResume() {
++        super.onResume();
++        updateWeatherSettings();
++    }
++
+     public static final SearchIndexProvider SEARCH_INDEX_DATA_PROVIDER =
+         new BaseSearchIndexProvider() {
+             @Override
+-- 
+2.34.1
 

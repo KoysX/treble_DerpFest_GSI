@@ -75,45 +75,11 @@ buildVariant() {
     echo
 }
 
-buildVndkliteVariant() {
-    echo "--> Building treble_arm64_bvN-vndklite"
-    cd treble_adapter
-    sudo bash lite-adapter.sh 64 $BD/system-treble_arm64_bvN.img
-    mv s.img $BD/system-treble_arm64_bvN-vndklite.img
-    sudo rm -rf s.img d tmp
-    cd ..
-    echo
-}
-
 generatePackages() {
     echo "--> Generating packages"
     buildDate="$(date +%Y%m%d)"
-    xz -cv $BD/system-treble_arm64_bvN.img -T0 > $BD/DerpFest_arm64-ab-14.0-unofficial-$buildDate.img.xz
-    xz -cv $BD/system-treble_arm64_bvN-vndklite.img -T0 > $BD/DerpFest_arm64-ab-vndklite-14.0-unofficial-$buildDate.img.xz
+    xz -cv $BD/system-treble_arm64_bvN.img -T0 > $BD/DerpFest-arm64-ab-14.0-unofficial-$buildDate.img.xz
     rm -rf $BD/system-*.img
-    echo
-}
-
-generateOta() {
-    echo "--> Generating OTA file"
-    version="$(date +v%Y.%m.%d)"
-    timestamp="$START"
-    json="{\"version\": \"$version\",\"date\": \"$timestamp\",\"variants\": ["
-    find $BD/ -name "DerpFest_*" | sort | {
-        while read file; do
-            filename="$(basename $file)"
-            if [[ $filename == *"vndklite"* ]]; then
-                name="treble_arm64_bvN-vndklite"
-            else
-                name="treble_arm64_bvN"
-            fi
-            size=$(wc -c $file | awk '{print $1}')
-            url="https://github.com/KoysX/treble_DerpFest_GSI/releases/download/$version/$filename"
-            json="${json} {\"name\": \"$name\",\"size\": \"$size\",\"url\": \"$url\"},"
-        done
-        json="${json%?}]}"
-        echo "$json" | jq . > $BL/ota.json
-    }
     echo
 }
 
@@ -125,9 +91,7 @@ applyPatches
 setupEnv
 buildTrebleApp
 buildVariant
-buildVndkliteVariant
 generatePackages
-generateOta
 
 END=$(date +%s)
 ELAPSEDM=$(($(($END-$START))/60))

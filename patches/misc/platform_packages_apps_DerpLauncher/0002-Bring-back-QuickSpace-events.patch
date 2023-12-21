@@ -1,7 +1,7 @@
-From 03bf505bd5b61faf15ef889c9e0c96b9c130cd52 Mon Sep 17 00:00:00 2001
+From 0e3233929994320cfe0e160f2134c72fc79266a7 Mon Sep 17 00:00:00 2001
 From: BoNic <BoNio9527@gmaul.com>
-Date: Mon, 18 Dec 2023 12:07:18 +0800
-Subject: [PATCH] Bring back QuickSpace events
+Date: Wed, 20 Dec 2023 23:21:29 +0800
+Subject: [PATCH] Bring-back-QuickSpace-events
 
 ---
  AndroidManifest-common.xml                    |   2 +
@@ -17,13 +17,13 @@ Subject: [PATCH] Bring back QuickSpace events
  res/layout/reserved_container_workspace.xml   |  35 ++
  res/values/derp_config.xml                    |   3 +
  res/values/derp_strings.xml                   | 115 +++++
- res/values/dimens.xml                         |   4 +-
- res/values/styles.xml                         |   8 +
- res/xml/launcher_preferences.xml              |  43 ++
+ res/values/dimens.xml                         |   4 +
+ res/values/styles.xml                         |   9 +
+ res/xml/launcher_preferences.xml              |  39 ++
  .../android/launcher3/AutoInstallsLayout.java |  21 -
  .../launcher3/DefaultLayoutParser.java        |   1 -
  src/com/android/launcher3/Launcher.java       |  36 +-
- src/com/android/launcher3/Utilities.java      |  46 +-
+ src/com/android/launcher3/Utilities.java      |  46 ++
  src/com/android/launcher3/Workspace.java      |   8 +-
  .../launcher3/config/FeatureFlags.java        |   2 +-
  .../graphics/LauncherPreviewRenderer.java     |   4 +-
@@ -32,7 +32,7 @@ Subject: [PATCH] Bring back QuickSpace events
  .../model/GridSizeMigrationUtil.java          |  11 +-
  .../android/launcher3/model/LoaderCursor.java |   2 +-
  .../android/launcher3/model/LoaderTask.java   |  11 +-
- .../model/WorkspaceItemSpaceFinder.java       |   2 +-
+ .../model/WorkspaceItemSpaceFinder.java       |   3 +-
  .../launcher3/qsb/QsbContainerView.java       |   2 +-
  .../quickspace/QuickEventsController.java     | 425 ++++++++++++++++++
  .../launcher3/quickspace/QuickSpaceView.java  | 296 ++++++++++++
@@ -41,7 +41,7 @@ Subject: [PATCH] Bring back QuickSpace events
  .../quickspace/views/DateTextView.java        |  94 ++++
  .../views/DoubleShadowTextView.java           |  53 +++
  .../launcher3/settings/SettingsActivity.java  |  17 +
- 37 files changed, 1995 insertions(+), 60 deletions(-)
+ 37 files changed, 1993 insertions(+), 60 deletions(-)
  create mode 100644 res/drawable/bg_quickspace.xml
  create mode 100644 res/drawable/ic_music_note_24dp.xml
  create mode 100644 res/drawable/ic_quickspace_evening.xml
@@ -59,13 +59,13 @@ Subject: [PATCH] Bring back QuickSpace events
  create mode 100644 src/com/android/launcher3/quickspace/views/DoubleShadowTextView.java
 
 diff --git a/AndroidManifest-common.xml b/AndroidManifest-common.xml
-index 89a950d..fb6c09f 100644
+index a8edf50..571d569 100644
 --- a/AndroidManifest-common.xml
 +++ b/AndroidManifest-common.xml
-@@ -58,6 +58,8 @@
-
-     <permission android:name="com.google.android.apps.nexuslauncher.permission.QSB" android:protectionLevel="signatureOrSystem"/>
-     <uses-permission android:name="com.google.android.apps.nexuslauncher.permission.QSB"/>
+@@ -55,6 +55,8 @@
+     <uses-permission android:name="android.permission.FORCE_STOP_PACKAGES" />
+     <uses-permission android:name="android.permission.DEVICE_POWER" />
+     <uses-permission android:name="android.permission.USE_BIOMETRIC" />
 +    <uses-permission android:name="android.permission.MEDIA_CONTENT_CONTROL" />
 +    <uses-permission android:name="org.omnirom.omnijaws.READ_WEATHER" />
 
@@ -606,10 +606,10 @@ index 7d0e1a5..72fc2f1 100644
 +    <item type="id" name="reserved_container_workspace" />
  </resources>
 diff --git a/res/values/derp_strings.xml b/res/values/derp_strings.xml
-index 284c3cf..18d7066 100644
+index 6131e28..fb80a13 100644
 --- a/res/values/derp_strings.xml
 +++ b/res/values/derp_strings.xml
-@@ -112,4 +112,119 @@
+@@ -108,4 +108,119 @@
      <string name="trust_apps_help">Help</string>
      <string name="trust_apps_info_hidden">Hidden apps and their widgets are hidden from the drawer</string>
      <string name="trust_apps_info_protected">Protected apps require authentication to be opened from the launcher</string>
@@ -730,7 +730,7 @@ index 284c3cf..18d7066 100644
 +    <string name="quick_event_ambient_weather_enabled_info">Requires weather service to be enabled</string>
  </resources>
 diff --git a/res/values/dimens.xml b/res/values/dimens.xml
-index 87b360d..c5781aa 100644
+index 87b360d..4f467de 100644
 --- a/res/values/dimens.xml
 +++ b/res/values/dimens.xml
 @@ -458,4 +458,8 @@
@@ -743,10 +743,10 @@ index 87b360d..c5781aa 100644
 +    <dimen name="quickspace_alternate_title_size">22dp</dimen>
  </resources>
 diff --git a/res/values/styles.xml b/res/values/styles.xml
-index 714c71c..4a16721 100644
+index 714c71c..911ab1a 100644
 --- a/res/values/styles.xml
 +++ b/res/values/styles.xml
-@@ -473,4 +473,12 @@
+@@ -473,4 +473,13 @@
          <item name="qsbIconTintTertiary">@color/qsb_tertiary</item>
      </style>
 
@@ -758,18 +758,16 @@ index 714c71c..4a16721 100644
 +    <style name="QuickSpaceSubText">
 +        <item name="android:fontFamily">@*android:string/config_bodyFontFamily</item>
 +    </style>
++
  </resources>
 diff --git a/res/xml/launcher_preferences.xml b/res/xml/launcher_preferences.xml
-index e5e9453..8d8eddb 100644
+index 8783731..bc6757f 100644
 --- a/res/xml/launcher_preferences.xml
 +++ b/res/xml/launcher_preferences.xml
-@@ -209,4 +209,47 @@
+@@ -74,6 +74,45 @@
+             <intent android:action="android.settings.ACTION_CONTENT_SUGGESTIONS_SETTINGS" />
+         </Preference>
 
-     </androidx.preference.PreferenceCategory>
-
-+    <androidx.preference.PreferenceCategory
-+        android:title="@string/quickspace_category_title">
-+
 +        <SwitchPreference
 +            android:key="pref_show_quickspace"
 +            android:title="@string/show_quickspace_title"
@@ -809,8 +807,9 @@ index e5e9453..8d8eddb 100644
 +            android:defaultValue="true"
 +            android:persistent="true" />
 +
-+    </androidx.preference.PreferenceCategory>
- </androidx.preference.PreferenceScreen>
+     </androidx.preference.PreferenceCategory>
+
+     <androidx.preference.PreferenceCategory
 diff --git a/src/com/android/launcher3/AutoInstallsLayout.java b/src/com/android/launcher3/AutoInstallsLayout.java
 index c7cdfa8..9316b14 100644
 --- a/src/com/android/launcher3/AutoInstallsLayout.java
@@ -877,7 +876,7 @@ index c748693..1949c9a 100644
          parsers.put(TAG_RESOLVE, new ResolveParser());
          parsers.put(TAG_FOLDER, new MyFolderParser());
 diff --git a/src/com/android/launcher3/Launcher.java b/src/com/android/launcher3/Launcher.java
-index 35294e4..9fd4e40 100644
+index 9d421e4..615f345 100644
 --- a/src/com/android/launcher3/Launcher.java
 +++ b/src/com/android/launcher3/Launcher.java
 @@ -189,7 +189,7 @@ import com.android.launcher3.popup.ArrowPopup;
@@ -889,17 +888,17 @@ index 35294e4..9fd4e40 100644
  import com.android.launcher3.statemanager.StateManager;
  import com.android.launcher3.statemanager.StateManager.StateHandler;
  import com.android.launcher3.statemanager.StatefulActivity;
-@@ -425,6 +425,9 @@ public class Launcher extends StatefulActivity<LauncherState>
-     private StartupLatencyLogger mStartupLatencyLogger;
-     private CellPosMapper mCellPosMapper = CellPosMapper.DEFAULT;
+@@ -428,6 +428,9 @@ public class Launcher extends StatefulActivity<LauncherState>
+     private final CannedAnimationCoordinator mAnimationCoordinator =
+             new CannedAnimationCoordinator(this);
 
 +    // QuickSpace
 +    private QuickSpaceView mQuickSpace;
 +
-     private final CannedAnimationCoordinator mAnimationCoordinator =
-             new CannedAnimationCoordinator(this);
-
-@@ -1078,6 +1081,9 @@ public class Launcher extends StatefulActivity<LauncherState>
+     @Override
+     @TargetApi(Build.VERSION_CODES.S)
+     protected void onCreate(Bundle savedInstanceState) {
+@@ -1074,6 +1077,9 @@ public class Launcher extends StatefulActivity<LauncherState>
          } else {
              mOverlayManager.onActivityStopped(this);
          }
@@ -909,7 +908,7 @@ index 35294e4..9fd4e40 100644
          hideKeyboard();
          logStopAndResume(false /* isResume */);
          mAppWidgetHolder.setActivityStarted(false);
-@@ -1268,6 +1274,10 @@ public class Launcher extends StatefulActivity<LauncherState>
+@@ -1264,6 +1270,10 @@ public class Launcher extends StatefulActivity<LauncherState>
          TraceHelper.INSTANCE.beginSection(ON_RESUME_EVT);
          super.onResume();
 
@@ -920,7 +919,7 @@ index 35294e4..9fd4e40 100644
          if (mDeferOverlayCallbacks) {
              scheduleDeferredCheck();
          } else {
-@@ -1293,6 +1303,9 @@ public class Launcher extends StatefulActivity<LauncherState>
+@@ -1289,6 +1299,9 @@ public class Launcher extends StatefulActivity<LauncherState>
          if (!mDeferOverlayCallbacks) {
              mOverlayManager.onActivityPaused(this);
          }
@@ -930,7 +929,7 @@ index 35294e4..9fd4e40 100644
          mAppWidgetHolder.setActivityResumed(false);
      }
 
-@@ -1369,6 +1382,9 @@ public class Launcher extends StatefulActivity<LauncherState>
+@@ -1365,6 +1378,9 @@ public class Launcher extends StatefulActivity<LauncherState>
          // Setup Scrim
          mScrimView = findViewById(R.id.scrim_view);
 
@@ -940,7 +939,7 @@ index 35294e4..9fd4e40 100644
          // Setup the drag controller (drop targets have to be added in reverse order in priority)
          mDropTargetBar.setup(mDragController);
          mAllAppsController.setupViews(mScrimView, mAppsView);
-@@ -1834,6 +1850,10 @@ public class Launcher extends StatefulActivity<LauncherState>
+@@ -1830,6 +1846,10 @@ public class Launcher extends StatefulActivity<LauncherState>
          LauncherAppState.getIDP(this).removeOnChangeListener(this);
 
          mOverlayManager.onActivityDestroyed(this);
@@ -951,30 +950,30 @@ index 35294e4..9fd4e40 100644
      }
 
      public LauncherAccessibilityDelegate getAccessibilityDelegate() {
-@@ -2355,11 +2375,11 @@ public class Launcher extends StatefulActivity<LauncherState>
+@@ -2351,11 +2371,11 @@ public class Launcher extends StatefulActivity<LauncherState>
      public void bindScreens(IntArray orderedScreenIds) {
          mWorkspace.mPageIndicator.setAreScreensBinding(true);
          int firstScreenPosition = 0;
--        if (mSmartspaceEnabled &&
+-        if (FeatureFlags.QSB_ON_FIRST_SCREEN &&
 +        if (Utilities.showQuickspace(this) &&
                  orderedScreenIds.indexOf(Workspace.FIRST_SCREEN_ID) != firstScreenPosition) {
              orderedScreenIds.removeValue(Workspace.FIRST_SCREEN_ID);
              orderedScreenIds.add(firstScreenPosition, Workspace.FIRST_SCREEN_ID);
--        } else if (!mSmartspaceEnabled && orderedScreenIds.isEmpty()) {
+-        } else if (!FeatureFlags.QSB_ON_FIRST_SCREEN && orderedScreenIds.isEmpty()) {
 +        } else if (!Utilities.showQuickspace(this) && orderedScreenIds.isEmpty()) {
              // If there are no screens, we need to have an empty screen
              mWorkspace.addExtraEmptyScreens();
          }
-@@ -2407,7 +2427,7 @@ public class Launcher extends StatefulActivity<LauncherState>
+@@ -2403,7 +2423,7 @@ public class Launcher extends StatefulActivity<LauncherState>
          int count = orderedScreenIds.size();
          for (int i = 0; i < count; i++) {
              int screenId = orderedScreenIds.get(i);
--            if (mSmartspaceEnabled && screenId == Workspace.FIRST_SCREEN_ID) {
+-            if (FeatureFlags.QSB_ON_FIRST_SCREEN && screenId == Workspace.FIRST_SCREEN_ID) {
 +            if (Utilities.showQuickspace(this) && screenId == Workspace.FIRST_SCREEN_ID) {
                  // No need to bind the first screen, as its always bound.
                  continue;
              }
-@@ -2611,14 +2631,6 @@ public class Launcher extends StatefulActivity<LauncherState>
+@@ -2607,14 +2627,6 @@ public class Launcher extends StatefulActivity<LauncherState>
      }
 
      private View inflateAppWidget(LauncherAppWidgetInfo item) {
@@ -990,7 +989,7 @@ index 35294e4..9fd4e40 100644
          if (mIsSafeModeEnabled) {
              view = new PendingAppWidgetHostView(this, item, mIconCache, true);
 diff --git a/src/com/android/launcher3/Utilities.java b/src/com/android/launcher3/Utilities.java
-index dd03aab..22a1739 100644
+index 329b1f0..effe6bf 100644
 --- a/src/com/android/launcher3/Utilities.java
 +++ b/src/com/android/launcher3/Utilities.java
 @@ -48,6 +48,8 @@ import android.graphics.RectF;
@@ -1010,7 +1009,7 @@ index dd03aab..22a1739 100644
  import android.text.style.TtsSpan;
  import android.util.DisplayMetrics;
  import android.util.Log;
-@@ -176,6 +179,11 @@ public final class Utilities {
+@@ -175,6 +178,11 @@ public final class Utilities {
      public static final String KEY_ICON_PACK = "pref_icon_pack";
      public static final String KEY_RECENTS_OPACITY = "pref_recents_opacity";
      public static final String KEY_APP_DRAWER_OPACITY = "pref_app_drawer_opacity";
@@ -1022,7 +1021,7 @@ index dd03aab..22a1739 100644
 
      /**
       * Returns true if theme is dark.
-@@ -848,6 +856,19 @@ public final class Utilities {
+@@ -847,6 +855,19 @@ public final class Utilities {
          return prefs.getBoolean(KEY_DT_GESTURE, true);
      }
 
@@ -1042,7 +1041,7 @@ index dd03aab..22a1739 100644
      public static boolean isWorkspaceEditAllowed(Context context) {
          SharedPreferences prefs = LauncherPrefs.getPrefs(context.getApplicationContext());
          return !prefs.getBoolean(InvariantDeviceProfile.KEY_WORKSPACE_LOCK, false);
-@@ -906,4 +927,29 @@ public final class Utilities {
+@@ -896,4 +917,29 @@ public final class Utilities {
          SharedPreferences prefs = LauncherPrefs.getPrefs(context.getApplicationContext());
          return prefs.getInt(KEY_APP_DRAWER_OPACITY, 100);
      }
@@ -1073,14 +1072,14 @@ index dd03aab..22a1739 100644
 +    }
  }
 diff --git a/src/com/android/launcher3/Workspace.java b/src/com/android/launcher3/Workspace.java
-index f3b030a..e6e90bb 100644
+index 391aef7..e6e90bb 100644
 --- a/src/com/android/launcher3/Workspace.java
 +++ b/src/com/android/launcher3/Workspace.java
 @@ -594,7 +594,7 @@ public class Workspace<T extends View & PageIndicator> extends PagedView<T>
       * Initializes and binds the first page
       */
      public void bindAndInitFirstWorkspaceScreen() {
--        if (!Utilities.showSmartspace(getContext())) {
+-        if (!FeatureFlags.QSB_ON_FIRST_SCREEN) {
 +        if (!Utilities.showQuickspace(getContext())) {
              return;
          }
@@ -1106,7 +1105,7 @@ index f3b030a..e6e90bb 100644
              int id = mWorkspaceScreens.keyAt(i);
              CellLayout cl = mWorkspaceScreens.valueAt(i);
              // FIRST_SCREEN_ID can never be removed.
--            if ((!Utilities.showSmartspace(getContext()) || id > FIRST_SCREEN_ID)
+-            if ((!FeatureFlags.QSB_ON_FIRST_SCREEN || id > FIRST_SCREEN_ID)
 +            if ((!Utilities.showQuickspace(getContext()) || id > FIRST_SCREEN_ID)
                      && cl.getShortcutsAndWidgets().getChildCount() == 0) {
                  removeScreens.add(id);
@@ -1125,14 +1124,14 @@ index 6b1ec3a..c18f963 100644
      /**
       * Feature flag to handle define config changes dynamically instead of killing the process.
 diff --git a/src/com/android/launcher3/graphics/LauncherPreviewRenderer.java b/src/com/android/launcher3/graphics/LauncherPreviewRenderer.java
-index 8427f6d..8842a2b 100644
+index ae44f0a..8842a2b 100644
 --- a/src/com/android/launcher3/graphics/LauncherPreviewRenderer.java
 +++ b/src/com/android/launcher3/graphics/LauncherPreviewRenderer.java
 @@ -526,13 +526,13 @@ public class LauncherPreviewRenderer extends ContextWrapper
          }
 
          // Add first page QSB
--        if (Utilities.showSmartspace(mContext)) {
+-        if (FeatureFlags.QSB_ON_FIRST_SCREEN) {
 +        if (FeatureFlags.USE_QUICKSPACE_VIEW) {
              CellLayout firstScreen = mWorkspaceScreens.get(FIRST_SCREEN_ID);
              View qsb = mHomeElementInflater.inflate(R.layout.qsb_preview, firstScreen, false);
@@ -1145,33 +1144,33 @@ index 8427f6d..8842a2b 100644
 
          measureView(mRootView, mDp.widthPx, mDp.heightPx);
 diff --git a/src/com/android/launcher3/model/BgDataModel.java b/src/com/android/launcher3/model/BgDataModel.java
-index 46d043f..e76e783 100644
+index 7bcd038..5ed90fa 100644
 --- a/src/com/android/launcher3/model/BgDataModel.java
 +++ b/src/com/android/launcher3/model/BgDataModel.java
-@@ -153,7 +153,7 @@ public class BgDataModel {
+@@ -152,7 +152,7 @@ public class BgDataModel {
                  screenSet.add(item.screenId);
              }
          }
--        if (Utilities.showSmartspace(context) || screenSet.isEmpty()) {
+-        if (FeatureFlags.QSB_ON_FIRST_SCREEN || screenSet.isEmpty()) {
 +        if (FeatureFlags.USE_QUICKSPACE_VIEW || screenSet.isEmpty()) {
              screenSet.add(Workspace.FIRST_SCREEN_ID);
          }
          return screenSet.getArray();
 diff --git a/src/com/android/launcher3/model/DatabaseHelper.java b/src/com/android/launcher3/model/DatabaseHelper.java
-index 8aef47c..160dc44 100644
+index ecf5f67..1a4ad4a 100644
 --- a/src/com/android/launcher3/model/DatabaseHelper.java
 +++ b/src/com/android/launcher3/model/DatabaseHelper.java
-@@ -256,7 +256,7 @@ public class DatabaseHelper extends NoLocaleSQLiteHelper implements
+@@ -257,7 +257,7 @@ public class DatabaseHelper extends NoLocaleSQLiteHelper implements
                          Favorites.SCREEN, IntArray.wrap(-777, -778)), null);
              }
              case 30: {
--                if (isQsbOnFirstScreen()) {
+-                if (FeatureFlags.QSB_ON_FIRST_SCREEN) {
 +                if (Utilities.showQuickspace(mContext)) {
                      // Clean up first row in screen 0 as it might contain junk data.
                      Log.d(TAG, "Cleaning up first row");
                      db.delete(Favorites.TABLE_NAME,
 diff --git a/src/com/android/launcher3/model/GridSizeMigrationUtil.java b/src/com/android/launcher3/model/GridSizeMigrationUtil.java
-index c4b4d38..6e3e6fb 100644
+index c233872..6e3e6fb 100644
 --- a/src/com/android/launcher3/model/GridSizeMigrationUtil.java
 +++ b/src/com/android/launcher3/model/GridSizeMigrationUtil.java
 @@ -119,7 +119,7 @@ public class GridSizeMigrationUtil {
@@ -1220,26 +1219,26 @@ index c4b4d38..6e3e6fb 100644
              @NonNull final List<DbEntry> sortedItemsToPlace, final boolean matchingScreenIdOnly) {
          final GridOccupancy occupied = new GridOccupancy(trgX, trgY);
          final Point trg = new Point(trgX, trgY);
--        final Point next = new Point(0, screenId == 0 && helper.isQsbOnFirstScreen()
+-        final Point next = new Point(0, screenId == 0 && FeatureFlags.QSB_ON_FIRST_SCREEN
 +        final Point next = new Point(0, screenId == 0 && Utilities.showQuickspace(context)
                  ? 1 /* smartspace */ : 0);
          List<DbEntry> existedEntries = destReader.mWorkspaceEntriesByScreenId.get(screenId);
          if (existedEntries != null) {
 diff --git a/src/com/android/launcher3/model/LoaderCursor.java b/src/com/android/launcher3/model/LoaderCursor.java
-index 718f4f1..eb855fc 100644
+index 33332f0..eb855fc 100644
 --- a/src/com/android/launcher3/model/LoaderCursor.java
 +++ b/src/com/android/launcher3/model/LoaderCursor.java
 @@ -528,7 +528,7 @@ public class LoaderCursor extends CursorWrapper {
 
          if (!mOccupied.containsKey(item.screenId)) {
              GridOccupancy screen = new GridOccupancy(countX + 1, countY + 1);
--            if (item.screenId == Workspace.FIRST_SCREEN_ID && Utilities.showSmartspace(mContext)) {
+-            if (item.screenId == Workspace.FIRST_SCREEN_ID && FeatureFlags.QSB_ON_FIRST_SCREEN) {
 +            if (item.screenId == Workspace.FIRST_SCREEN_ID && Utilities.showQuickspace(mContext)) {
                  // Mark the first X columns (X is width of the search container) in the first row as
                  // occupied (if the feature is enabled) in order to account for the search
                  // container.
 diff --git a/src/com/android/launcher3/model/LoaderTask.java b/src/com/android/launcher3/model/LoaderTask.java
-index d6f5d37..2d7d251 100644
+index 0e68db2..2ff40fe 100644
 --- a/src/com/android/launcher3/model/LoaderTask.java
 +++ b/src/com/android/launcher3/model/LoaderTask.java
 @@ -724,15 +724,8 @@ public class LoaderTask implements Runnable {
@@ -1261,27 +1260,35 @@ index d6f5d37..2d7d251 100644
                              !c.hasRestoreFlag(LauncherAppWidgetInfo.FLAG_ID_NOT_VALID);
                      final boolean wasProviderReady =
 diff --git a/src/com/android/launcher3/model/WorkspaceItemSpaceFinder.java b/src/com/android/launcher3/model/WorkspaceItemSpaceFinder.java
-index 829e2fd..b1ad16f 100644
+index 1fc8a03..b1ad16f 100644
 --- a/src/com/android/launcher3/model/WorkspaceItemSpaceFinder.java
 +++ b/src/com/android/launcher3/model/WorkspaceItemSpaceFinder.java
-@@ -67,7 +67,7 @@ public class WorkspaceItemSpaceFinder {
+@@ -22,6 +22,7 @@ import android.util.LongSparseArray;
+ import com.android.launcher3.InvariantDeviceProfile;
+ import com.android.launcher3.LauncherAppState;
+ import com.android.launcher3.LauncherSettings;
++import com.android.launcher3.Utilities;
+ import com.android.launcher3.config.FeatureFlags;
+ import com.android.launcher3.model.data.ItemInfo;
+ import com.android.launcher3.util.GridOccupancy;
+@@ -66,7 +67,7 @@ public class WorkspaceItemSpaceFinder {
          int screenCount = workspaceScreens.size();
          // First check the preferred screen.
          IntSet screensToExclude = new IntSet();
--        if (Utilities.showSmartspace(app.getContext())) {
+-        if (FeatureFlags.QSB_ON_FIRST_SCREEN) {
 +        if (Utilities.showQuickspace(app.getContext())) {
              screensToExclude.add(FIRST_SCREEN_ID);
          }
 
 diff --git a/src/com/android/launcher3/qsb/QsbContainerView.java b/src/com/android/launcher3/qsb/QsbContainerView.java
-index 26df25b..bdf63ac 100644
+index fac7eda..bdf63ac 100644
 --- a/src/com/android/launcher3/qsb/QsbContainerView.java
 +++ b/src/com/android/launcher3/qsb/QsbContainerView.java
 @@ -289,7 +289,7 @@ public class QsbContainerView extends FrameLayout {
          }
 
          public boolean isQsbEnabled() {
--            return Utilities.showSmartspace(getContext());
+-            return FeatureFlags.QSB_ON_FIRST_SCREEN;
 +            return false;
          }
 
@@ -2582,7 +2589,7 @@ index 0000000..1bf019f
 +    }
 +}
 diff --git a/src/com/android/launcher3/settings/SettingsActivity.java b/src/com/android/launcher3/settings/SettingsActivity.java
-index 181df1a..889cb65 100644
+index fdda151..cb4256e 100644
 --- a/src/com/android/launcher3/settings/SettingsActivity.java
 +++ b/src/com/android/launcher3/settings/SettingsActivity.java
 @@ -74,6 +74,8 @@ import com.android.launcher3.util.DisplayController;
@@ -2594,10 +2601,10 @@ index 181df1a..889cb65 100644
  import java.util.Collections;
  import java.util.List;
 
-@@ -163,6 +165,11 @@ public class SettingsActivity extends CollapsingToolbarBaseActivity
+@@ -162,6 +164,11 @@ public class SettingsActivity extends CollapsingToolbarBaseActivity
+     public void onSharedPreferenceChanged(SharedPreferences sharedPreferences, String key) {
          switch (key) {
              case KEY_DOCK_SEARCH:
-             case KEY_SMARTSPACE:
 +            case Utilities.DESKTOP_SHOW_QUICKSPACE:
 +            case Utilities.KEY_SHOW_ALT_QUICKSPACE:
 +            case Utilities.KEY_SHOW_QUICKSPACE_NOWPLAYING:
@@ -2606,7 +2613,7 @@ index 181df1a..889cb65 100644
                  LauncherAppState.getInstanceNoCreate().setNeedsRestart();
                  break;
              default:
-@@ -222,6 +229,9 @@ public class SettingsActivity extends CollapsingToolbarBaseActivity
+@@ -221,6 +228,9 @@ public class SettingsActivity extends CollapsingToolbarBaseActivity
          private PreferenceGroup mDeveloperOptionPrefGroup;
          private Preference mIconPackPref;
          private Preference mThemeAllAppsIconsPref;
@@ -2616,7 +2623,7 @@ index 181df1a..889cb65 100644
 
          @Override
          public void onCreatePreferences(Bundle savedInstanceState, String rootKey) {
-@@ -265,6 +275,13 @@ public class SettingsActivity extends CollapsingToolbarBaseActivity
+@@ -264,6 +274,13 @@ public class SettingsActivity extends CollapsingToolbarBaseActivity
                  }
              }
 

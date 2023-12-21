@@ -1,15 +1,15 @@
-From 7034633e5942e6127a835a9f083c920000876a44 Mon Sep 17 00:00:00 2001
+From 0022a3a2ec56bf165a097278c8248cc6fe133ab7 Mon Sep 17 00:00:00 2001
 From: BoNic <BoNio9527@gmaul.com>
-Date: Mon, 18 Dec 2023 11:08:08 +0800
-Subject: [PATCH] Add seekbar for Left/Right statusbar Paddings [2/2]
+Date: Thu, 21 Dec 2023 16:55:39 +0800
+Subject: [PATCH] Add-seekbar-for-Left-Right-statusbar-Paddings-2-2
 
 ---
  res/values/attrs.xml                          |   9 +
- res/values/strings.xml                        |  18 +-
- res/xml/customisation.xml                     |  27 ++
+ res/values/strings.xml                        |  12 +
+ res/xml/misc_derpspace.xml                    |  27 ++
  .../derpspace/fragments/StatusBar.java        |  68 ++++
- .../preferences/CustomSeekBarPreference.java  | 379 ++++++++++++++++++
- 5 files changed, 498 insertions(+), 3 deletions(-)
+ .../preferences/CustomSeekBarPreference.java  | 369 ++++++++++++++++++
+ 5 files changed, 485 insertions(+)
  create mode 100644 src/org/derpfest/derpspace/fragments/StatusBar.java
  create mode 100644 src/org/derpfest/derpspace/preferences/CustomSeekBarPreference.java
 
@@ -32,36 +32,9 @@ index c25dc32..d2f6de2 100644
 +
  </resources>
 diff --git a/res/values/strings.xml b/res/values/strings.xml
-index a9f86dd..374efff 100644
+index a9f86dd..5862066 100644
 --- a/res/values/strings.xml
 +++ b/res/values/strings.xml
-@@ -18,7 +18,7 @@
-  -->
- 
- <resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
--    
-+
-     <!-- General app strings -->
-     <string name="derpspace_title" translatable="false">DerpSpace</string>
-     <string name="add">Add</string>
-@@ -95,7 +95,7 @@
-     <string name="battery_title">Battery</string>
- 
-     <!-- Battery Settings -->
--    <string name="battery_settings_title">Battery Settings</string>   
-+    <string name="battery_settings_title">Battery Settings</string>
- 
-     <!-- App info dialog -->
-     <string name="derpspace_dialog_title">Help us help you!</string>
-@@ -336,7 +336,7 @@
- 
-     <!-- Statusbar Clock background chip -->
-     <string name="statusbar_clock_chip_title">Background chip</string>
--    <string name="statusbar_clock_chip_summary">Display accented chip behind clock</string> 
-+    <string name="statusbar_clock_chip_summary">Display accented chip behind clock</string>
- 
-     <!-- Statusbar colored icons -->
-     <string name="statusbar_colored_icons_title">Colored icons</string>
 @@ -469,4 +469,16 @@
      <!-- Ignore window secure -->
      <string name="ignore_window_secure_title">Ignore window secure flags</string>
@@ -79,11 +52,11 @@ index a9f86dd..374efff 100644
 +    <string name="statusbar_left_padding">Left padding</string>
 +    <string name="statusbar_right_padding">Right padding</string>
  </resources>
-diff --git a/res/xml/customisation.xml b/res/xml/customisation.xml
-index cb4c834..6330285 100644
---- a/res/xml/customisation.xml
-+++ b/res/xml/customisation.xml
-@@ -82,5 +82,32 @@
+diff --git a/res/xml/misc_derpspace.xml b/res/xml/misc_derpspace.xml
+index ea65f4a..457902a 100644
+--- a/res/xml/misc_derpspace.xml
++++ b/res/xml/misc_derpspace.xml
+@@ -75,4 +75,31 @@
  
      </PreferenceCategory>
  
@@ -115,10 +88,9 @@ index cb4c834..6330285 100644
 +    </PreferenceCategory>
 +
  </PreferenceScreen>
- 
 diff --git a/src/org/derpfest/derpspace/fragments/StatusBar.java b/src/org/derpfest/derpspace/fragments/StatusBar.java
 new file mode 100644
-index 0000000..306e095
+index 0000000..32d1944
 --- /dev/null
 +++ b/src/org/derpfest/derpspace/fragments/StatusBar.java
 @@ -0,0 +1,68 @@
@@ -165,7 +137,7 @@ index 0000000..306e095
 +    public void onCreate(Bundle savedInstanceState) {
 +        super.onCreate(savedInstanceState);
 +
-+        addPreferencesFromResource(R.xml.customisation);
++        addPreferencesFromResource(R.xml.misc_derpspace);
 +
 +        final PreferenceScreen prefScreen = getPreferenceScreen();
 +
@@ -190,13 +162,12 @@ index 0000000..306e095
 +        return true;
 +    }
 +}
-\ No newline at end of file
 diff --git a/src/org/derpfest/derpspace/preferences/CustomSeekBarPreference.java b/src/org/derpfest/derpspace/preferences/CustomSeekBarPreference.java
 new file mode 100644
-index 0000000..e2654ed
+index 0000000..cee5340
 --- /dev/null
 +++ b/src/org/derpfest/derpspace/preferences/CustomSeekBarPreference.java
-@@ -0,0 +1,379 @@
+@@ -0,0 +1,369 @@
 +/*
 + * Copyright (C) 2016-2023 crDroid Android Project
 + *
@@ -547,16 +518,6 @@ index 0000000..e2654ed
 +        if (mSeekBar != null) mSeekBar.setProgress(getSeekValue(mValue));
 +    }
 +
-+    public void setMax(int max) {
-+        mMaxValue = max;
-+        mSeekBar.setMax(mMaxValue - mMinValue);
-+    }
-+
-+    public void setMin(int min) {
-+        mMinValue = min;
-+        mSeekBar.setMax(mMaxValue - mMinValue);
-+    }
-+
 +    public void setValue(int newValue, boolean update) {
 +        newValue = getLimitedValue(newValue);
 +        if (mValue != newValue) {
@@ -576,7 +537,6 @@ index 0000000..e2654ed
 +        setValue(newValue, mSeekBar != null);
 +    }
 +}
-\ No newline at end of file
 -- 
 2.34.1
 

@@ -1,0 +1,960 @@
+From 64b5c457a80981fbb54bbe62e3d575382222c1dd Mon Sep 17 00:00:00 2001
+From: BoNic <BoNio9527@gmaul.com>
+Date: Wed, 20 Dec 2023 22:50:10 +0800
+Subject: [PATCH] remove-Smartspace
+
+---
+ Android.bp                                    |   4 +-
+ AndroidManifest-common.xml                    |   3 -
+ .../com/android/launcher3/DerpLauncher.java   |  61 -------
+ .../quickstep/util/WorkspaceUnlockAnim.java   | 136 ----------------
+ res/layout/qsb_preview.xml                    |  21 +--
+ res/layout/search_container_workspace.xml     |  19 ++-
+ res/values/derp_strings.xml                   |   4 -
+ res/xml/launcher_preferences.xml              |   6 -
+ src/com/android/launcher3/Launcher.java       |  10 +-
+ src/com/android/launcher3/Utilities.java      |  10 --
+ src/com/android/launcher3/Workspace.java      |   4 +-
+ .../graphics/LauncherPreviewRenderer.java     |   2 +-
+ .../model/AddWorkspaceItemsTask.java          |   3 +-
+ .../launcher3/model/BaseLauncherBinder.java   |   4 +-
+ .../android/launcher3/model/BgDataModel.java  |   5 +-
+ .../launcher3/model/DatabaseHelper.java       |   7 +-
+ .../model/GridSizeMigrationUtil.java          |   2 +-
+ .../android/launcher3/model/LoaderCursor.java |   2 +-
+ .../android/launcher3/model/LoaderTask.java   |   2 +-
+ .../model/WorkspaceItemSpaceFinder.java       |   3 +-
+ .../LauncherUnlockAnimationController.java    | 153 ------------------
+ .../launcher3/qsb/QsbContainerView.java       |   2 +-
+ .../qsb/SmartspaceViewContainer.java          |  88 ----------
+ .../launcher3/settings/SettingsActivity.java  |   6 ------
+ .../com/android/launcher3/BuildConfig.java    |   2 +-
+ 25 files changed, 45 insertions(+), 514 deletions(-)
+ delete mode 100644 quickstep/src/com/android/quickstep/util/WorkspaceUnlockAnim.java
+ delete mode 100644 src/com/android/launcher3/qsb/LauncherUnlockAnimationController.java
+ delete mode 100644 src/com/android/launcher3/qsb/SmartspaceViewContainer.java
+
+diff --git a/Android.bp b/Android.bp
+index 2228ddc..79b23ff 100644
+--- a/Android.bp
++++ b/Android.bp
+@@ -166,9 +166,7 @@ android_library {
+         "view_capture",
+         "animationlib",
+         "libGoogleFeed",
+-        "SettingsLib",
+-        "bcsmartspace-google",
+-        "SystemUIPluginLib"
++        "SettingsLib"
+     ],
+     manifest: "AndroidManifest-common.xml",
+     sdk_version: "current",
+diff --git a/AndroidManifest-common.xml b/AndroidManifest-common.xml
+index 89a950d..a8edf50 100644
+--- a/AndroidManifest-common.xml
++++ b/AndroidManifest-common.xml
+@@ -56,9 +56,6 @@
+     <uses-permission android:name="android.permission.DEVICE_POWER" />
+     <uses-permission android:name="android.permission.USE_BIOMETRIC" />
+ 
+-    <permission android:name="com.google.android.apps.nexuslauncher.permission.QSB" android:protectionLevel="signatureOrSystem"/>
+-    <uses-permission android:name="com.google.android.apps.nexuslauncher.permission.QSB"/>
+-
+     <!--
+     Permissions required for read/write access to the workspace data. These permission name
+     should not conflict with that defined in other apps, as such an app should embed its package
+diff --git a/quickstep/src/com/android/launcher3/DerpLauncher.java b/quickstep/src/com/android/launcher3/DerpLauncher.java
+index 25b0938..a5d6158 100644
+--- a/quickstep/src/com/android/launcher3/DerpLauncher.java
++++ b/quickstep/src/com/android/launcher3/DerpLauncher.java
+@@ -16,74 +16,13 @@
+ 
+ package com.android.launcher3;
+ 
+-import android.app.smartspace.SmartspaceTarget;
+-import android.os.Bundle;
+-
+-import com.android.launcher3.DerpLauncherModelDelegate.SmartspaceItem;
+-
+-import com.android.launcher3.model.BgDataModel;
+-import com.android.launcher3.qsb.LauncherUnlockAnimationController;
+ import com.android.launcher3.uioverrides.QuickstepLauncher;
+-import com.android.quickstep.SystemUiProxy;
+ import com.android.systemui.plugins.shared.LauncherOverlayManager;
+ 
+-import com.google.android.systemui.smartspace.BcSmartspaceDataProvider;
+-
+-import java.util.List;
+-import java.util.stream.Collectors;
+-
+ public class DerpLauncher extends QuickstepLauncher {
+ 
+-    private BcSmartspaceDataProvider mSmartspacePlugin = new BcSmartspaceDataProvider();
+-    private LauncherUnlockAnimationController mUnlockAnimationController =
+-            new LauncherUnlockAnimationController(this);
+-
+     @Override
+     protected LauncherOverlayManager getDefaultOverlay() {
+         return new OverlayCallbackImpl(this);
+     }
+-
+-    public BcSmartspaceDataProvider getSmartspacePlugin() {
+-        return mSmartspacePlugin;
+-    }
+-
+-    public LauncherUnlockAnimationController getLauncherUnlockAnimationController() {
+-        return mUnlockAnimationController;
+-    }
+-
+-    @Override
+-    public void onCreate(Bundle bundle) {
+-        super.onCreate(bundle);
+-        SystemUiProxy.INSTANCE.get(this).setLauncherUnlockAnimationController(mUnlockAnimationController);
+-    }
+-
+-    @Override
+-    public void onDestroy() {
+-        super.onDestroy();
+-        SystemUiProxy.INSTANCE.get(this).setLauncherUnlockAnimationController(null);
+-    }
+-
+-    @Override
+-    public void onOverlayVisibilityChanged(boolean visible) {
+-        super.onOverlayVisibilityChanged(visible);
+-        mUnlockAnimationController.updateSmartspaceState();
+-    }
+-
+-    @Override
+-    public void onPageEndTransition() {
+-        super.onPageEndTransition();
+-        mUnlockAnimationController.updateSmartspaceState();
+-    }
+-
+-    @Override
+-    public void bindExtraContainerItems(BgDataModel.FixedContainerItems container) {
+-        if (container.containerId == -110) {
+-            List<SmartspaceTarget> targets = container.items.stream()
+-                                                            .map(item -> ((SmartspaceItem) item).getSmartspaceTarget())
+-                                                            .collect(Collectors.toList());
+-            mSmartspacePlugin.onTargetsAvailable(targets);
+-        }
+-        super.bindExtraContainerItems(container);
+-    }
+-
+ }
+diff --git a/quickstep/src/com/android/quickstep/util/WorkspaceUnlockAnim.java b/quickstep/src/com/android/quickstep/util/WorkspaceUnlockAnim.java
+deleted file mode 100644
+index b6e73bf..0000000
+--- a/quickstep/src/com/android/quickstep/util/WorkspaceUnlockAnim.java
++++ /dev/null
+@@ -1,136 +0,0 @@
+-/*
+- * Copyright (C) 2021 The Android Open Source Project
+- *
+- * Licensed under the Apache License, Version 2.0 (the "License");
+- * you may not use this file except in compliance with the License.
+- * You may obtain a copy of the License at
+- *
+- *      http://www.apache.org/licenses/LICENSE-2.0
+- *
+- * Unless required by applicable law or agreed to in writing, software
+- * distributed under the License is distributed on an "AS IS" BASIS,
+- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+- * See the License for the specific language governing permissions and
+- * limitations under the License.
+- */
+-package com.android.quickstep.util;
+-
+-import android.graphics.Point;
+-import android.view.View;
+-
+-import com.android.launcher3.R;
+-import com.android.launcher3.CellLayout;
+-import com.android.launcher3.Hotseat;
+-import com.android.launcher3.Launcher;
+-import com.android.launcher3.ShortcutAndWidgetContainer;
+-import com.android.launcher3.Utilities;
+-import com.android.launcher3.Workspace;
+-
+-import java.util.ArrayList;
+-import java.util.List;
+-
+-/**
+- * Animation to animate in a workspace during the unlock transition.
+- */
+-// TODO(b/219444608): use SCALE_PROPERTY_FACTORY once the scale is reset to 1.0 after unlocking.
+-public class WorkspaceUnlockAnim {
+-    /** Scale for the workspace icons at the beginning of the animation. */
+-    private static final float START_SCALE = 0.85f;
+-
+-    /**
+-     * Starting translation Y values for the animation. We use a larger value if we're animating in
+-     * from a swipe, since there is more perceived upward movement when we unlock from a swipe.
+-     */
+-    private static final int START_TRANSLATION_DP = 20;
+-    private static final int START_TRANSLATION_SWIPE_DP = 60;
+-
+-    private Launcher mLauncher;
+-    private float mUnlockAmount = 0f;
+-
+-    public WorkspaceUnlockAnim(Launcher launcher) {
+-        mLauncher = launcher;
+-    }
+-
+-    /**
+-     * Called when we're about to make the Launcher window visible and play the unlock animation.
+-     *
+-     * This is a blocking call so that System UI knows it's safe to show the Launcher window without
+-     * causing the Launcher contents to flicker on screen. Do not do anything expensive here.
+-     */
+-    public void prepareForUnlock() {
+-        Workspace workspace = mLauncher.getWorkspace();
+-        final Point workspaceCenter = new Point(
+-                workspace.getLeft() + workspace.getWidth() / 2,
+-                workspace.getTop() + workspace.getHeight() / 2);
+-
+-        getCurrentPageCells().forEach(v -> {
+-            v.setAlpha(0f);
+-            setViewPivotTowardsPoint(v, workspaceCenter);
+-        });
+-        setViewPivotTowardsPoint(mLauncher.getHotseat(), workspaceCenter);
+-        mLauncher.getHotseat().setAlpha(0f);
+-
+-        mUnlockAmount = 0f;
+-    }
+-
+-    private List<View> getCurrentPageCells() {
+-        List<View> cells = new ArrayList<View>();
+-        Workspace workspace = mLauncher.getWorkspace();
+-        CellLayout currentPage = workspace.getScreenWithId(
+-                workspace.getScreenIdForPageIndex(workspace.getCurrentPage()));
+-        ShortcutAndWidgetContainer container = currentPage.getShortcutsAndWidgets();
+-        for (int i = 0; i < container.getChildCount(); i++) {
+-            View cell = container.getChildAt(i);
+-            if (cell.getId() == R.id.search_container_workspace) {
+-                // Smartspace is animated separately
+-                continue;
+-            }
+-            cells.add(cell);
+-        }
+-        return cells;
+-    }
+-
+-    private void setViewPivotTowardsPoint(View view, Point point) {
+-        float centerX = view.getX() + view.getWidth() / 2;
+-        float centerY = view.getY() + view.getHeight() / 2;
+-        float offsetX = point.x - centerX;
+-        float offsetY = point.y - centerY;
+-        float clipX = Math.min(view.getWidth() / 2, Math.abs(offsetX));
+-        float clipY = Math.min(view.getHeight() / 2, Math.abs(offsetY));
+-        view.setPivotX(view.getWidth() / 2 + (clipX * (offsetX > 0 ? 1 : -1)));
+-        view.setPivotY(view.getHeight() / 2 + (clipY * (offsetY > 0 ? 1 : -1)));
+-    }
+-
+-    public void setUnlockAmount(float amount, boolean fromSwipe) {
+-        mUnlockAmount = amount;
+-
+-        final float amountInverse = 1f - amount;
+-        final float scale = START_SCALE + (1f - START_SCALE) * amount;
+-
+-        final Hotseat hotseat = mLauncher.getHotseat();
+-
+-        List<View> cells = getCurrentPageCells();
+-
+-        if (fromSwipe) {
+-            cells.forEach(v -> v.setTranslationY(
+-                    Utilities.dpToPx(START_TRANSLATION_SWIPE_DP) * amountInverse));
+-            hotseat.setTranslationY(
+-                    Utilities.dpToPx(START_TRANSLATION_SWIPE_DP) * amountInverse);
+-        } else {
+-            cells.forEach(v -> v.setTranslationY(
+-                    Utilities.dpToPx(START_TRANSLATION_DP) * amountInverse));
+-            hotseat.setTranslationY(
+-                    Utilities.dpToPx(START_TRANSLATION_DP) * amountInverse);
+-        }
+-
+-        cells.forEach(v -> {
+-            v.setScaleX(scale);
+-            v.setScaleY(scale);
+-            v.setAlpha(amount);
+-        });
+-
+-        hotseat.setScaleX(scale);
+-        hotseat.setScaleY(scale);
+-        hotseat.setAlpha(amount);
+-    }
+-}
+diff --git a/res/layout/qsb_preview.xml b/res/layout/qsb_preview.xml
+index 2082277..3216792 100644
+--- a/res/layout/qsb_preview.xml
++++ b/res/layout/qsb_preview.xml
+@@ -14,16 +14,17 @@
+      See the License for the specific language governing permissions and
+      limitations under the License.
+ -->
+-<com.google.android.systemui.smartspace.BcSmartspaceCard
++<com.android.launcher3.qsb.QsbContainerView
+     xmlns:android="http://schemas.android.com/apk/res/android"
+-    android:paddingTop="@dimen/enhanced_smartspace_padding_top"
++    android:orientation="vertical"
+     android:layout_width="match_parent"
+-    android:layout_height="match_parent"
+-    android:baselineAligned="false">
+-    <com.google.android.systemui.smartspace.IcuDateTextView
+-        android:id="@+id/clock"
++    android:layout_height="0dp"
++    android:id="@id/search_container_workspace"
++    android:padding="0dp" >
++
++    <fragment
++        android:name="com.android.launcher3.qsb.QsbContainerView$QsbFragment"
+         android:layout_width="match_parent"
+-        android:layout_height="wrap_content"
+-        android:maxLines="2"
+-        style="@style/EnhancedSmartspaceTextTitle"/>
+-</com.google.android.systemui.smartspace.BcSmartspaceCard>
++        android:tag="qsb_view"
++        android:layout_height="match_parent"/>
++</com.android.launcher3.qsb.QsbContainerView>
+diff --git a/res/layout/search_container_workspace.xml b/res/layout/search_container_workspace.xml
+index af9cf91..d81c75c 100644
+--- a/res/layout/search_container_workspace.xml
++++ b/res/layout/search_container_workspace.xml
+@@ -14,8 +14,17 @@
+      See the License for the specific language governing permissions and
+      limitations under the License.
+ -->
+-<com.android.launcher3.qsb.SmartspaceViewContainer
+-    xmlns:android="http://schemas.android.com/apk/res/android"
+-    android:id="@+id/search_container_workspace"
+-    android:layout_width="match_parent"
+-    android:layout_height="0dp"/>
++<com.android.launcher3.qsb.QsbContainerView
++        xmlns:android="http://schemas.android.com/apk/res/android"
++        android:orientation="vertical"
++        android:layout_width="match_parent"
++        android:layout_height="0dp"
++        android:id="@id/search_container_workspace"
++        android:padding="0dp" >
++
++    <fragment
++        android:name="com.android.launcher3.qsb.QsbContainerView$QsbFragment"
++        android:layout_width="match_parent"
++        android:tag="qsb_view"
++        android:layout_height="match_parent"/>
++</com.android.launcher3.qsb.QsbContainerView>
+diff --git a/res/values/derp_strings.xml b/res/values/derp_strings.xml
+index 284c3cf..6131e28 100644
+--- a/res/values/derp_strings.xml
++++ b/res/values/derp_strings.xml
+@@ -59,10 +59,6 @@
+     <string name="recents_clear_all_title">Clear all</string>
+     <string name="recents_lens_title">Lens</string>
+ 
+-    <!-- Smartspace -->
+-    <string name="smartspace_pref_title">At a Glance</string>
+-    <string name="smartspace_pref_summary">Show smartspace at the top of home screen</string>
+-
+     <!-- AppInfo -->
+     <string name="app_info_version_value" translatable="false">%1$s (%2$d)</string>
+     <string name="app_info_icon_pack">Icon pack</string>
+diff --git a/res/xml/launcher_preferences.xml b/res/xml/launcher_preferences.xml
+index e5e9453..8783731 100644
+--- a/res/xml/launcher_preferences.xml
++++ b/res/xml/launcher_preferences.xml
+@@ -60,12 +60,6 @@
+             android:summary="@string/pref_show_google_now_summary"
+             android:title="@string/title_show_google_feed"/>
+ 
+-        <SwitchPreference
+-            android:key="pref_smartspace"
+-            android:title="@string/smartspace_pref_title"
+-            android:summary="@string/smartspace_pref_summary"
+-            android:defaultValue="true" />
+-
+         <SwitchPreference
+             android:key="pref_dock_search"
+             android:title="@string/dock_search_title"
+diff --git a/src/com/android/launcher3/Launcher.java b/src/com/android/launcher3/Launcher.java
+index 35294e4..9d421e4 100644
+--- a/src/com/android/launcher3/Launcher.java
++++ b/src/com/android/launcher3/Launcher.java
+@@ -428,8 +428,6 @@ public class Launcher extends StatefulActivity<LauncherState>
+     private final CannedAnimationCoordinator mAnimationCoordinator =
+             new CannedAnimationCoordinator(this);
+ 
+-    private boolean mSmartspaceEnabled;
+-
+     @Override
+     @TargetApi(Build.VERSION_CODES.S)
+     protected void onCreate(Bundle savedInstanceState) {
+@@ -531,8 +529,6 @@ public class Launcher extends StatefulActivity<LauncherState>
+         mAppWidgetHolder = createAppWidgetHolder();
+         mAppWidgetHolder.startListening();
+ 
+-        mSmartspaceEnabled = Utilities.showSmartspace(this);
+-
+         mPopupDataProvider = new PopupDataProvider(this::updateNotificationDots);
+ 
+         boolean internalStateHandled = ACTIVITY_TRACKER.handleCreate(this);
+@@ -2355,11 +2351,11 @@ public class Launcher extends StatefulActivity<LauncherState>
+     public void bindScreens(IntArray orderedScreenIds) {
+         mWorkspace.mPageIndicator.setAreScreensBinding(true);
+         int firstScreenPosition = 0;
+-        if (mSmartspaceEnabled &&
++        if (FeatureFlags.QSB_ON_FIRST_SCREEN &&
+                 orderedScreenIds.indexOf(Workspace.FIRST_SCREEN_ID) != firstScreenPosition) {
+             orderedScreenIds.removeValue(Workspace.FIRST_SCREEN_ID);
+             orderedScreenIds.add(firstScreenPosition, Workspace.FIRST_SCREEN_ID);
+-        } else if (!mSmartspaceEnabled && orderedScreenIds.isEmpty()) {
++        } else if (!FeatureFlags.QSB_ON_FIRST_SCREEN && orderedScreenIds.isEmpty()) {
+             // If there are no screens, we need to have an empty screen
+             mWorkspace.addExtraEmptyScreens();
+         }
+@@ -2407,7 +2403,7 @@ public class Launcher extends StatefulActivity<LauncherState>
+         int count = orderedScreenIds.size();
+         for (int i = 0; i < count; i++) {
+             int screenId = orderedScreenIds.get(i);
+-            if (mSmartspaceEnabled && screenId == Workspace.FIRST_SCREEN_ID) {
++            if (FeatureFlags.QSB_ON_FIRST_SCREEN && screenId == Workspace.FIRST_SCREEN_ID) {
+                 // No need to bind the first screen, as its always bound.
+                 continue;
+             }
+diff --git a/src/com/android/launcher3/Utilities.java b/src/com/android/launcher3/Utilities.java
+index dd03aab..329b1f0 100644
+--- a/src/com/android/launcher3/Utilities.java
++++ b/src/com/android/launcher3/Utilities.java
+@@ -172,7 +172,6 @@ public final class Utilities {
+     public static final String LENS_SHARE_ACTIVITY = "com.google.android.apps.search.lens.LensShareEntryPointActivity";
+ 
+     public static final String KEY_DOCK_SEARCH = "pref_dock_search";
+-    public static final String KEY_SMARTSPACE = "pref_smartspace";
+     public static final String KEY_ICON_PACK = "pref_icon_pack";
+     public static final String KEY_RECENTS_OPACITY = "pref_recents_opacity";
+     public static final String KEY_APP_DRAWER_OPACITY = "pref_app_drawer_opacity";
+@@ -888,15 +887,6 @@ public final class Utilities {
+         return prefs.getBoolean(KEY_DOCK_SEARCH, true);
+     }
+ 
+-    public static boolean showSmartspace(Context context) {
+-        return isGSAEnabled(context) && isASIEnabled(context) && isSmartspaceEnabled(context);
+-    }
+-
+-    private static boolean isSmartspaceEnabled(Context context) {
+-        SharedPreferences prefs = LauncherPrefs.getPrefs(context.getApplicationContext());
+-        return prefs.getBoolean(KEY_SMARTSPACE, true);
+-    }
+-
+     public static int getRecentsOpacity(Context context) {
+         SharedPreferences prefs = LauncherPrefs.getPrefs(context.getApplicationContext());
+         return prefs.getInt(KEY_RECENTS_OPACITY, 100);
+diff --git a/src/com/android/launcher3/Workspace.java b/src/com/android/launcher3/Workspace.java
+index f3b030a..391aef7 100644
+--- a/src/com/android/launcher3/Workspace.java
++++ b/src/com/android/launcher3/Workspace.java
+@@ -594,7 +594,7 @@ public class Workspace<T extends View & PageIndicator> extends PagedView<T>
+      * Initializes and binds the first page
+      */
+     public void bindAndInitFirstWorkspaceScreen() {
+-        if (!Utilities.showSmartspace(getContext())) {
++        if (!FeatureFlags.QSB_ON_FIRST_SCREEN) {
+             return;
+         }
+ 
+@@ -1012,7 +1012,7 @@ public class Workspace<T extends View & PageIndicator> extends PagedView<T>
+             int id = mWorkspaceScreens.keyAt(i);
+             CellLayout cl = mWorkspaceScreens.valueAt(i);
+             // FIRST_SCREEN_ID can never be removed.
+-            if ((!Utilities.showSmartspace(getContext()) || id > FIRST_SCREEN_ID)
++            if ((!FeatureFlags.QSB_ON_FIRST_SCREEN || id > FIRST_SCREEN_ID)
+                     && cl.getShortcutsAndWidgets().getChildCount() == 0) {
+                 removeScreens.add(id);
+             }
+diff --git a/src/com/android/launcher3/graphics/LauncherPreviewRenderer.java b/src/com/android/launcher3/graphics/LauncherPreviewRenderer.java
+index 8427f6d..ae44f0a 100644
+--- a/src/com/android/launcher3/graphics/LauncherPreviewRenderer.java
++++ b/src/com/android/launcher3/graphics/LauncherPreviewRenderer.java
+@@ -526,7 +526,7 @@ public class LauncherPreviewRenderer extends ContextWrapper
+         }
+ 
+         // Add first page QSB
+-        if (Utilities.showSmartspace(mContext)) {
++        if (FeatureFlags.QSB_ON_FIRST_SCREEN) {
+             CellLayout firstScreen = mWorkspaceScreens.get(FIRST_SCREEN_ID);
+             View qsb = mHomeElementInflater.inflate(R.layout.qsb_preview, firstScreen, false);
+             CellLayoutLayoutParams lp = new CellLayoutLayoutParams(
+diff --git a/src/com/android/launcher3/model/AddWorkspaceItemsTask.java b/src/com/android/launcher3/model/AddWorkspaceItemsTask.java
+index 8c937b1..5e86bd6 100644
+--- a/src/com/android/launcher3/model/AddWorkspaceItemsTask.java
++++ b/src/com/android/launcher3/model/AddWorkspaceItemsTask.java
+@@ -28,7 +28,6 @@ import androidx.annotation.Nullable;
+ import com.android.launcher3.LauncherAppState;
+ import com.android.launcher3.LauncherModel.CallbackTask;
+ import com.android.launcher3.LauncherSettings;
+-import com.android.launcher3.Utilities;
+ import com.android.launcher3.logging.FileLog;
+ import com.android.launcher3.model.BgDataModel.Callbacks;
+ import com.android.launcher3.model.data.AppInfo;
+@@ -87,7 +86,7 @@ public class AddWorkspaceItemsTask extends BaseModelUpdateTask {
+         final IntArray addedWorkspaceScreensFinal = new IntArray();
+ 
+         synchronized (dataModel) {
+-            IntArray workspaceScreens = dataModel.collectWorkspaceScreens(app.getContext());
++            IntArray workspaceScreens = dataModel.collectWorkspaceScreens();
+ 
+             List<ItemInfo> filteredItems = new ArrayList<>();
+             for (Pair<ItemInfo, Object> entry : mItemList) {
+diff --git a/src/com/android/launcher3/model/BaseLauncherBinder.java b/src/com/android/launcher3/model/BaseLauncherBinder.java
+index 0cc5398..dbb29b8 100644
+--- a/src/com/android/launcher3/model/BaseLauncherBinder.java
++++ b/src/com/android/launcher3/model/BaseLauncherBinder.java
+@@ -88,7 +88,7 @@ public abstract class BaseLauncherBinder {
+         try {
+             if (FeatureFlags.ENABLE_WORKSPACE_LOADING_OPTIMIZATION.get()) {
+                 DisjointWorkspaceBinder workspaceBinder =
+-                    initWorkspaceBinder(incrementBindId, mBgDataModel.collectWorkspaceScreens(mApp.getContext()));
++                    initWorkspaceBinder(incrementBindId, mBgDataModel.collectWorkspaceScreens());
+                 workspaceBinder.bindCurrentWorkspacePages(isBindSync);
+                 workspaceBinder.bindOtherWorkspacePages();
+             } else {
+@@ -129,7 +129,7 @@ public abstract class BaseLauncherBinder {
+         synchronized (mBgDataModel) {
+             workspaceItems.addAll(mBgDataModel.workspaceItems);
+             appWidgets.addAll(mBgDataModel.appWidgets);
+-            orderedScreenIds.addAll(mBgDataModel.collectWorkspaceScreens(mApp.getContext()));
++            orderedScreenIds.addAll(mBgDataModel.collectWorkspaceScreens());
+             mBgDataModel.extraItems.forEach(extraItems::add);
+             if (incrementBindId) {
+                 mBgDataModel.lastBindId++;
+diff --git a/src/com/android/launcher3/model/BgDataModel.java b/src/com/android/launcher3/model/BgDataModel.java
+index 46d043f..7bcd038 100644
+--- a/src/com/android/launcher3/model/BgDataModel.java
++++ b/src/com/android/launcher3/model/BgDataModel.java
+@@ -36,7 +36,6 @@ import androidx.annotation.Nullable;
+ 
+ import com.android.launcher3.LauncherSettings;
+ import com.android.launcher3.LauncherSettings.Favorites;
+-import com.android.launcher3.Utilities;
+ import com.android.launcher3.Workspace;
+ import com.android.launcher3.config.FeatureFlags;
+ import com.android.launcher3.model.data.AppInfo;
+@@ -146,14 +145,14 @@ public class BgDataModel {
+     /**
+      * Creates an array of valid workspace screens based on current items in the model.
+      */
+-    public synchronized IntArray collectWorkspaceScreens(Context context) {
++    public synchronized IntArray collectWorkspaceScreens() {
+         IntSet screenSet = new IntSet();
+         for (ItemInfo item: itemsIdMap) {
+             if (item.container == LauncherSettings.Favorites.CONTAINER_DESKTOP) {
+                 screenSet.add(item.screenId);
+             }
+         }
+-        if (Utilities.showSmartspace(context) || screenSet.isEmpty()) {
++        if (FeatureFlags.QSB_ON_FIRST_SCREEN || screenSet.isEmpty()) {
+             screenSet.add(Workspace.FIRST_SCREEN_ID);
+         }
+         return screenSet.getArray();
+diff --git a/src/com/android/launcher3/model/DatabaseHelper.java b/src/com/android/launcher3/model/DatabaseHelper.java
+index 8aef47c..ecf5f67 100644
+--- a/src/com/android/launcher3/model/DatabaseHelper.java
++++ b/src/com/android/launcher3/model/DatabaseHelper.java
+@@ -39,6 +39,7 @@ import com.android.launcher3.AutoInstallsLayout.LayoutParserCallback;
+ import com.android.launcher3.LauncherSettings;
+ import com.android.launcher3.LauncherSettings.Favorites;
+ import com.android.launcher3.Utilities;
++import com.android.launcher3.config.FeatureFlags;
+ import com.android.launcher3.logging.FileLog;
+ import com.android.launcher3.pm.UserCache;
+ import com.android.launcher3.provider.LauncherDbUtils;
+@@ -256,7 +257,7 @@ public class DatabaseHelper extends NoLocaleSQLiteHelper implements
+                         Favorites.SCREEN, IntArray.wrap(-777, -778)), null);
+             }
+             case 30: {
+-                if (isQsbOnFirstScreen()) {
++                if (FeatureFlags.QSB_ON_FIRST_SCREEN) {
+                     // Clean up first row in screen 0 as it might contain junk data.
+                     Log.d(TAG, "Cleaning up first row");
+                     db.delete(Favorites.TABLE_NAME,
+@@ -529,8 +530,4 @@ public class DatabaseHelper extends NoLocaleSQLiteHelper implements
+         }
+         return max;
+     }
+-
+-    public boolean isQsbOnFirstScreen() {
+-        return Utilities.showSmartspace(mContext);
+-    }
+ }
+diff --git a/src/com/android/launcher3/model/GridSizeMigrationUtil.java b/src/com/android/launcher3/model/GridSizeMigrationUtil.java
+index c4b4d38..c233872 100644
+--- a/src/com/android/launcher3/model/GridSizeMigrationUtil.java
++++ b/src/com/android/launcher3/model/GridSizeMigrationUtil.java
+@@ -327,7 +327,7 @@ public class GridSizeMigrationUtil {
+             @NonNull final List<DbEntry> sortedItemsToPlace, final boolean matchingScreenIdOnly) {
+         final GridOccupancy occupied = new GridOccupancy(trgX, trgY);
+         final Point trg = new Point(trgX, trgY);
+-        final Point next = new Point(0, screenId == 0 && helper.isQsbOnFirstScreen()
++        final Point next = new Point(0, screenId == 0 && FeatureFlags.QSB_ON_FIRST_SCREEN
+                 ? 1 /* smartspace */ : 0);
+         List<DbEntry> existedEntries = destReader.mWorkspaceEntriesByScreenId.get(screenId);
+         if (existedEntries != null) {
+diff --git a/src/com/android/launcher3/model/LoaderCursor.java b/src/com/android/launcher3/model/LoaderCursor.java
+index 718f4f1..33332f0 100644
+--- a/src/com/android/launcher3/model/LoaderCursor.java
++++ b/src/com/android/launcher3/model/LoaderCursor.java
+@@ -528,7 +528,7 @@ public class LoaderCursor extends CursorWrapper {
+ 
+         if (!mOccupied.containsKey(item.screenId)) {
+             GridOccupancy screen = new GridOccupancy(countX + 1, countY + 1);
+-            if (item.screenId == Workspace.FIRST_SCREEN_ID && Utilities.showSmartspace(mContext)) {
++            if (item.screenId == Workspace.FIRST_SCREEN_ID && FeatureFlags.QSB_ON_FIRST_SCREEN) {
+                 // Mark the first X columns (X is width of the search container) in the first row as
+                 // occupied (if the feature is enabled) in order to account for the search
+                 // container.
+diff --git a/src/com/android/launcher3/model/LoaderTask.java b/src/com/android/launcher3/model/LoaderTask.java
+index d6f5d37..0e68db2 100644
+--- a/src/com/android/launcher3/model/LoaderTask.java
++++ b/src/com/android/launcher3/model/LoaderTask.java
+@@ -182,7 +182,7 @@ public class LoaderTask implements Runnable {
+         ArrayList<ItemInfo> allItems = mBgDataModel.getAllWorkspaceItems();
+ 
+         // Screen set is never empty
+-        IntArray allScreens = mBgDataModel.collectWorkspaceScreens(mApp.getContext());
++        IntArray allScreens = mBgDataModel.collectWorkspaceScreens();
+         final int firstScreen = allScreens.get(0);
+         IntSet firstScreens = IntSet.wrap(firstScreen);
+ 
+diff --git a/src/com/android/launcher3/model/WorkspaceItemSpaceFinder.java b/src/com/android/launcher3/model/WorkspaceItemSpaceFinder.java
+index 829e2fd..1fc8a03 100644
+--- a/src/com/android/launcher3/model/WorkspaceItemSpaceFinder.java
++++ b/src/com/android/launcher3/model/WorkspaceItemSpaceFinder.java
+@@ -22,7 +22,6 @@ import android.util.LongSparseArray;
+ import com.android.launcher3.InvariantDeviceProfile;
+ import com.android.launcher3.LauncherAppState;
+ import com.android.launcher3.LauncherSettings;
+-import com.android.launcher3.Utilities;
+ import com.android.launcher3.config.FeatureFlags;
+ import com.android.launcher3.model.data.ItemInfo;
+ import com.android.launcher3.util.GridOccupancy;
+@@ -67,7 +66,7 @@ public class WorkspaceItemSpaceFinder {
+         int screenCount = workspaceScreens.size();
+         // First check the preferred screen.
+         IntSet screensToExclude = new IntSet();
+-        if (Utilities.showSmartspace(app.getContext())) {
++        if (FeatureFlags.QSB_ON_FIRST_SCREEN) {
+             screensToExclude.add(FIRST_SCREEN_ID);
+         }
+ 
+diff --git a/src/com/android/launcher3/qsb/LauncherUnlockAnimationController.java b/src/com/android/launcher3/qsb/LauncherUnlockAnimationController.java
+deleted file mode 100644
+index 78db7d1..0000000
+--- a/src/com/android/launcher3/qsb/LauncherUnlockAnimationController.java
++++ /dev/null
+@@ -1,153 +0,0 @@
+-package com.android.launcher3.qsb;
+-
+-import static com.android.launcher3.util.Executors.MAIN_EXECUTOR;
+-
+-import android.animation.AnimatorSet;
+-import android.animation.ValueAnimator;
+-import android.graphics.Rect;
+-import com.android.app.animation.Interpolators;
+-import com.android.launcher3.CellLayout;
+-import com.android.launcher3.Launcher;
+-import com.android.launcher3.Workspace;
+-import com.android.quickstep.SystemUiProxy;
+-import com.android.quickstep.util.WorkspaceUnlockAnim;
+-import com.android.systemui.shared.system.smartspace.ILauncherUnlockAnimationController;
+-import com.android.systemui.shared.system.smartspace.SmartspaceState;
+-import com.google.android.systemui.smartspace.BcSmartspaceView;
+-
+-public final class LauncherUnlockAnimationController extends ILauncherUnlockAnimationController.Stub {
+-
+-    private final Launcher mLauncher;
+-    private BcSmartspaceView mSmartspaceView;
+-    private final SmartspaceState mSmartspaceState = new SmartspaceState();
+-    private final Rect mLauncherSmartspaceBounds = new Rect();
+-    private final Rect mLockscreenSmartspaceBounds = new Rect();
+-
+-    private AnimatorSet mUnlockAnimatorSet;
+-    private final ValueAnimator mSmartspaceAnimator;
+-    private final ValueAnimator mWorkspaceAnimator;
+-    private final WorkspaceUnlockAnim mWorkspaceUnlockAnim;
+-    private boolean mShouldAnimateSmartspace;
+-
+-    public LauncherUnlockAnimationController(Launcher launcher) {
+-        mLauncher = launcher;
+-
+-        mSmartspaceAnimator = ValueAnimator.ofFloat(0.0f, 1.0f);
+-        mSmartspaceAnimator.setInterpolator(Interpolators.EMPHASIZED);
+-        mSmartspaceAnimator.addUpdateListener(animation -> setSmartspaceProgressToLauncherPosition(
+-                (Float) animation.getAnimatedValue()));
+-
+-        mWorkspaceUnlockAnim = new WorkspaceUnlockAnim(launcher);
+-        mWorkspaceAnimator = ValueAnimator.ofFloat(0.0f, 1.0f);
+-        mWorkspaceAnimator.setInterpolator(Interpolators.EMPHASIZED_DECELERATE);
+-        mWorkspaceAnimator.addUpdateListener(animation -> mWorkspaceUnlockAnim.setUnlockAmount(
+-                (Float) animation.getAnimatedValue(), false));
+-    }
+-
+-    public void setSmartspaceView(BcSmartspaceView view) {
+-        mSmartspaceView = view;
+-        updateSmartspaceState();
+-    }
+-
+-    private void setSmartspaceProgressToLauncherPosition(float f) {
+-        if (mSmartspaceView != null) {
+-            mSmartspaceView.setTranslationX(
+-                (mLockscreenSmartspaceBounds.left - mLauncherSmartspaceBounds.left) * (1.0f - f));
+-            mSmartspaceView.setTranslationY(
+-                (mLockscreenSmartspaceBounds.top - mLauncherSmartspaceBounds.top) * (1.0f - f));
+-        }
+-    }
+-
+-    @Override
+-    public void prepareForUnlock(boolean animateSmartspace, Rect lockscreenSmartspaceBounds,
+-            int selectedPage) {
+-        mShouldAnimateSmartspace = animateSmartspace;
+-        mLockscreenSmartspaceBounds.set(lockscreenSmartspaceBounds);
+-
+-        mWorkspaceUnlockAnim.prepareForUnlock();
+-
+-        if (mSmartspaceView == null) {
+-            return;
+-        }
+-        mSmartspaceView.getBoundsOnScreen(mLauncherSmartspaceBounds);
+-        mLauncherSmartspaceBounds.offset(0, mSmartspaceView.getCurrentCardTopPadding());
+-        setSmartspaceProgressToLauncherPosition(animateSmartspace ? 0f : 1f);
+-        setSmartspaceSelectedPage(selectedPage);
+-
+-        Workspace<?> workspace = mLauncher.getWorkspace();
+-        CellLayout currentPage = workspace.getScreenWithId(
+-                workspace.getScreenIdForPageIndex(workspace.getCurrentPage()));
+-        currentPage.getShortcutsAndWidgets().setClipChildren(!animateSmartspace);
+-    }
+-
+-    @Override
+-    public void setUnlockAmount(float amount, boolean forceIfAnimating) {
+-        if (mUnlockAnimatorSet == null || !mUnlockAnimatorSet.isStarted() || forceIfAnimating) {
+-            mWorkspaceUnlockAnim.setUnlockAmount(amount, false);
+-            setSmartspaceProgressToLauncherPosition(amount);
+-        }
+-    }
+-
+-    @Override
+-    public void playUnlockAnimation(boolean unlocked, long duration, long startDelay) {
+-        MAIN_EXECUTOR.post(() -> {
+-            if (mUnlockAnimatorSet != null && mUnlockAnimatorSet.isStarted()) {
+-                mUnlockAnimatorSet.cancel();
+-            }
+-
+-            mWorkspaceAnimator.setStartDelay(startDelay);
+-            mWorkspaceAnimator.setDuration(duration);
+-
+-            mUnlockAnimatorSet = new AnimatorSet();
+-            AnimatorSet.Builder builder = mUnlockAnimatorSet.play(mWorkspaceAnimator);
+-
+-            if (mSmartspaceView != null && mShouldAnimateSmartspace) {
+-                mSmartspaceAnimator.setDuration(startDelay + duration);
+-                builder.with(mSmartspaceAnimator);
+-            }
+-
+-            mUnlockAnimatorSet.start();
+-        });
+-    }
+-
+-    @Override
+-    public void setSmartspaceSelectedPage(int selectedPage) {
+-        if (mSmartspaceView != null) {
+-            mSmartspaceView.post(() -> mSmartspaceView.setSelectedPage(selectedPage));
+-        }
+-    }
+-
+-    @Override
+-    public void setSmartspaceVisibility(int visibility) {
+-        if (mSmartspaceView != null) {
+-            mSmartspaceView.post(() -> mSmartspaceView.setVisibility(visibility));
+-        }
+-    }
+-
+-    @Override
+-    public void dispatchSmartspaceStateToSysui() {
+-        if (mSmartspaceView != null) {
+-            SystemUiProxy.INSTANCE.get(mLauncher).notifySysuiSmartspaceStateUpdated(mSmartspaceState);
+-        }
+-    }
+-
+-    public final void updateSmartspaceState() {
+-        if (mSmartspaceView == null) {
+-            return;
+-        }
+-        Rect bounds = new Rect();
+-        mSmartspaceView.getBoundsOnScreen(bounds);
+-        boolean visible = !mLauncher.getWorkspace().isOverlayShown()
+-                && mLauncher.getWorkspace().getDestinationPage() == 0
+-                && !bounds.isEmpty();
+-        int selectedPage = mSmartspaceView.getSelectedPage();
+-        if (mSmartspaceState.getVisibleOnScreen() != visible
+-                || mSmartspaceState.getSelectedPage() != selectedPage
+-                || !mSmartspaceState.getBoundsOnScreen().equals(bounds)) {
+-            mSmartspaceState.setBoundsOnScreen(bounds);
+-            mSmartspaceState.setSelectedPage(selectedPage);
+-            mSmartspaceState.setVisibleOnScreen(visible);
+-            dispatchSmartspaceStateToSysui();
+-        }
+-    }
+-}
+diff --git a/src/com/android/launcher3/qsb/QsbContainerView.java b/src/com/android/launcher3/qsb/QsbContainerView.java
+index 26df25b..fac7eda 100644
+--- a/src/com/android/launcher3/qsb/QsbContainerView.java
++++ b/src/com/android/launcher3/qsb/QsbContainerView.java
+@@ -289,7 +289,7 @@ public class QsbContainerView extends FrameLayout {
+         }
+ 
+         public boolean isQsbEnabled() {
+-            return Utilities.showSmartspace(getContext());
++            return FeatureFlags.QSB_ON_FIRST_SCREEN;
+         }
+ 
+         protected Bundle createBindOptions() {
+diff --git a/src/com/android/launcher3/qsb/SmartspaceViewContainer.java b/src/com/android/launcher3/qsb/SmartspaceViewContainer.java
+deleted file mode 100644
+index a8275e6..0000000
+--- a/src/com/android/launcher3/qsb/SmartspaceViewContainer.java
++++ /dev/null
+@@ -1,88 +0,0 @@
+-package com.android.launcher3.qsb;
+-
+-import android.app.smartspace.SmartspaceAction;
+-import android.app.smartspace.SmartspaceTarget;
+-import android.app.smartspace.SmartspaceTargetEvent;
+-import android.content.ComponentName;
+-import android.content.Context;
+-import android.content.Intent;
+-import android.util.AttributeSet;
+-import android.view.Gravity;
+-import android.view.View;
+-import android.widget.FrameLayout;
+-
+-import com.android.launcher3.DerpLauncher;
+-import com.android.launcher3.DerpLauncherModelDelegate;
+-
+-import com.android.launcher3.celllayout.CellLayoutLayoutParams;;
+-import com.android.launcher3.DeviceProfile;
+-import com.android.launcher3.Launcher;
+-import com.android.launcher3.R;
+-import com.android.launcher3.Utilities;
+-import com.android.launcher3.icons.GraphicsUtils;
+-import com.android.launcher3.uioverrides.plugins.PluginManagerWrapper;
+-import com.android.launcher3.views.ActivityContext;
+-import com.android.quickstep.SystemUiProxy;
+-
+-import com.android.systemui.plugins.BcSmartspaceDataPlugin;
+-import com.android.systemui.plugins.PluginListener;
+-
+-import com.google.android.systemui.smartspace.BcSmartspaceDataProvider;
+-import com.google.android.systemui.smartspace.BcSmartspaceView;
+-
+-import java.util.ArrayList;
+-import java.util.List;
+-
+-public class SmartspaceViewContainer extends FrameLayout implements PluginListener<BcSmartspaceDataPlugin> {
+-
+-    public BcSmartspaceView mView;
+-
+-    public SmartspaceViewContainer(Context context, AttributeSet attributeSet) {
+-        super(context, attributeSet);
+-
+-        mView = (BcSmartspaceView) inflate(context, R.layout.smartspace_enhanced, null);
+-        mView.setPrimaryTextColor(GraphicsUtils.getAttrColor(context, R.attr.workspaceTextColor));
+-        LayoutParams layoutParams = new LayoutParams(LayoutParams.MATCH_PARENT, LayoutParams.WRAP_CONTENT);
+-        layoutParams.gravity = Gravity.CENTER_VERTICAL;
+-        layoutParams.setMarginStart(getResources().getDimensionPixelSize(R.dimen.enhanced_smartspace_margin_start_launcher));
+-        addView(mView, layoutParams);
+-
+-        DerpLauncher launcher = (DerpLauncher) ActivityContext.lookupContext(context);
+-        launcher.getLauncherUnlockAnimationController().setSmartspaceView(mView);
+-
+-        DerpLauncherModelDelegate delegate = (DerpLauncherModelDelegate) launcher.getModel().getModelDelegate();
+-        BcSmartspaceDataProvider plugin = launcher.getSmartspacePlugin();
+-        plugin.registerSmartspaceEventNotifier(event -> delegate.notifySmartspaceEvent(event));
+-        mView.registerDataProvider(plugin);
+-    }
+-
+-    @Override
+-    public void onPluginConnected(BcSmartspaceDataPlugin plugin, Context context) {
+-        mView.registerDataProvider(plugin);
+-    }
+-
+-    @Override
+-    public void onPluginDisconnected(BcSmartspaceDataPlugin plugin) {
+-        DerpLauncher launcher = (DerpLauncher) ActivityContext.lookupContext(getContext());
+-        mView.registerDataProvider(launcher.getSmartspacePlugin());
+-    }
+-
+-    @Override
+-    public void onAttachedToWindow() {
+-        super.onAttachedToWindow();
+-        PluginManagerWrapper.INSTANCE.get(getContext()).addPluginListener(this, BcSmartspaceDataPlugin.class);
+-    }
+-
+-    @Override
+-    public void onDetachedFromWindow() {
+-        super.onDetachedFromWindow();
+-        PluginManagerWrapper.INSTANCE.get(getContext()).removePluginListener(this);
+-    }
+-
+-    @Override
+-    public void setPadding(int left, int top, int right, int bottom) {
+-        CellLayoutLayoutParams lp = (CellLayoutLayoutParams) getLayoutParams();
+-        lp.setMargins(left, top, right, bottom);
+-        setLayoutParams(lp);
+-    }
+-}
+diff --git a/src/com/android/launcher3/settings/SettingsActivity.java b/src/com/android/launcher3/settings/SettingsActivity.java
+index 181df1a..1be2720 100644
+--- a/src/com/android/launcher3/settings/SettingsActivity.java
++++ b/src/com/android/launcher3/settings/SettingsActivity.java
+@@ -21,7 +21,6 @@ import static androidx.core.view.accessibility.AccessibilityNodeInfoCompat.ACTIO
+ import static com.android.launcher3.config.FeatureFlags.IS_STUDIO_BUILD;
+ 
+ import static com.android.launcher3.Utilities.KEY_DOCK_SEARCH;
+-import static com.android.launcher3.Utilities.KEY_SMARTSPACE;
+ import static com.android.launcher3.states.RotationHelper.ALLOW_ROTATION_PREFERENCE_KEY;
+ import static com.android.launcher3.util.Themes.isThemedIconEnabled;
+ 
+@@ -162,7 +161,6 @@ public class SettingsActivity extends CollapsingToolbarBaseActivity
+     public void onSharedPreferenceChanged(SharedPreferences sharedPreferences, String key) {
+         switch (key) {
+             case KEY_DOCK_SEARCH:
+-            case KEY_SMARTSPACE:
+                 LauncherAppState.getInstanceNoCreate().setNeedsRestart();
+                 break;
+             default:
+@@ -343,10 +341,6 @@ public class SettingsActivity extends CollapsingToolbarBaseActivity
+                     preference.setEnabled(isGsaEnabled());
+                     return true;
+ 
+-                case KEY_SMARTSPACE:
+-                    preference.setEnabled(isGsaEnabled() && isAsiEnabled());
+-                    return true;
+-
+                 case KEY_SUGGESTIONS:
+                     preference.setEnabled(isAsiEnabled());
+                     return true;
+diff --git a/src_build_config/com/android/launcher3/BuildConfig.java b/src_build_config/com/android/launcher3/BuildConfig.java
+index 9bf2776..b550601 100644
+--- a/src_build_config/com/android/launcher3/BuildConfig.java
++++ b/src_build_config/com/android/launcher3/BuildConfig.java
+@@ -24,7 +24,7 @@ public final class BuildConfig {
+      * Flag to state if the QSB is on the first screen and placed on the top,
+      * this can be overwritten in other launchers with a different value, if needed.
+      */
+-    public static final boolean QSB_ON_FIRST_SCREEN = true;
++    public static final boolean QSB_ON_FIRST_SCREEN = false;
+ 
+     /**
+      * Flag to control various developer centric features
+-- 
+2.34.1
+

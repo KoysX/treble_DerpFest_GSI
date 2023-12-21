@@ -1,7 +1,7 @@
-From 7e197cdef13f66e7af7135432ab9a10cbc612577 Mon Sep 17 00:00:00 2001
+From 8e95c50ecc464e8c29df32e07372da5a3a174873 Mon Sep 17 00:00:00 2001
 From: BoNic <BoNio9527@gmaul.com>
-Date: Sun, 17 Dec 2023 15:26:13 +0800
-Subject: [PATCH] Apply at a glance widget design
+Date: Wed, 20 Dec 2023 23:42:41 +0800
+Subject: [PATCH] Apply-at-a-glance-widget-design
 
 ---
  AndroidManifest-common.xml                    |   2 +
@@ -16,11 +16,11 @@ Subject: [PATCH] Apply at a glance widget design
  create mode 100644 res/drawable/baseline_audiotrack_24.xml
 
 diff --git a/AndroidManifest-common.xml b/AndroidManifest-common.xml
-index fb6c09f..bee64d8 100644
+index 571d569..a3a4927 100644
 --- a/AndroidManifest-common.xml
 +++ b/AndroidManifest-common.xml
-@@ -60,6 +60,8 @@
-     <uses-permission android:name="com.google.android.apps.nexuslauncher.permission.QSB"/>
+@@ -57,6 +57,8 @@
+     <uses-permission android:name="android.permission.USE_BIOMETRIC" />
      <uses-permission android:name="android.permission.MEDIA_CONTENT_CONTROL" />
      <uses-permission android:name="org.omnirom.omnijaws.READ_WEATHER" />
 +    <uses-permission android:name="android.permission.GET_INTENT_SENDER_INTENT" />
@@ -58,10 +58,10 @@ index 0000000..bd8e9da
 +      android:pathData="M12,3v9.28c-0.47,-0.17 -0.97,-0.28 -1.5,-0.28C8.01,12 6,14.01 6,16.5S8.01,21 10.5,21c2.31,0 4.2,-1.75 4.45,-4H15V6h4V3h-7z"/>
 +</vector>
 diff --git a/res/values/derp_strings.xml b/res/values/derp_strings.xml
-index 51ecbea..db9ac6e 100644
+index d82773c..7c9986c 100644
 --- a/res/values/derp_strings.xml
 +++ b/res/values/derp_strings.xml
-@@ -118,11 +118,12 @@
+@@ -113,11 +113,12 @@
      <!-- QuickSpace -->
      <string name="show_quickspace_title">At A Glance</string>
      <string name="show_quickspace_summary">Show at the top of your home screen</string>
@@ -76,7 +76,7 @@ index 51ecbea..db9ac6e 100644
      <string-array name="welcome_message_variants">
          <item>Have a great day</item>
          <item>Thank you for choosing us</item>
-@@ -133,17 +134,30 @@
+@@ -128,17 +129,30 @@
          <item>We love you 3000</item>
      </string-array>
  
@@ -111,7 +111,7 @@ index 51ecbea..db9ac6e 100644
  
      <!-- Quickspace PSA - Custom messages for the glance -->
      <string name="quickspace_psa_title">Random messages</string>
-@@ -163,30 +177,63 @@
+@@ -158,30 +172,63 @@
          <item>Feeling a bit sleepy yet</item>
          <item>Have you looked outside yet?</item>
          <item>Let\'s get this done.</item>
@@ -194,7 +194,7 @@ index 51ecbea..db9ac6e 100644
      <string-array name="quickspace_psa_random">
          <item>Ignorance is Bliss</item>
          <item>Is it time to flash another update already?</item>
-@@ -222,10 +269,45 @@
+@@ -217,10 +264,45 @@
          <item>Wubba Lubba Dub Dub</item>
          <item>Winner Winner ....?</item>
          <item>rm -rf \/</item>
@@ -258,10 +258,10 @@ index 4f467de..1968dc8 100644
 +    <dimen name="quickspace_alternate_subtitle_size">16sp</dimen>
  </resources>
 diff --git a/res/xml/launcher_preferences.xml b/res/xml/launcher_preferences.xml
-index 8d8eddb..1893739 100644
+index bc6757f..5577aa5 100644
 --- a/res/xml/launcher_preferences.xml
 +++ b/res/xml/launcher_preferences.xml
-@@ -219,14 +219,6 @@
+@@ -81,14 +81,6 @@
              android:defaultValue="true"
              android:persistent="true"/>
  
@@ -276,7 +276,7 @@ index 8d8eddb..1893739 100644
          <SwitchPreference
              android:key="pref_quickspace_psonality"
              android:title="@string/quickspace_psa_title"
-@@ -235,6 +227,14 @@
+@@ -97,6 +89,14 @@
              android:defaultValue="true"
              android:persistent="true" />
  
@@ -291,7 +291,7 @@ index 8d8eddb..1893739 100644
          <SwitchPreference
              android:key="pref_quickspace_np"
              android:title="@string/quickspace_now_playing_title"
-@@ -251,5 +251,21 @@
+@@ -113,6 +113,22 @@
              android:defaultValue="true"
              android:persistent="true" />
  
@@ -312,12 +312,13 @@ index 8d8eddb..1893739 100644
 +            android:persistent="true" />
 +
      </androidx.preference.PreferenceCategory>
- </androidx.preference.PreferenceScreen>
+ 
+     <androidx.preference.PreferenceCategory
 diff --git a/src/com/android/launcher3/Utilities.java b/src/com/android/launcher3/Utilities.java
-index b6fd0de..20cba95 100644
+index effe6bf..dd4fb02 100644
 --- a/src/com/android/launcher3/Utilities.java
 +++ b/src/com/android/launcher3/Utilities.java
-@@ -184,6 +184,8 @@ public final class Utilities {
+@@ -183,6 +183,8 @@ public final class Utilities {
      public static final String KEY_SHOW_QUICKSPACE_PSONALITY = "pref_quickspace_psonality";
      public static final String KEY_SHOW_QUICKSPACE_NOWPLAYING = "pref_quickspace_np";
      public static final String KEY_SHOW_QUICKSPACE_WEATHER = "pref_quickspace_weather";
@@ -326,7 +327,7 @@ index b6fd0de..20cba95 100644
  
      /**
       * Returns true if theme is dark.
-@@ -952,4 +954,14 @@ public final class Utilities {
+@@ -942,4 +944,14 @@ public final class Utilities {
          SharedPreferences prefs = LauncherPrefs.getPrefs(context.getApplicationContext());
          return prefs.getBoolean(KEY_SHOW_QUICKSPACE_WEATHER, true);
      }
@@ -342,10 +343,10 @@ index b6fd0de..20cba95 100644
 +    }
  }
 diff --git a/src/com/android/launcher3/settings/SettingsActivity.java b/src/com/android/launcher3/settings/SettingsActivity.java
-index 889cb65..d0d1ee6 100644
+index af8eb3e..f8eeaef 100644
 --- a/src/com/android/launcher3/settings/SettingsActivity.java
 +++ b/src/com/android/launcher3/settings/SettingsActivity.java
-@@ -170,6 +170,8 @@ public class SettingsActivity extends CollapsingToolbarBaseActivity
+@@ -169,6 +169,8 @@ public class SettingsActivity extends CollapsingToolbarBaseActivity
              case Utilities.KEY_SHOW_QUICKSPACE_NOWPLAYING:
              case Utilities.KEY_SHOW_QUICKSPACE_WEATHER:
              case Utilities.KEY_SHOW_QUICKSPACE_PSONALITY:
