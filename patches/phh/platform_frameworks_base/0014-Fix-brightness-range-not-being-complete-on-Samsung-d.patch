@@ -33,5 +33,5 @@ index d82f7a56a830..fe397d53c5d6 100644
                      mContext.getResources().getInteger(com.android.internal.R.integer
                              .config_screenBrightnessSettingMaximum));
 -- 
-2.34.1
+2.25.1
 

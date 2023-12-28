@@ -1,22 +1,22 @@
-From 16082dd54217c7b65218518c268303ebb1768521 Mon Sep 17 00:00:00 2001
+From 3ea884f9dc1bab531c79033b33f330d623dfe63f Mon Sep 17 00:00:00 2001
 From: BoNic <BoNio9527@gmaul.com>
-Date: Wed, 20 Dec 2023 22:13:34 +0800
-Subject: [PATCH] add omnijaws lockscreen customization
+Date: Thu, 28 Dec 2023 10:43:30 +0800
+Subject: [PATCH] add-omnijaws-lockscreen-customization
 
 ---
- res/values/strings.xml                        | 12 ++++++++
- res/xml/lockscreen_ui.xml                     | 29 +++++++++++++++++++
- .../derpspace/fragments/LockscreenUI.java     | 27 +++++++++++++----
- 3 files changed, 63 insertions(+), 5 deletions(-)
+ res/values/strings.xml                        | 12 +++++++
+ res/xml/lockscreen_ui.xml                     | 35 +++++++++++++++++++
+ .../derpspace/fragments/LockscreenUI.java     | 27 +++++++++++---
+ 3 files changed, 69 insertions(+), 5 deletions(-)
 
 diff --git a/res/values/strings.xml b/res/values/strings.xml
-index 374efff..98c3357 100644
+index 841fba9..e555294 100644
 --- a/res/values/strings.xml
 +++ b/res/values/strings.xml
-@@ -481,4 +481,16 @@
-     <string name="statusbar_top_padding">Top padding</string>
-     <string name="statusbar_left_padding">Left padding</string>
-     <string name="statusbar_right_padding">Right padding</string>
+@@ -497,4 +497,16 @@
+     <!-- Hide statusbar on lockscreen -->
+     <string name="lockscreen_hide_status_bar_title">Hide Statusbar</string>
+     <string name="lockscreen_hide_status_bar_summary">When enabled, statusbar will be hidden on lockscreen</string>
 +
 +    <!-- Weather -->
 +    <string name="weather_category_title">Weather</string>
@@ -31,13 +31,26 @@ index 374efff..98c3357 100644
 +    <string name="lockscreen_weather_text_summary">Display current weather condition summary</string>
  </resources>
 diff --git a/res/xml/lockscreen_ui.xml b/res/xml/lockscreen_ui.xml
-index 0cdd082..81e13c9 100644
+index 2bb5642..77657a3 100644
 --- a/res/xml/lockscreen_ui.xml
 +++ b/res/xml/lockscreen_ui.xml
-@@ -67,6 +67,35 @@
-             android:summary="@string/lockscreen_hide_status_bar_summary"
-             android:defaultValue="false" />
+@@ -63,6 +63,41 @@
  
+     </PreferenceCategory>
+ 
++    <PreferenceCategory
++        android:key="weather_category"
++        android:title="@string/weather_category_title">
++
++        <Preference
++            android:title="@string/weather_settings_title"
++            android:summary="@string/weather_settings_summary">
++            <intent
++                 android:action="android.intent.action.MAIN"
++                 android:targetPackage="org.omnirom.omnijaws"
++                 android:targetClass="org.omnirom.omnijaws.SettingsActivity" />
++        </Preference>
++
 +        <org.derpfest.support.preferences.SystemSettingSwitchPreference
 +            android:key="lockscreen_weather_enabled"
 +            android:title="@string/lockscreen_weather_title"
@@ -58,18 +71,11 @@ index 0cdd082..81e13c9 100644
 +            android:defaultValue="true"
 +            android:dependency="lockscreen_weather_enabled" />
 +
-+        <Preference
-+            android:title="@string/weather_settings_title"
-+            android:summary="@string/weather_settings_summary">
-+            <intent
-+                 android:action="android.intent.action.MAIN"
-+                 android:targetPackage="org.omnirom.omnijaws"
-+                 android:targetClass="org.omnirom.omnijaws.SettingsActivity" />
-+        </Preference>
++    </PreferenceCategory>
 +
-     </PreferenceCategory>
- 
      <PreferenceCategory
+         android:key="lockscreen_media_art_options"
+         android:title="@string/lockscreen_media_art_options_title">
 diff --git a/src/org/derpfest/derpspace/fragments/LockscreenUI.java b/src/org/derpfest/derpspace/fragments/LockscreenUI.java
 index ee09a0a..0322540 100644
 --- a/src/org/derpfest/derpspace/fragments/LockscreenUI.java

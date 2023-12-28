@@ -82,5 +82,5 @@ index 19b67b5f3def..ef5e4f617138 100644
                  mBiometricExecutor.execute(() -> {
                      mAlternateTouchProvider.onPointerUp(requestId);
 -- 
-2.34.1
+2.25.1
 

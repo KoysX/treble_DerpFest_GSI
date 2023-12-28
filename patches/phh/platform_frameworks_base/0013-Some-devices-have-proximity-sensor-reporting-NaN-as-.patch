@@ -10,10 +10,10 @@ Change-Id: I3c39e3e914a05903c140235702e0480d2d58a612
  1 file changed, 3 insertions(+)
 
 diff --git a/services/core/java/com/android/server/display/DisplayPowerController.java b/services/core/java/com/android/server/display/DisplayPowerController.java
-index 24e222791..d5509091b 100644
+index b76bb8d6a4c3..a797470c4306 100644
 --- a/services/core/java/com/android/server/display/DisplayPowerController.java
 +++ b/services/core/java/com/android/server/display/DisplayPowerController.java
-@@ -2378,6 +2378,9 @@ final class DisplayPowerController implements AutomaticBrightnessController.Call
+@@ -2390,6 +2390,9 @@ final class DisplayPowerController implements AutomaticBrightnessController.Call
          if (mProximitySensor != null) {
              mProximityThreshold = Math.min(mProximitySensor.getMaximumRange(),
                      TYPICAL_PROXIMITY_THRESHOLD);
@@ -24,5 +24,5 @@ index 24e222791..d5509091b 100644
      }
  
 -- 
-2.34.1
+2.25.1
 

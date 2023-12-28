@@ -32,13 +32,13 @@ index c25dc32..d2f6de2 100644
 +
  </resources>
 diff --git a/res/values/strings.xml b/res/values/strings.xml
-index a9f86dd..5862066 100644
+index e555294..31ed0e0 100644
 --- a/res/values/strings.xml
 +++ b/res/values/strings.xml
-@@ -469,4 +469,16 @@
-     <!-- Ignore window secure -->
-     <string name="ignore_window_secure_title">Ignore window secure flags</string>
-     <string name="ignore_window_secure_summary">Remove screenshot and screenrecord limits for all apps. This can be convenient in some cases but may lead to privacy leaks.</string>
+@@ -509,4 +509,16 @@
+     <string name="lockscreen_weather_location_summary">Display current weather location</string>
+     <string name="lockscreen_weather_text_title">Current condition</string>
+     <string name="lockscreen_weather_text_summary">Display current weather condition summary</string>
 +
 +    <!-- Custom seekbar -->
 +    <string name="custom_seekbar_value">Value: <xliff:g id="v">%s</xliff:g></string>

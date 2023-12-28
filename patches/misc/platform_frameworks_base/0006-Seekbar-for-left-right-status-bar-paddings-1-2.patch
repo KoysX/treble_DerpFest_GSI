@@ -1,23 +1,23 @@
-From 767f7739cf50517aa7c14cc962d390e059b2232d Mon Sep 17 00:00:00 2001
+From df66beb18be109845a614dd9034a2e87e3ae4239 Mon Sep 17 00:00:00 2001
 From: BoNic <BoNio9527@gmaul.com>
-Date: Sun, 17 Dec 2023 11:31:10 +0800
-Subject: [PATCH] Seekbar for left/right status bar paddings [1/2]
+Date: Thu, 28 Dec 2023 12:39:25 +0800
+Subject: [PATCH] Seekbar-for-left-right-status-bar-paddings-1-2
 
 ---
- core/java/android/provider/Settings.java      | 21 +++++
+ core/java/android/provider/Settings.java      | 21 +++++++
  core/res/res/values/derp_symbols.xml          |  5 ++
  core/res/res/values/dimens.xml                |  9 +++
  packages/SystemUI/res/values/dimens.xml       |  6 +-
- .../statusbar/phone/PhoneStatusBarView.java   | 76 ++++++++++++++-----
- 5 files changed, 94 insertions(+), 23 deletions(-)
+ .../statusbar/phone/PhoneStatusBarView.java   | 59 +++++++++++++++++--
+ 5 files changed, 91 insertions(+), 9 deletions(-)
 
 diff --git a/core/java/android/provider/Settings.java b/core/java/android/provider/Settings.java
-index a029e76c2..32883b70c 100644
+index a59b4d1d9..a0cc54ba2 100644
 --- a/core/java/android/provider/Settings.java
 +++ b/core/java/android/provider/Settings.java
-@@ -6734,6 +6734,24 @@ public final class Settings {
+@@ -6835,6 +6835,24 @@ public final class Settings {
           */
-         public static final String LOCK_HIDE_STATUS_BAR = "lockscreen_hide_status_bar";
+         public static final String LOCKSCREEN_WEATHER_TEXT = "lockscreen_weather_text";
  
 +        /**
 +         * Whether to add left padding on statusbar
@@ -38,18 +38,18 @@ index a029e76c2..32883b70c 100644
 +        public static final String STATUSBAR_TOP_PADDING = "statusbar_top_padding";
 +
          /**
-          * Which notification Vibration Pattern to use
-          * 0: default provided value
-@@ -6880,6 +6898,9 @@ public final class Settings {
-             PRIVATE_SETTINGS.add(AUTO_BRIGHTNESS_ONE_SHOT);
-             PRIVATE_SETTINGS.add(CLICK_PARTIAL_SCREENSHOT);
+          * Whether keyguard will rotate
+          * 0 = false, 1 = true
+@@ -7012,6 +7030,9 @@ public final class Settings {
+             PRIVATE_SETTINGS.add(INCREASING_RING_START_VOLUME);
+             PRIVATE_SETTINGS.add(INCREASING_RING_RAMP_UP_TIME);
              PRIVATE_SETTINGS.add(LOCK_HIDE_STATUS_BAR);
 +            PRIVATE_SETTINGS.add(STATUSBAR_LEFT_PADDING);
 +            PRIVATE_SETTINGS.add(STATUSBAR_RIGHT_PADDING);
 +            PRIVATE_SETTINGS.add(STATUSBAR_TOP_PADDING);
+             PRIVATE_SETTINGS.add(AUTO_BRIGHTNESS_ONE_SHOT);
+             PRIVATE_SETTINGS.add(CLICK_PARTIAL_SCREENSHOT);
              PRIVATE_SETTINGS.add(SWAP_VOLUME_KEYS_ON_ROTATION);
-             PRIVATE_SETTINGS.add(KEY_EDGE_LONG_SWIPE_ACTION);
-             PRIVATE_SETTINGS.add(OMNI_KEYGUARD_SHOW_BATTERY_BAR);
 diff --git a/core/res/res/values/derp_symbols.xml b/core/res/res/values/derp_symbols.xml
 index 524f5cf42..906662893 100644
 --- a/core/res/res/values/derp_symbols.xml
@@ -104,7 +104,7 @@ index 9a4db3fb5..c40396cec 100644
      <!-- the radius of the overflow dot in the status bar -->
      <dimen name="overflow_dot_radius">2sp</dimen>
 diff --git a/packages/SystemUI/src/com/android/systemui/statusbar/phone/PhoneStatusBarView.java b/packages/SystemUI/src/com/android/systemui/statusbar/phone/PhoneStatusBarView.java
-index 0ab3e0ce9..98ceade7f 100644
+index 0ab3e0ce9..c83976cc4 100644
 --- a/packages/SystemUI/src/com/android/systemui/statusbar/phone/PhoneStatusBarView.java
 +++ b/packages/SystemUI/src/com/android/systemui/statusbar/phone/PhoneStatusBarView.java
 @@ -29,6 +29,8 @@ import android.util.Log;
@@ -158,24 +158,13 @@ index 0ab3e0ce9..98ceade7f 100644
          updateResources();
      }
  
-@@ -303,29 +321,18 @@ public class PhoneStatusBarView extends FrameLayout implements Callbacks {
-         ViewGroup.LayoutParams layoutParams = getLayoutParams();
-         mStatusBarHeight = SystemBarUtils.getStatusBarHeight(mContext);
-         layoutParams.height = mStatusBarHeight - waterfallTopInset;
--        updatePaddings();
--        setLayoutParams(layoutParams);
--    }
+@@ -312,13 +330,13 @@ public class PhoneStatusBarView extends FrameLayout implements Callbacks {
+                 R.dimen.status_bar_padding_start);
  
--    private void updatePaddings() {
--        int statusBarPaddingStart = getResources().getDimensionPixelSize(
--                R.dimen.status_bar_padding_start);
--
--        findViewById(R.id.status_bar_contents).setPaddingRelative(
+         findViewById(R.id.status_bar_contents).setPaddingRelative(
 -                statusBarPaddingStart,
 -                getResources().getDimensionPixelSize(R.dimen.status_bar_padding_top),
 -                getResources().getDimensionPixelSize(R.dimen.status_bar_padding_end),
-+        View sbContents = findViewById(R.id.status_bar_contents);
-+        sbContents.setPaddingRelative(
 +                (int) mLeftPad,
 +                (int) mTopPad,
 +                (int) mRightPad,
@@ -183,23 +172,17 @@ index 0ab3e0ce9..98ceade7f 100644
  
          findViewById(R.id.notification_lights_out)
 -                .setPaddingRelative(0, statusBarPaddingStart, 0, 0);
--
--        findViewById(R.id.system_icons).setPaddingRelative(
--                getResources().getDimensionPixelSize(R.dimen.status_bar_icons_padding_start),
--                getResources().getDimensionPixelSize(R.dimen.status_bar_icons_padding_top),
--                getResources().getDimensionPixelSize(R.dimen.status_bar_icons_padding_end),
--                getResources().getDimensionPixelSize(R.dimen.status_bar_icons_padding_bottom)
--        );
 +                .setPaddingRelative(0, (int) mLeftPad, 0, 0);
-+
-+        setLayoutParams(layoutParams);
+ 
+         findViewById(R.id.system_icons).setPaddingRelative(
+                 getResources().getDimensionPixelSize(R.dimen.status_bar_icons_padding_start),
+@@ -378,6 +396,35 @@ public class PhoneStatusBarView extends FrameLayout implements Callbacks {
      }
  
-     private void updateLayoutForCutout() {
-@@ -380,4 +387,33 @@ public class PhoneStatusBarView extends FrameLayout implements Callbacks {
      public ClockController getClockController() {
-         return mClockController;
-     }
+-        return mClockController;
++         return mClockController;
++    }
 +
 +    @Override
 +    public void onTuningChanged(String key, String newValue) {
@@ -228,7 +211,7 @@ index 0ab3e0ce9..98ceade7f 100644
 +                getResources().getDisplayMetrics()));
 +            updateStatusBarHeight();
 +        }
-+    }
+     }
  }
 -- 
 2.34.1

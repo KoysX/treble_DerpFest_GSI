@@ -25,12 +25,12 @@ Change-Id: Ibd0f9ea8fba584a38c060fd9271549a5e106b4eb
  7 files changed, 585 insertions(+), 6 deletions(-)
 
 diff --git a/packages/SystemUI/Android.bp b/packages/SystemUI/Android.bp
-index 66b8f3042..1ed948467 100644
+index 0af887698..e8b69a42f 100644
 --- a/packages/SystemUI/Android.bp
 +++ b/packages/SystemUI/Android.bp
-@@ -202,6 +202,10 @@ android_library {
+@@ -203,6 +203,10 @@ android_library {
+         "LowLightDreamLib",
          "motion_tool_lib",
-         "bcsmartspace-google",
          "vendor.lineage.powershare-V1.0-java",
 +        "vendor.goodix.hardware.biometrics.fingerprint-V2.1-java",
 +        "vendor.xiaomi.hw.touchfeature-V1.0-java",

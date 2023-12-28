@@ -1,0 +1,139 @@
+From 67ac11a7dfd8667d24f394c6470a9be13d2413cd Mon Sep 17 00:00:00 2001
+From: BoNic <BoNio9527@gmaul.com>
+Date: Thu, 28 Dec 2023 19:52:23 +0800
+Subject: [PATCH] Remove smartspace view when OmniJaws weather is enabled
+
+---
+ .../KeyguardClockSwitchController.java        | 42 ++++++++-----------
+ .../LockscreenSmartspaceController.kt         |  5 +--
+ 2 files changed, 19 insertions(+), 28 deletions(-)
+
+diff --git a/packages/SystemUI/src/com/android/keyguard/KeyguardClockSwitchController.java b/packages/SystemUI/src/com/android/keyguard/KeyguardClockSwitchController.java
+index d1358be71..a50d0cef0 100644
+--- a/packages/SystemUI/src/com/android/keyguard/KeyguardClockSwitchController.java
++++ b/packages/SystemUI/src/com/android/keyguard/KeyguardClockSwitchController.java
+@@ -140,7 +140,9 @@ public class KeyguardClockSwitchController extends ViewController<KeyguardClockS
+     private final ContentObserver mShowWeatherObserver = new ContentObserver(null) {
+         @Override
+         public void onChange(boolean change) {
+-            setWeatherVisibility();
++            if (!mShowWeather) {
++                setWeatherVisibility();
++            }
+         }
+     };
+ 
+@@ -236,8 +238,6 @@ public class KeyguardClockSwitchController extends ViewController<KeyguardClockS
+         mLargeClockFrame = mView.findViewById(R.id.lockscreen_clock_view_large);
+         mCurrentWeatherView = mView.findViewById(R.id.weather_container);
+ 
+-        mTunerService.addTunable(this, LOCKSCREEN_WEATHER_ENABLED);
+-
+         if (!mOnlyClock) {
+             mDumpManager.unregisterDumpable(getClass().toString()); // unregister previous clocks
+             mDumpManager.registerDumpable(getClass().toString(), this);
+@@ -277,7 +277,6 @@ public class KeyguardClockSwitchController extends ViewController<KeyguardClockS
+             hideSliceViewAndNotificationIconContainer();
+             return;
+         }
+-        updateWeatherView();
+ 
+         if (mOnlyClock) {
+             hideSliceViewAndNotificationIconContainer();
+@@ -304,22 +303,29 @@ public class KeyguardClockSwitchController extends ViewController<KeyguardClockS
+         mKeyguardUnlockAnimationController.addKeyguardUnlockAnimationListener(
+                 mKeyguardUnlockAnimationListener);
+ 
++        mTunerService.addTunable(this, LOCKSCREEN_WEATHER_ENABLED);
++
++        updateViews();
++    }
++
++    private void updateViews() {
+         if (mSmartspaceController.isEnabled()) {
++            removeViewsFromStatusArea();
+             View ksv = mView.findViewById(R.id.keyguard_slice_view);
+             int viewIndex = mStatusArea.indexOfChild(ksv);
+-            ksv.setVisibility(View.GONE);
++            ksv.setVisibility(mShowWeather ? View.VISIBLE : View.GONE);
+ 
+-            removeViewsFromStatusArea();
++            if (!mShowWeather) {
+             addSmartspaceView();
+             // TODO(b/261757708): add content observer for the Settings toggle and add/remove
+             //  weather according to the Settings.
+             if (mSmartspaceController.isDateWeatherDecoupled()) {
+                 addDateWeatherView();
++                setDateWeatherVisibility();
++                setWeatherVisibility();
+             }
+         }
+-
+-        setDateWeatherVisibility();
+-        setWeatherVisibility();
++      }
+     }
+ 
+     int getNotificationIconAreaHeight() {
+@@ -355,10 +361,6 @@ public class KeyguardClockSwitchController extends ViewController<KeyguardClockS
+ 
+     public void updateWeatherView() {
+         mUiExecutor.execute(() -> {
+-            final ContentResolver resolver = getContext().getContentResolver();
+-            mShowWeather = Settings.System.getIntForUser(resolver,
+-                    Settings.System.LOCKSCREEN_WEATHER_ENABLED, 0,
+-                    UserHandle.USER_CURRENT) != 0;
+             if (mCurrentWeatherView != null) {
+                 if (mShowWeather && !mOnlyClock) {
+                     mCurrentWeatherView.enableUpdates();
+@@ -369,19 +371,11 @@ public class KeyguardClockSwitchController extends ViewController<KeyguardClockS
+                 }
+             }
+         });
++        updateViews();
+     }
+ 
+     void onLocaleListChanged() {
+-        if (mSmartspaceController.isEnabled()) {
+-            removeViewsFromStatusArea();
+-            addSmartspaceView();
+-            if (mSmartspaceController.isDateWeatherDecoupled()) {
+-                mDateWeatherView.removeView(mWeatherView);
+-                addDateWeatherView();
+-                setDateWeatherVisibility();
+-                setWeatherVisibility();
+-            }
+-        }
++        updateViews();
+     }
+ 
+     private void addDateWeatherView() {
+@@ -666,7 +660,7 @@ public class KeyguardClockSwitchController extends ViewController<KeyguardClockS
+         }
+ 
+         return ((mCurrentClockSize == LARGE) ? clock.getLargeClock() : clock.getSmallClock())
+-                .getConfig().getHasCustomWeatherDataDisplay();
++                .getConfig().getHasCustomWeatherDataDisplay() && !mShowWeather;
+     }
+ 
+     private void removeViewsFromStatusArea() {
+diff --git a/packages/SystemUI/src/com/android/systemui/statusbar/lockscreen/LockscreenSmartspaceController.kt b/packages/SystemUI/src/com/android/systemui/statusbar/lockscreen/LockscreenSmartspaceController.kt
+index 092cbf163..154908ac9 100644
+--- a/packages/SystemUI/src/com/android/systemui/statusbar/lockscreen/LockscreenSmartspaceController.kt
++++ b/packages/SystemUI/src/com/android/systemui/statusbar/lockscreen/LockscreenSmartspaceController.kt
+@@ -273,11 +273,8 @@ constructor(
+ 
+     fun isWeatherEnabled(): Boolean {
+        execution.assertIsMainThread()
+-       val defaultValue = context.getResources().getBoolean(
+-               com.android.internal.R.bool.config_lockscreenWeatherEnabledByDefault)
+        val showWeather = secureSettings.getIntForUser(
+-           LOCK_SCREEN_WEATHER_ENABLED,
+-           if (defaultValue) 1 else 0,
++           LOCK_SCREEN_WEATHER_ENABLED, 0,
+            userTracker.userId) == 1
+        return showWeather
+     }
+-- 
+2.34.1
+

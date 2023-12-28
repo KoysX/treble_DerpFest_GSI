@@ -11,7 +11,7 @@ Change-Id: I1c2de43ba7c3544710897ad9127d320dd02293fe
  1 file changed, 3 insertions(+)
 
 diff --git a/core/sysprop.mk b/core/sysprop.mk
-index 44af367a38d..4adec48daa7 100644
+index 44af367a38..4adec48daa 100644
 --- a/core/sysprop.mk
 +++ b/core/sysprop.mk
 @@ -76,6 +76,9 @@ define generate-common-build-props
@@ -25,5 +25,5 @@ index 44af367a38d..4adec48daa7 100644
      echo "ro.$(1).build.date.utc=`$(DATE_FROM_FILE) +%s`" >> $(2);\
      echo "ro.$(1).build.fingerprint=$(BUILD_FINGERPRINT_FROM_FILE)" >> $(2);\
 -- 
-2.34.1
+2.25.1
 

@@ -35,5 +35,5 @@ index b7082690276c..ab190a39e2e6 100644
                  synchronized (mNetworkPoliciesSecondLock) {
                      updatePowerSaveWhitelistUL();
 -- 
-2.34.1
+2.25.1
 

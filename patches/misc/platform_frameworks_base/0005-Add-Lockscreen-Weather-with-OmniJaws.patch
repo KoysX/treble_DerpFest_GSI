@@ -20,12 +20,12 @@ Subject: [PATCH] Add Lockscreen Weather with OmniJaws
  create mode 100644 packages/SystemUI/src/com/android/systemui/derp/CurrentWeatherView.java
 
 diff --git a/core/java/android/provider/Settings.java b/core/java/android/provider/Settings.java
-index 394dc8929..ed927c857 100644
+index bdfcf4159..a59b4d1d9 100644
 --- a/core/java/android/provider/Settings.java
 +++ b/core/java/android/provider/Settings.java
-@@ -6752,6 +6752,21 @@ public final class Settings {
+@@ -6820,6 +6820,21 @@ public final class Settings {
           */
-         public static final String STATUSBAR_TOP_PADDING = "statusbar_top_padding";
+         public static final String LOCK_HIDE_STATUS_BAR = "lockscreen_hide_status_bar";
  
 +        /**
 +         * @hide
@@ -43,8 +43,8 @@ index 394dc8929..ed927c857 100644
 +        public static final String LOCKSCREEN_WEATHER_TEXT = "lockscreen_weather_text";
 +
          /**
-          * Which notification Vibration Pattern to use
-          * 0: default provided value
+          * Whether keyguard will rotate
+          * 0 = false, 1 = true
 diff --git a/core/java/com/android/internal/util/derp/OmniJawsClient.java b/core/java/com/android/internal/util/derp/OmniJawsClient.java
 new file mode 100644
 index 000000000..fef691a77

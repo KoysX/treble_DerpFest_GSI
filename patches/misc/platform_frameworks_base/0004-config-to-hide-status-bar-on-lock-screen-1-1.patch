@@ -1,23 +1,23 @@
-From 8b75e26e1df6d1cf041701f2b58f59794470905b Mon Sep 17 00:00:00 2001
+From d0df8569d597f67e1bb2697b4f0c917dd75bfe74 Mon Sep 17 00:00:00 2001
 From: BoNic <BoNio9527@gmaul.com>
-Date: Sun, 17 Dec 2023 11:15:01 +0800
-Subject: [PATCH] SystemUI: config to hide status bar on lock screen [1/2]
+Date: Thu, 28 Dec 2023 10:22:21 +0800
+Subject: [PATCH] config to hide status bar on lock screen-1-1
 
 ---
  core/java/android/provider/Settings.java      |   6 +
  .../settings/backup/SystemSettings.java       |   1 +
  .../validators/SystemSettingsValidators.java  |   1 +
  .../NotificationPanelViewController.java      |   3 +
- .../phone/KeyguardStatusBarView.java          | 103 +++++++++++++++++-
- 5 files changed, 113 insertions(+), 1 deletion(-)
+ .../phone/KeyguardStatusBarView.java          | 104 +++++++++++++++++-
+ 5 files changed, 114 insertions(+), 1 deletion(-)
 
 diff --git a/core/java/android/provider/Settings.java b/core/java/android/provider/Settings.java
-index e4856d2dd..a029e76c2 100644
+index 0d077d283..bdfcf4159 100644
 --- a/core/java/android/provider/Settings.java
 +++ b/core/java/android/provider/Settings.java
-@@ -6729,6 +6729,11 @@ public final class Settings {
-          */
-         public static final String THREE_FINGER_GESTURE = "three_finger_gesture";
+@@ -6815,6 +6815,11 @@ public final class Settings {
+           **/
+         public static final String QS_HEADER_IMAGE_URI = "qs_header_image_uri";
  
 +        /**
 +         * @hide
@@ -25,18 +25,18 @@ index e4856d2dd..a029e76c2 100644
 +        public static final String LOCK_HIDE_STATUS_BAR = "lockscreen_hide_status_bar";
 +
          /**
-          * Which notification Vibration Pattern to use
-          * 0: default provided value
-@@ -6874,6 +6879,7 @@ public final class Settings {
+          * Whether keyguard will rotate
+          * 0 = false, 1 = true
+@@ -6991,6 +6996,7 @@ public final class Settings {
+             PRIVATE_SETTINGS.add(INCREASING_RING);
+             PRIVATE_SETTINGS.add(INCREASING_RING_START_VOLUME);
              PRIVATE_SETTINGS.add(INCREASING_RING_RAMP_UP_TIME);
++            PRIVATE_SETTINGS.add(LOCK_HIDE_STATUS_BAR);
              PRIVATE_SETTINGS.add(AUTO_BRIGHTNESS_ONE_SHOT);
              PRIVATE_SETTINGS.add(CLICK_PARTIAL_SCREENSHOT);
-+            PRIVATE_SETTINGS.add(LOCK_HIDE_STATUS_BAR);
              PRIVATE_SETTINGS.add(SWAP_VOLUME_KEYS_ON_ROTATION);
-             PRIVATE_SETTINGS.add(KEY_EDGE_LONG_SWIPE_ACTION);
-             PRIVATE_SETTINGS.add(OMNI_KEYGUARD_SHOW_BATTERY_BAR);
 diff --git a/packages/SettingsProvider/src/android/provider/settings/backup/SystemSettings.java b/packages/SettingsProvider/src/android/provider/settings/backup/SystemSettings.java
-index 5eb361f8c..4bc08f446 100644
+index d1fbb58b9..c5cf4caa9 100644
 --- a/packages/SettingsProvider/src/android/provider/settings/backup/SystemSettings.java
 +++ b/packages/SettingsProvider/src/android/provider/settings/backup/SystemSettings.java
 @@ -110,6 +110,7 @@ public class SystemSettings {
@@ -46,24 +46,24 @@ index 5eb361f8c..4bc08f446 100644
 +        Settings.System.LOCK_HIDE_STATUS_BAR,
          Settings.System.VOLUME_DIALOG_TIMEOUT,
          Settings.System.NETWORK_TRAFFIC_STATE,
-         Settings.System.NETWORK_TRAFFIC_AUTOHIDE_THRESHOLD
+         Settings.System.NETWORK_TRAFFIC_AUTOHIDE_THRESHOLD,
 diff --git a/packages/SettingsProvider/src/android/provider/settings/validators/SystemSettingsValidators.java b/packages/SettingsProvider/src/android/provider/settings/validators/SystemSettingsValidators.java
-index 2604c2bf1..b593ef511 100644
+index 4edc4f8d3..01a93e541 100644
 --- a/packages/SettingsProvider/src/android/provider/settings/validators/SystemSettingsValidators.java
 +++ b/packages/SettingsProvider/src/android/provider/settings/validators/SystemSettingsValidators.java
-@@ -251,6 +251,7 @@ public class SystemSettingsValidators {
-         VALIDATORS.put(System.CUSTOM_RINGTONE_VIBRATION_PATTERN, CUSTOM_VIBRATION_PATTERN_VALIDATOR);
+@@ -252,6 +252,7 @@ public class SystemSettingsValidators {
          VALIDATORS.put(System.NOTIFICATION_VIBRATION_PATTERN, new InclusiveIntegerRangeValidator(0, 5));
          VALIDATORS.put(System.CUSTOM_NOTIFICATION_VIBRATION_PATTERN, CUSTOM_VIBRATION_PATTERN_VALIDATOR);
-+        VALIDATORS.put(System.LOCK_HIDE_STATUS_BAR, BOOLEAN_VALIDATOR);
          VALIDATORS.put(System.SENSOR_BLOCK, BOOLEAN_VALIDATOR);
++	    VALIDATORS.put(System.LOCK_HIDE_STATUS_BAR, BOOLEAN_VALIDATOR);
          VALIDATORS.put(System.VOLUME_DIALOG_TIMEOUT, new InclusiveIntegerRangeValidator(1, 7));
          VALIDATORS.put(System.NETWORK_TRAFFIC_STATE, BOOLEAN_VALIDATOR);
+         VALIDATORS.put(System.NETWORK_TRAFFIC_AUTOHIDE_THRESHOLD, BOOLEAN_VALIDATOR);
 diff --git a/packages/SystemUI/src/com/android/systemui/shade/NotificationPanelViewController.java b/packages/SystemUI/src/com/android/systemui/shade/NotificationPanelViewController.java
-index 94a18e461..38a0c66cf 100644
+index 61786cf08..80977e390 100644
 --- a/packages/SystemUI/src/com/android/systemui/shade/NotificationPanelViewController.java
 +++ b/packages/SystemUI/src/com/android/systemui/shade/NotificationPanelViewController.java
-@@ -4708,6 +4708,9 @@ public final class NotificationPanelViewController implements ShadeSurface, Dump
+@@ -4741,6 +4741,9 @@ public final class NotificationPanelViewController implements ShadeSurface, Dump
                              /* alpha= */ 1f,
                              keyguardShowing ? View.VISIBLE : View.INVISIBLE);
                  }
@@ -74,7 +74,7 @@ index 94a18e461..38a0c66cf 100644
                      mQsController.hideQsImmediately();
                  }
 diff --git a/packages/SystemUI/src/com/android/systemui/statusbar/phone/KeyguardStatusBarView.java b/packages/SystemUI/src/com/android/systemui/statusbar/phone/KeyguardStatusBarView.java
-index 8e61a0691..97e24a265 100644
+index 8e61a0691..577a8c919 100644
 --- a/packages/SystemUI/src/com/android/systemui/statusbar/phone/KeyguardStatusBarView.java
 +++ b/packages/SystemUI/src/com/android/systemui/statusbar/phone/KeyguardStatusBarView.java
 @@ -19,7 +19,12 @@ package com.android.systemui.statusbar.phone;
@@ -99,15 +99,16 @@ index 8e61a0691..97e24a265 100644
  import android.util.AttributeSet;
  import android.util.Pair;
  import android.util.TypedValue;
-@@ -41,6 +48,7 @@ import android.widget.RelativeLayout;
- import android.widget.TextView;
+@@ -42,6 +49,8 @@ import android.widget.TextView;
  
  import androidx.annotation.VisibleForTesting;
-+import com.android.app.animation.Interpolators;
  
++import com.android.app.animation.Interpolators;
++
  import com.android.settingslib.Utils;
  import com.android.systemui.R;
-@@ -110,6 +118,7 @@ public class KeyguardStatusBarView extends RelativeLayout {
+ import com.android.systemui.battery.BatteryMeterView;
+@@ -110,6 +119,7 @@ public class KeyguardStatusBarView extends RelativeLayout {
      private int mTopClipping;
      private final Rect mClipRect = new Rect(0, 0, 0, 0);
      private boolean mIsUserSwitcherEnabled;
@@ -115,7 +116,7 @@ index 8e61a0691..97e24a265 100644
  
      public KeyguardStatusBarView(Context context, AttributeSet attrs) {
          super(context, attrs);
-@@ -241,7 +250,7 @@ public class KeyguardStatusBarView extends RelativeLayout {
+@@ -241,7 +251,7 @@ public class KeyguardStatusBarView extends RelativeLayout {
              // we only show the multi-user switch if it's enabled through UserManager as well as
              // by the user.
              if (mIsUserSwitcherEnabled) {
@@ -124,7 +125,7 @@ index 8e61a0691..97e24a265 100644
              } else {
                  mMultiUserAvatar.setVisibility(View.GONE);
              }
-@@ -509,4 +518,96 @@ public class KeyguardStatusBarView extends RelativeLayout {
+@@ -509,4 +519,96 @@ public class KeyguardStatusBarView extends RelativeLayout {
      public StateFlow<DarkChange> darkChangeFlow() {
          return FlowKt.asStateFlow(mDarkChange);
      }

@@ -63,5 +63,5 @@ index 5c53caa8a884..b76bb8d6a4c3 100644
                  boolean positive = distance >= 0.0f && distance < mProximityThreshold;
                  handleProximitySensorEvent(time, positive);
 -- 
-2.34.1
+2.25.1
 
