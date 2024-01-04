@@ -16,7 +16,7 @@ Subject: [PATCH] Bring-back-QuickSpace-events
  ...reserved_container_alternate_workspace.xml |  34 ++
  res/layout/reserved_container_workspace.xml   |  35 ++
  res/values/derp_config.xml                    |   3 +
- res/values/derp_strings.xml                   | 115 +++++
+ res/values/derp_strings.xml                   | 116 +++++
  res/values/dimens.xml                         |   4 +
  res/values/styles.xml                         |   9 +
  res/xml/launcher_preferences.xml              |  39 ++
@@ -41,7 +41,7 @@ Subject: [PATCH] Bring-back-QuickSpace-events
  .../quickspace/views/DateTextView.java        |  94 ++++
  .../views/DoubleShadowTextView.java           |  53 +++
  .../launcher3/settings/SettingsActivity.java  |  17 +
- 37 files changed, 1993 insertions(+), 60 deletions(-)
+ 37 files changed, 1994 insertions(+), 60 deletions(-)
  create mode 100644 res/drawable/bg_quickspace.xml
  create mode 100644 res/drawable/ic_music_note_24dp.xml
  create mode 100644 res/drawable/ic_quickspace_evening.xml
@@ -59,7 +59,7 @@ Subject: [PATCH] Bring-back-QuickSpace-events
  create mode 100644 src/com/android/launcher3/quickspace/views/DoubleShadowTextView.java
 
 diff --git a/AndroidManifest-common.xml b/AndroidManifest-common.xml
-index a8edf50..571d569 100644
+index f049653..23c04e6 100644
 --- a/AndroidManifest-common.xml
 +++ b/AndroidManifest-common.xml
 @@ -55,6 +55,8 @@
@@ -68,20 +68,20 @@ index a8edf50..571d569 100644
      <uses-permission android:name="android.permission.USE_BIOMETRIC" />
 +    <uses-permission android:name="android.permission.MEDIA_CONTENT_CONTROL" />
 +    <uses-permission android:name="org.omnirom.omnijaws.READ_WEATHER" />
-
-     <!--
-     Permissions required for read/write access to the workspace data. These permission name
+ 
+     <!-- AppLock -->
+     <uses-permission android:name="com.android.permission.MANAGE_APP_LOCK" />
 diff --git a/privapp_whitelist_derp_launcher3.xml b/privapp_whitelist_derp_launcher3.xml
-index e54b330..a49460e 100644
+index 7c020c0..10e38bd 100644
 --- a/privapp_whitelist_derp_launcher3.xml
 +++ b/privapp_whitelist_derp_launcher3.xml
-@@ -11,6 +11,7 @@
-         <permission name="android.permission.INTERACT_ACROSS_USERS"/>
+@@ -12,6 +12,7 @@
          <permission name="android.permission.INTERACT_ACROSS_USERS_FULL"/>
          <permission name="android.permission.MANAGE_USERS"/>
+         <permission name="android.permission.PACKAGE_USAGE_STATS"/>
 +        <permission name="android.permission.MEDIA_CONTENT_CONTROL"/>
      </privapp-permissions>
-
+ 
  </permissions>
 diff --git a/res/drawable/bg_quickspace.xml b/res/drawable/bg_quickspace.xml
 new file mode 100644
@@ -606,13 +606,13 @@ index 7d0e1a5..72fc2f1 100644
 +    <item type="id" name="reserved_container_workspace" />
  </resources>
 diff --git a/res/values/derp_strings.xml b/res/values/derp_strings.xml
-index 6131e28..fb80a13 100644
+index c54711f..41637e8 100644
 --- a/res/values/derp_strings.xml
 +++ b/res/values/derp_strings.xml
-@@ -108,4 +108,119 @@
-     <string name="trust_apps_help">Help</string>
+@@ -109,6 +109,122 @@
      <string name="trust_apps_info_hidden">Hidden apps and their widgets are hidden from the drawer</string>
      <string name="trust_apps_info_protected">Protected apps require authentication to be opened from the launcher</string>
+ 
 +    <string name="quickspace_category_title">Quickspace</string>
 +
 +    <!-- QuickSpace -->
@@ -728,7 +728,10 @@ index 6131e28..fb80a13 100644
 +    <string name="quick_event_ambient_weather_title">Weather condition</string>
 +    <string name="quick_event_ambient_weather_summary">Display current weather condition and temperature</string>
 +    <string name="quick_event_ambient_weather_enabled_info">Requires weather service to be enabled</string>
- </resources>
++
+     <!-- Wallpaper zooming -->
+     <string name="allow_wallpaper_zooming">Wallpaper zooming</string>
+     <string name="allow_wallpaper_zooming_summary">Zoom in or out the wallpaper when using drawer or recent apps</string>
 diff --git a/res/values/dimens.xml b/res/values/dimens.xml
 index 87b360d..4f467de 100644
 --- a/res/values/dimens.xml
@@ -989,7 +992,7 @@ index 9d421e4..615f345 100644
          if (mIsSafeModeEnabled) {
              view = new PendingAppWidgetHostView(this, item, mIconCache, true);
 diff --git a/src/com/android/launcher3/Utilities.java b/src/com/android/launcher3/Utilities.java
-index 329b1f0..effe6bf 100644
+index 5da15e1..86209c6 100644
 --- a/src/com/android/launcher3/Utilities.java
 +++ b/src/com/android/launcher3/Utilities.java
 @@ -48,6 +48,8 @@ import android.graphics.RectF;
@@ -1009,7 +1012,7 @@ index 329b1f0..effe6bf 100644
  import android.text.style.TtsSpan;
  import android.util.DisplayMetrics;
  import android.util.Log;
-@@ -175,6 +178,11 @@ public final class Utilities {
+@@ -176,6 +179,11 @@ public final class Utilities {
      public static final String KEY_ICON_PACK = "pref_icon_pack";
      public static final String KEY_RECENTS_OPACITY = "pref_recents_opacity";
      public static final String KEY_APP_DRAWER_OPACITY = "pref_app_drawer_opacity";
@@ -1018,13 +1021,13 @@ index 329b1f0..effe6bf 100644
 +    public static final String KEY_SHOW_QUICKSPACE_PSONALITY = "pref_quickspace_psonality";
 +    public static final String KEY_SHOW_QUICKSPACE_NOWPLAYING = "pref_quickspace_np";
 +    public static final String KEY_SHOW_QUICKSPACE_WEATHER = "pref_quickspace_weather";
-
+ 
      /**
       * Returns true if theme is dark.
-@@ -847,6 +855,19 @@ public final class Utilities {
+@@ -848,6 +856,19 @@ public final class Utilities {
          return prefs.getBoolean(KEY_DT_GESTURE, true);
      }
-
+ 
 +    public static String formatDateTime(Context context) {
 +        String styleText;
 +        DateFormat dateFormat;
@@ -1041,9 +1044,9 @@ index 329b1f0..effe6bf 100644
      public static boolean isWorkspaceEditAllowed(Context context) {
          SharedPreferences prefs = LauncherPrefs.getPrefs(context.getApplicationContext());
          return !prefs.getBoolean(InvariantDeviceProfile.KEY_WORKSPACE_LOCK, false);
-@@ -896,4 +917,29 @@ public final class Utilities {
+@@ -902,4 +923,29 @@ public final class Utilities {
          SharedPreferences prefs = LauncherPrefs.getPrefs(context.getApplicationContext());
-         return prefs.getInt(KEY_APP_DRAWER_OPACITY, 100);
+         return prefs.getBoolean(KEY_ALLOW_WALLPAPER_ZOOMING, true);
      }
 +
 +    public static boolean showQuickspace(Context context) {

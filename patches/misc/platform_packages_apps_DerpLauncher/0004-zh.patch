@@ -1,6 +1,6 @@
-From 9ee55eeefadc5460cc0dc02d3f0289c30b8ec964 Mon Sep 17 00:00:00 2001
+From 2fe8a2b5bae83f217b4c8c3e98b72adaf91e8be4 Mon Sep 17 00:00:00 2001
 From: BoNic <BoNio9527@gmail.com>
-Date: Tue, 5 Dec 2023 04:12:20 -0500
+Date: Wed, 3 Jan 2024 21:13:53 -0500
 Subject: [PATCH] zh
 
 ---
@@ -10,7 +10,7 @@ Subject: [PATCH] zh
 
 diff --git a/res/values-zh-rCN/derp_strings.xml b/res/values-zh-rCN/derp_strings.xml
 new file mode 100644
-index 0000000..f096266
+index 0000000..682547e
 --- /dev/null
 +++ b/res/values-zh-rCN/derp_strings.xml
 @@ -0,0 +1,308 @@
@@ -74,11 +74,6 @@ index 0000000..f096266
 +    <string name="recents_screenshot_title">截图</string>
 +    <string name="recents_clear_all_title">全部清除</string>
 +    <string name="recents_lens_title">镜头</string>
-+
-+    <!-- Smartspace -->
-+    <string name="smartspace_pref_title">一目了然</string>
-+    <string name="smartspace_pref_summary">在主屏幕顶部显示一目了然</string>
-+
 +    <!-- AppInfo -->
 +    <string name="app_info_version_value" translatable="false">%1$s (%2$d)</string>
 +    <string name="app_info_icon_pack">图标包</string>
@@ -110,6 +105,22 @@ index 0000000..f096266
 +    <!-- All apps themed icons -->
 +    <string name="pref_allapps_themed_icons">在抽屉中使用主题图标</string>
 +    <string name="themed_icons_disabled_summary">主题图标在壁纸和桌面中被关闭。风格</string>
++    <!-- Force monocrome icons -->
++    <string name="pref_force_mono_icons_title">强制单色图标</string>
++    <string name="pref_force_mono_icons_summary">对本身不支持单色图标的应用程序强制使用单色图标</string>
++
++    <!-- Background opacity -->
++    <string name="drawer_background_opacity_title">抽屉背景不透明度</string>
++    <string name="recents_background_opacity_title">最近的背景不透明度</string>
++    <!-- Trust apps -->
++    <string name="trust_apps_manager_name">隐藏&amp;受保护的应用程序</string>
++    <string name="trust_apps_auth_manager">解锁以管理隐藏和受保护的应用程序</string>
++    <string name="trust_apps_auth_open_app">进行身份验证以打开 %1$s</string>
++    <string name="trust_apps_loading">正在加载...</string>
++    <string name="trust_apps_no_lock_error">请设置安全锁屏以限制应用程序访问</string>
++    <string name="trust_apps_help">帮助</string>
++    <string name="trust_apps_info_hidden">隐藏的应用程序及其小部件从抽屉中隐藏起来</string>
++    <string name="trust_apps_info_protected">受保护的应用程序需要身份验证才能从启动器打开</string>
 +    <string name="quickspace_category_title">快速空间</string>
 +    <!-- QuickSpace -->
 +    <string name="show_quickspace_title">一目了然</string>
@@ -173,6 +184,9 @@ index 0000000..f096266
 +        <item>祝你今天好运！</item>
 +        <item>切换开关可以修复卡住的响应。</item>
 +        <item>开始新的一天。</item>
++        <item>不要忘记心理健康。</item>
++        <item>生活很好。</item>
++        <item>享用早餐。</item>
 +        <item>不要忘记心理健康。</item>
 +        <item>生活很好。</item>
 +        <item>享用早餐。</item>
@@ -302,26 +316,12 @@ index 0000000..f096266
 +    <string name="quick_event_weather_city_summary">显示当前天气位置</string>
 +    <string name="quick_event_weather_text_title">当前的状况</string>
 +    <string name="quick_event_weather_text_summary">显示当前天气状况摘要</string>
-+
 +    <string name="intent_no_app_clock_found">无法找到日历或时钟活动</string>
 +
-+    <!-- Force monocrome icons -->
-+    <string name="pref_force_mono_icons_title">强制单色图标</string>
-+    <string name="pref_force_mono_icons_summary">对本身不支持单色图标的应用程序强制使用单色图标</string>
-+
-+    <!-- Background opacity -->
-+    <string name="drawer_background_opacity_title">抽屉背景不透明度</string>
-+    <string name="recents_background_opacity_title">最近的背景不透明度</string>
-+    <!-- Trust apps -->
-+    <string name="trust_apps_manager_name">隐藏&amp;受保护的应用程序</string>
-+    <string name="trust_apps_auth_manager">解锁以管理隐藏和受保护的应用程序</string>
-+    <string name="trust_apps_auth_open_app">进行身份验证以打开 %1$s</string>
-+    <string name="trust_apps_loading">正在加载...</string>
-+    <string name="trust_apps_no_lock_error">请设置安全锁屏以限制应用程序访问</string>
-+    <string name="trust_apps_help">帮助</string>
-+    <string name="trust_apps_info_hidden">隐藏的应用程序及其小部件从抽屉中隐藏起来</string>
-+    <string name="trust_apps_info_protected">受保护的应用程序需要身份验证才能从启动器打开</string>
++    <!-- Wallpaper zooming -->
++    <string name="allow_wallpaper_zooming">壁纸缩放</string>
++    <string name="allow_wallpaper_zooming_summary">使用抽屉或最近使用的应用程序时放大或缩小壁纸</string>
 +</resources>
---
-2.25.1
+-- 
+2.34.1
 

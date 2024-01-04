@@ -1,14 +1,14 @@
-From 5d7dd6152b4d85418c2b462d8eca7908e1d6c20d Mon Sep 17 00:00:00 2001
-From: BoNic <BoNio9527@gmaul.com>
-Date: Thu, 28 Dec 2023 20:13:07 +0800
+From 0a29f7ff67e3925c40d3dc126e606224310022cb Mon Sep 17 00:00:00 2001
+From: BoNic <BoNio9527@gmail.com>
+Date: Wed, 3 Jan 2024 21:02:24 -0500
 Subject: [PATCH] zh
 
 ---
- res/values-zh-rCN/strings.xml | 378 ++++++++++++++--------------------
- 1 file changed, 158 insertions(+), 220 deletions(-)
+ res/values-zh-rCN/strings.xml | 379 ++++++++++++++--------------------
+ 1 file changed, 160 insertions(+), 219 deletions(-)
 
 diff --git a/res/values-zh-rCN/strings.xml b/res/values-zh-rCN/strings.xml
-index 4d774fc..8305d55 100644
+index 4d774fc..6586819 100644
 --- a/res/values-zh-rCN/strings.xml
 +++ b/res/values-zh-rCN/strings.xml
 @@ -42,7 +42,6 @@
@@ -227,7 +227,7 @@ index 4d774fc..8305d55 100644
  
      <!-- Charging animation -->
      <string name="charging_animation_title">充电动画</string>
-@@ -413,84 +343,15 @@
+@@ -413,84 +343,18 @@
      <!-- Statusbar Clock background chip -->
      <string name="statusbar_clock_chip_title">背景条</string>
      <string name="statusbar_clock_chip_summary">显示 Material You 风格化的状态栏时钟背景条</string>
@@ -287,10 +287,12 @@ index 4d774fc..8305d55 100644
      <string name="statusbar_colored_icons_title">原始图标</string>
      <string name="statusbar_colored_icons_summary">为状态栏中的通知使用应用原本的图标</string>
  
--    <!-- Wi-Fi Standard icon -->
+     <!-- Wi-Fi Standard icon -->
 -    <string name="show_wifi_standard_icon_title">显示 Wi-Fi 类型</string>
 -    <string name="show_wifi_standard_icon_summary">在 Wi-Fi 信号指示器中显示信号类型</string>
 -
++    <string name="show_wifi_standard_icon_title">显示 Wi-Fi 类型图标</string>
++    <string name="show_wifi_standard_icon_summary">在 Wi-Fi 信号指示器中显示 Wi-Fi 类型</string>
      <!-- QS Transparency -->
      <string name="qs_transparency_title">背景透明度</string>
      <string name="qs_transparency_summary">为快速设置面板设置背景透明度</string>
@@ -312,7 +314,7 @@ index 4d774fc..8305d55 100644
      <!-- Disable QS -->
      <string name="disable_qs_title">在安全的锁屏中隐藏快速设置</string>
      <string name="disable_qs_summary">当设备锁定时隐藏快速设置面板，不会关闭通知面板阴影</string>
-@@ -508,67 +369,144 @@
+@@ -508,67 +372,144 @@
      <string name="qs_auto_brightness_title">自动亮度图标</string>
      <string name="qs_auto_brightness_summary">在滑块左侧显示自动亮度图标</string>
  

@@ -16,7 +16,7 @@ Subject: [PATCH] Apply-at-a-glance-widget-design
  create mode 100644 res/drawable/baseline_audiotrack_24.xml
 
 diff --git a/AndroidManifest-common.xml b/AndroidManifest-common.xml
-index 571d569..a3a4927 100644
+index 23c04e6..eb4393b 100644
 --- a/AndroidManifest-common.xml
 +++ b/AndroidManifest-common.xml
 @@ -57,6 +57,8 @@
@@ -26,15 +26,15 @@ index 571d569..a3a4927 100644
 +    <uses-permission android:name="android.permission.GET_INTENT_SENDER_INTENT" />
 +    <uses-permission android:name="com.android.alarm.permission.SET_ALARM" />
  
-     <!--
-     Permissions required for read/write access to the workspace data. These permission name
+     <!-- AppLock -->
+     <uses-permission android:name="com.android.permission.MANAGE_APP_LOCK" />
 diff --git a/privapp_whitelist_derp_launcher3.xml b/privapp_whitelist_derp_launcher3.xml
-index a49460e..06656f3 100644
+index 10e38bd..25277e5 100644
 --- a/privapp_whitelist_derp_launcher3.xml
 +++ b/privapp_whitelist_derp_launcher3.xml
-@@ -12,6 +12,8 @@
-         <permission name="android.permission.INTERACT_ACROSS_USERS_FULL"/>
+@@ -13,6 +13,8 @@
          <permission name="android.permission.MANAGE_USERS"/>
+         <permission name="android.permission.PACKAGE_USAGE_STATS"/>
          <permission name="android.permission.MEDIA_CONTENT_CONTROL"/>
 +        <permission name="android.permission.GET_INTENT_SENDER_INTENT"/>
 +        <permission name="com.android.alarm.permission.SET_ALARM"/>
@@ -58,10 +58,10 @@ index 0000000..bd8e9da
 +      android:pathData="M12,3v9.28c-0.47,-0.17 -0.97,-0.28 -1.5,-0.28C8.01,12 6,14.01 6,16.5S8.01,21 10.5,21c2.31,0 4.2,-1.75 4.45,-4H15V6h4V3h-7z"/>
 +</vector>
 diff --git a/res/values/derp_strings.xml b/res/values/derp_strings.xml
-index d82773c..7c9986c 100644
+index 41637e8..dacf418 100644
 --- a/res/values/derp_strings.xml
 +++ b/res/values/derp_strings.xml
-@@ -113,11 +113,12 @@
+@@ -114,11 +114,12 @@
      <!-- QuickSpace -->
      <string name="show_quickspace_title">At A Glance</string>
      <string name="show_quickspace_summary">Show at the top of your home screen</string>
@@ -76,7 +76,7 @@ index d82773c..7c9986c 100644
      <string-array name="welcome_message_variants">
          <item>Have a great day</item>
          <item>Thank you for choosing us</item>
-@@ -128,17 +129,30 @@
+@@ -129,17 +130,30 @@
          <item>We love you 3000</item>
      </string-array>
  
@@ -111,7 +111,7 @@ index d82773c..7c9986c 100644
  
      <!-- Quickspace PSA - Custom messages for the glance -->
      <string name="quickspace_psa_title">Random messages</string>
-@@ -158,30 +172,63 @@
+@@ -159,30 +173,63 @@
          <item>Feeling a bit sleepy yet</item>
          <item>Have you looked outside yet?</item>
          <item>Let\'s get this done.</item>
@@ -194,7 +194,7 @@ index d82773c..7c9986c 100644
      <string-array name="quickspace_psa_random">
          <item>Ignorance is Bliss</item>
          <item>Is it time to flash another update already?</item>
-@@ -217,10 +264,45 @@
+@@ -218,12 +265,47 @@
          <item>Wubba Lubba Dub Dub</item>
          <item>Winner Winner ....?</item>
          <item>rm -rf \/</item>
@@ -241,7 +241,9 @@ index d82773c..7c9986c 100644
 +    <string name="quick_event_weather_text_summary">Display current weather condition summary</string>
 +
 +    <string name="intent_no_app_clock_found">Unable to find calendar or clock activity</string>
- </resources>
+ 
+     <!-- Wallpaper zooming -->
+     <string name="allow_wallpaper_zooming">Wallpaper zooming</string>
 diff --git a/res/values/dimens.xml b/res/values/dimens.xml
 index 4f467de..1968dc8 100644
 --- a/res/values/dimens.xml
@@ -315,10 +317,10 @@ index bc6757f..5577aa5 100644
  
      <androidx.preference.PreferenceCategory
 diff --git a/src/com/android/launcher3/Utilities.java b/src/com/android/launcher3/Utilities.java
-index effe6bf..dd4fb02 100644
+index ae1f488..c9bf283 100644
 --- a/src/com/android/launcher3/Utilities.java
 +++ b/src/com/android/launcher3/Utilities.java
-@@ -183,6 +183,8 @@ public final class Utilities {
+@@ -184,6 +184,8 @@ public final class Utilities {
      public static final String KEY_SHOW_QUICKSPACE_PSONALITY = "pref_quickspace_psonality";
      public static final String KEY_SHOW_QUICKSPACE_NOWPLAYING = "pref_quickspace_np";
      public static final String KEY_SHOW_QUICKSPACE_WEATHER = "pref_quickspace_weather";
@@ -327,7 +329,7 @@ index effe6bf..dd4fb02 100644
  
      /**
       * Returns true if theme is dark.
-@@ -942,4 +944,14 @@ public final class Utilities {
+@@ -948,4 +950,14 @@ public final class Utilities {
          SharedPreferences prefs = LauncherPrefs.getPrefs(context.getApplicationContext());
          return prefs.getBoolean(KEY_SHOW_QUICKSPACE_WEATHER, true);
      }

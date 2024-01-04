@@ -8,7 +8,7 @@ Subject: [PATCH] remove-Smartspace
  AndroidManifest-common.xml                    |   3 -
  .../com/android/launcher3/DerpLauncher.java   |  61 -------
  .../quickstep/util/WorkspaceUnlockAnim.java   | 136 ----------------
- res/layout/qsb_preview.xml                    |  21 +--
+ res/layout/qsb_preview.xml                    |  19 +--
  res/layout/search_container_workspace.xml     |  19 ++-
  res/values/derp_strings.xml                   |   4 -
  res/xml/launcher_preferences.xml              |   6 -
@@ -29,7 +29,7 @@ Subject: [PATCH] remove-Smartspace
  .../qsb/SmartspaceViewContainer.java          |  88 ----------
  .../launcher3/settings/SettingsActivity.java  |   6 ------
  .../com/android/launcher3/BuildConfig.java    |   2 +-
- 25 files changed, 45 insertions(+), 514 deletions(-)
+ 25 files changed, 44 insertions(+), 513 deletions(-)
  delete mode 100644 quickstep/src/com/android/quickstep/util/WorkspaceUnlockAnim.java
  delete mode 100644 src/com/android/launcher3/qsb/LauncherUnlockAnimationController.java
  delete mode 100644 src/com/android/launcher3/qsb/SmartspaceViewContainer.java
@@ -50,7 +50,7 @@ index 2228ddc..79b23ff 100644
      manifest: "AndroidManifest-common.xml",
      sdk_version: "current",
 diff --git a/AndroidManifest-common.xml b/AndroidManifest-common.xml
-index 89a950d..a8edf50 100644
+index 5ebf482..f049653 100644
 --- a/AndroidManifest-common.xml
 +++ b/AndroidManifest-common.xml
 @@ -56,9 +56,6 @@
@@ -60,9 +60,9 @@ index 89a950d..a8edf50 100644
 -    <permission android:name="com.google.android.apps.nexuslauncher.permission.QSB" android:protectionLevel="signatureOrSystem"/>
 -    <uses-permission android:name="com.google.android.apps.nexuslauncher.permission.QSB"/>
 -
-     <!--
-     Permissions required for read/write access to the workspace data. These permission name
-     should not conflict with that defined in other apps, as such an app should embed its package
+     <!-- AppLock -->
+     <uses-permission android:name="com.android.permission.MANAGE_APP_LOCK" />
+
 diff --git a/quickstep/src/com/android/launcher3/DerpLauncher.java b/quickstep/src/com/android/launcher3/DerpLauncher.java
 index 25b0938..a5d6158 100644
 --- a/quickstep/src/com/android/launcher3/DerpLauncher.java
@@ -285,17 +285,16 @@ index b6e73bf..0000000
 -    }
 -}
 diff --git a/res/layout/qsb_preview.xml b/res/layout/qsb_preview.xml
-index 2082277..3216792 100644
+index a828b68..a4bf7c7 100644
 --- a/res/layout/qsb_preview.xml
 +++ b/res/layout/qsb_preview.xml
-@@ -14,16 +14,17 @@
+@@ -14,15 +14,16 @@
       See the License for the specific language governing permissions and
       limitations under the License.
  -->
 -<com.google.android.systemui.smartspace.BcSmartspaceCard
 +<com.android.launcher3.qsb.QsbContainerView
      xmlns:android="http://schemas.android.com/apk/res/android"
--    android:paddingTop="@dimen/enhanced_smartspace_padding_top"
 +    android:orientation="vertical"
      android:layout_width="match_parent"
 -    android:layout_height="match_parent"
@@ -305,7 +304,6 @@ index 2082277..3216792 100644
 +    android:layout_height="0dp"
 +    android:id="@id/search_container_workspace"
 +    android:padding="0dp" >
-+
 +    <fragment
 +        android:name="com.android.launcher3.qsb.QsbContainerView$QsbFragment"
          android:layout_width="match_parent"
@@ -421,18 +419,18 @@ index 35294e4..9d421e4 100644
                  continue;
              }
 diff --git a/src/com/android/launcher3/Utilities.java b/src/com/android/launcher3/Utilities.java
-index dd03aab..329b1f0 100644
+index bde3543..5da15e1 100644
 --- a/src/com/android/launcher3/Utilities.java
 +++ b/src/com/android/launcher3/Utilities.java
-@@ -172,7 +172,6 @@ public final class Utilities {
-     public static final String LENS_SHARE_ACTIVITY = "com.google.android.apps.search.lens.LensShareEntryPointActivity";
+@@ -173,7 +173,6 @@ public final class Utilities {
+     public static final String KEY_ALLOW_WALLPAPER_ZOOMING = "pref_allow_wallpaper_zooming";
  
      public static final String KEY_DOCK_SEARCH = "pref_dock_search";
 -    public static final String KEY_SMARTSPACE = "pref_smartspace";
      public static final String KEY_ICON_PACK = "pref_icon_pack";
      public static final String KEY_RECENTS_OPACITY = "pref_recents_opacity";
      public static final String KEY_APP_DRAWER_OPACITY = "pref_app_drawer_opacity";
-@@ -888,15 +887,6 @@ public final class Utilities {
+@@ -889,15 +888,6 @@ public final class Utilities {
          return prefs.getBoolean(KEY_DOCK_SEARCH, true);
      }
  
@@ -647,7 +645,7 @@ index 829e2fd..1fc8a03 100644
  
 diff --git a/src/com/android/launcher3/qsb/LauncherUnlockAnimationController.java b/src/com/android/launcher3/qsb/LauncherUnlockAnimationController.java
 deleted file mode 100644
-index 78db7d1..0000000
+index d4d943d..0000000
 --- a/src/com/android/launcher3/qsb/LauncherUnlockAnimationController.java
 +++ /dev/null
 @@ -1,153 +0,0 @@
@@ -658,7 +656,6 @@ index 78db7d1..0000000
 -import android.animation.AnimatorSet;
 -import android.animation.ValueAnimator;
 -import android.graphics.Rect;
--import com.android.app.animation.Interpolators;
 -import com.android.launcher3.CellLayout;
 -import com.android.launcher3.Launcher;
 -import com.android.launcher3.Workspace;
@@ -666,6 +663,7 @@ index 78db7d1..0000000
 -import com.android.quickstep.util.WorkspaceUnlockAnim;
 -import com.android.systemui.shared.system.smartspace.ILauncherUnlockAnimationController;
 -import com.android.systemui.shared.system.smartspace.SmartspaceState;
+-import com.android.wm.shell.animation.Interpolators;
 -import com.google.android.systemui.smartspace.BcSmartspaceView;
 -
 -public final class LauncherUnlockAnimationController extends ILauncherUnlockAnimationController.Stub {
