@@ -9,10 +9,10 @@ Change-Id: Ieb8fe91e2f02462f074312ed0f4885d183e9780b
  1 file changed, 2 insertions(+), 19 deletions(-)
 
 diff --git a/services/core/java/com/android/server/wm/ActivityTaskManagerService.java b/services/core/java/com/android/server/wm/ActivityTaskManagerService.java
-index a9ec7e575..e79e6f15c 100644
+index c74da27cb..171f199e6 100644
 --- a/services/core/java/com/android/server/wm/ActivityTaskManagerService.java
 +++ b/services/core/java/com/android/server/wm/ActivityTaskManagerService.java
-@@ -6100,25 +6100,8 @@ public class ActivityTaskManagerService extends IActivityTaskManager.Stub {
+@@ -6129,25 +6129,8 @@ public class ActivityTaskManagerService extends IActivityTaskManager.Stub {
                  }
  
                  if (!Build.isBuildConsistent()) {
@@ -41,5 +41,5 @@ index a9ec7e575..e79e6f15c 100644
              }
          }
 -- 
-2.34.1
+2.25.1
 

@@ -47,5 +47,5 @@ index 540b88711..fab3b70e3 100644
  
          public static boolean cameraStatusesContains(CameraStatus[] cameraStatuses, String id) {
 -- 
-2.34.1
+2.25.1
 

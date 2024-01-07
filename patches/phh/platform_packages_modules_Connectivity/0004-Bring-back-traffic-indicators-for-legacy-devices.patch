@@ -165,5 +165,5 @@ index 744df6e9b8..999c854634 100644
          if (!PRE_T) {
              System.loadLibrary("service-connectivity");
 -- 
-2.34.1
+2.25.1
 

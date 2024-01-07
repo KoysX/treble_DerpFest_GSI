@@ -9,7 +9,7 @@ This reverts commit 803c77a0a24624111944832098c6f65158051dc4.
  1 file changed, 2 insertions(+), 2 deletions(-)
 
 diff --git a/core/res/res/values/config.xml b/core/res/res/values/config.xml
-index a9122a058..015d363ff 100644
+index 6706b1be2..ae05e594f 100644
 --- a/core/res/res/values/config.xml
 +++ b/core/res/res/values/config.xml
 @@ -1100,7 +1100,7 @@
@@ -31,5 +31,5 @@ index a9122a058..015d363ff 100644
      <!-- Allows activities to be launched on a long press on power during device setup. -->
      <bool name="config_allowStartActivityForLongPressOnPowerInSetup">false</bool>
 -- 
-2.34.1
+2.25.1
 

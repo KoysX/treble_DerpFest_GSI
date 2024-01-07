@@ -27,10 +27,10 @@ Change-Id: I9f1eac5a20b98920a5d0c8204fe4d165ba069f5a
  2 files changed, 52 insertions(+), 1 deletion(-)
 
 diff --git a/services/core/Android.bp b/services/core/Android.bp
-index 911df41dd..4a4b3188d 100644
+index 600241369..1d7c29598 100644
 --- a/services/core/Android.bp
 +++ b/services/core/Android.bp
-@@ -188,7 +188,9 @@ java_library_static {
+@@ -187,7 +187,9 @@ java_library_static {
          "ImmutabilityAnnotation",
          "securebox",
          "vendor.aospa.biometrics.face",
@@ -42,7 +42,7 @@ index 911df41dd..4a4b3188d 100644
      javac_shard_size: 50,
      javacflags: [
 diff --git a/services/core/java/com/android/server/wm/DisplayPolicy.java b/services/core/java/com/android/server/wm/DisplayPolicy.java
-index 95c9e9bbf..c2f5181f3 100644
+index 4497a9209..075c7d696 100644
 --- a/services/core/java/com/android/server/wm/DisplayPolicy.java
 +++ b/services/core/java/com/android/server/wm/DisplayPolicy.java
 @@ -236,6 +236,9 @@ public class DisplayPolicy {
@@ -123,5 +123,5 @@ index 95c9e9bbf..c2f5181f3 100644
  
                      @Override
 -- 
-2.34.1
+2.25.1
 
