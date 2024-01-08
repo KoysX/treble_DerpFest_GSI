@@ -1,39 +1,45 @@
-From 94fdc4a73ea6a2ebf3847a5846ba3325da9e7211 Mon Sep 17 00:00:00 2001
-From: TheAtt1la <alittauwu@gmail.com>
-Date: Wed, 17 May 2023 11:18:17 -0300
-Subject: [PATCH 1/2] Remove duplicate 'ro.adb.secure' and 'Support many users/work
- profiles'
+From 338a2e6da2c03442da398d239a0e30f341950566 Mon Sep 17 00:00:00 2001
+From: BoNic <BoNio9527@gmail.com>
+Date: Sun, 7 Jan 2024 12:39:31 -0500
+Subject: [PATCH] Remove duplicate ro.adb.secure and Support many user
 
 ---
- config/common.mk | 8 ++++----
- 1 file changed, 4 insertions(+), 4 deletions(-)
+ config/common.mk | 13 -------------
+ 1 file changed, 13 deletions(-)
 
 diff --git a/config/common.mk b/config/common.mk
-index 61fa544..f6e8d67 100644
+index 08bf490..2786afd 100644
 --- a/config/common.mk
 +++ b/config/common.mk
-@@ -18,7 +18,7 @@ ifeq ($(TARGET_BUILD_VARIANT),eng)
- PRODUCT_SYSTEM_PROPERTIES += ro.adb.secure=0
- else
- # Enable ADB authentication
--PRODUCT_SYSTEM_PROPERTIES += ro.adb.secure=1
-+#PRODUCT_SYSTEM_PROPERTIES += ro.adb.secure=1
+@@ -13,16 +13,8 @@ PRODUCT_SYSTEM_PROPERTIES += \
+     ro.com.google.clientidbase=$(PRODUCT_GMS_CLIENTID_BASE)
+ endif
  
+-ifeq ($(TARGET_BUILD_VARIANT),eng)
+-# Disable ADB authentication
+-PRODUCT_SYSTEM_PROPERTIES += ro.adb.secure=0
+-else
+-# Enable ADB authentication
+-PRODUCT_SYSTEM_PROPERTIES += ro.adb.secure=1
+-
  # Disable extra StrictMode features on all non-engineering builds
  PRODUCT_SYSTEM_PROPERTIES += persist.sys.strictmode.disable=true
-@@ -69,9 +69,9 @@ PRODUCT_SYSTEM_PROPERTIES += \
-     ro.control_privapp_permissions=enforce
+-endif
  
- # Support many users/work profiles
+ # Backup Tool
+ ifneq ($(TARGET_EXCLUDE_BACKUPTOOL),true)
+@@ -84,11 +76,6 @@ endif
+ PRODUCT_SYSTEM_PROPERTIES += \
+     ro.control_privapp_permissions?=enforce
+ 
+-# Support many users/work profiles
 -PRODUCT_SYSTEM_DEFAULT_PROPERTIES += \
 -    persist.sys.max_profiles=16 \
 -    fw.max_users=32
-+#PRODUCT_SYSTEM_DEFAULT_PROPERTIES += \
-+#    persist.sys.max_profiles=16 \
-+#    fw.max_users=32
- 
+-
  # Include AOSP audio files
  include vendor/derp/config/aosp_audio.mk
+ 
 -- 
-2.39.2
+2.34.1
 

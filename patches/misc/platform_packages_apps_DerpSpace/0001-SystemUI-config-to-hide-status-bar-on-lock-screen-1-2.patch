@@ -9,13 +9,13 @@ Subject: [PATCH] SystemUI-config-to-hide-status-bar-on-lock-screen-1-2
  2 files changed, 10 insertions(+)
 
 diff --git a/res/values/strings.xml b/res/values/strings.xml
-index 12e135a..841fba9 100644
+index 0e04bfa..77ce246 100644
 --- a/res/values/strings.xml
 +++ b/res/values/strings.xml
-@@ -493,4 +493,8 @@
-     <!-- Ignore window secure -->
-     <string name="ignore_window_secure_title">Ignore window secure flags</string>
-     <string name="ignore_window_secure_summary">Remove screenshot and screenrecord limits for all apps. This can be convenient in some cases but may lead to privacy leaks.</string>
+@@ -502,4 +502,8 @@
+     <string name="use_photos_spoof_title">Unlimited Google photo storage</string>
+     <string name="use_photos_spoof_summary">Your device will be identified as a Pixel XL to get unlimited Google photo storage at original quality</string>
+     <string name="photos_spoof_toast">Restart the Photos app for it to take effect</string>
 +
 +    <!-- Hide statusbar on lockscreen -->
 +    <string name="lockscreen_hide_status_bar_title">Hide Statusbar</string>

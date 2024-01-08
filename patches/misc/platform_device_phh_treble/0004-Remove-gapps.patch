@@ -1,0 +1,24 @@
+From 222a49240de8173184c10f9f65d6f0a2496d6ba4 Mon Sep 17 00:00:00 2001
+From: BoNic <BoNio9527@gmaul.com>
+Date: Thu, 21 Dec 2023 18:57:54 +0800
+Subject: [PATCH] Remove-gapps
+
+---
+ generate.sh | 1 -
+ 1 file changed, 1 deletion(-)
+
+diff --git a/generate.sh b/generate.sh
+index 9c20eb5..d830e34 100644
+--- a/generate.sh
++++ b/generate.sh
+@@ -26,7 +26,6 @@ for part in a ab;do
+ 		optional_base=""
+ 				if [ "$apps" == "gapps" ];then
+ 					apps_suffix="g"
+-					apps_script='$(call inherit-product, device/phh/treble/gapps.mk)'
+ 					apps_name="with GApps"
+ 				fi
+ 				if [ "$apps" == "gapps-go" ];then
+-- 
+2.34.1
+

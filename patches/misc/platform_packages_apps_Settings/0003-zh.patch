@@ -1,19 +1,19 @@
-From e13dbb5ba230da65aec6dc8e582101393e208c6d Mon Sep 17 00:00:00 2001
-From: BoNic <BoNio9527@gmaul.com>
-Date: Mon, 18 Dec 2023 22:47:09 +0800
-Subject: [PATCH] add-zh
+From 1a13ab90f40ff5d8bc0481aad3952193e59d1128 Mon Sep 17 00:00:00 2001
+From: BoNic <BoNio9527@gmail.com>
+Date: Sun, 7 Jan 2024 22:38:49 -0500
+Subject: [PATCH] zh
 
 ---
- res/values-zh-rCN/derp_strings.xml | 647 +++++++++++++++++++++++++++++
- 1 file changed, 647 insertions(+)
+ res/values-zh-rCN/derp_strings.xml | 695 +++++++++++++++++++++++++++++
+ 1 file changed, 695 insertions(+)
  create mode 100644 res/values-zh-rCN/derp_strings.xml
 
 diff --git a/res/values-zh-rCN/derp_strings.xml b/res/values-zh-rCN/derp_strings.xml
 new file mode 100644
-index 0000000..ef27d1c
+index 0000000..afb0ba6
 --- /dev/null
 +++ b/res/values-zh-rCN/derp_strings.xml
-@@ -0,0 +1,647 @@
+@@ -0,0 +1,695 @@
 +<?xml version="1.0" encoding="utf-8"?>
 +<!--
 +     Copyright (C) 2023 DerpFest
@@ -581,6 +581,39 @@ index 0000000..ef27d1c
 +    <string name="global_vpn_summary_on">强制设备上的所有流量通过此 VPN，包括工作配置文件和其他用户。注意：启用后，您将无法在工作配置文件或其他用户中使用单独的 VPN</string>
 +    <string name="global_vpn_summary_any_vpn_active">您需要先禁用所有活动的 VPN 连接才能启用此功能</string>
 +
++    <!-- App lock -->
++    <string name="app_lock_title">应用锁</string>
++    <plurals name="app_lock_summary">
++        <item quantity="one"><xliff:g example="1" id="Number of applications">%1$d</xliff:g> application is protected</item>
++        <item quantity="other"><xliff:g example="10" id="Number of applications">%1$d</xliff:g> applications are protected</item>
++    </plurals>
++    <string name="app_lock_authentication_dialog_title">解锁</string>
++    <string name="enable_debugging">启用调试</string>
++    <string name="disable_debugging">禁用调试</string>
++    <string name="app_lock_packages_title">受保护的应用程序</string>
++    <string name="app_lock_packages_summary">选择要使用生物识别或设备凭据保护的应用程序</string>
++    <string name="app_lock_timeout_title">自动锁定超时</string>
++    <string name="app_lock_timeout_summary">应锁定后台未锁定应用程序的持续时间</string>
++    <string name="app_lock_notifications_title">编辑通知</string>
++    <string name="app_lock_notifications_summary">
++          当选定的应用程序被锁定时，通知内容将被隐藏和折叠。
++          抬头通知将自动禁用。
++    </string>
++    <string name="app_lock_notifications_disabled_summary">首先保护应用程序</string>
++    <string name="app_lock_biometrics_allowed_title">启用生物识别解锁</string>
++    <string name="app_lock_footer_text">超时后气泡将自动消除</string>
++    <string name="enable_protection">启用保护</string>
++    <string name="hide_from_launcher_title">从启动器隐藏</string>
++    <string name="hide_from_launcher_summary">
++        防止此应用程序出现在启动器中。需要重新启动启动器才能使更改生效。
++    </string>
++    <string name="app_lock_timeout_5sec">5秒</string>
++    <string name="app_lock_timeout_10sec">10秒</string>
++    <string name="app_lock_timeout_30sec">30秒</string>
++    <string name="app_lock_timeout_1min">1分钟</string>
++    <string name="app_lock_timeout_5min">5分钟</string>
++    <string name="app_lock_timeout_10min">10分钟</string>
++    <string name="app_lock_timeout_30min">30分钟</string>
 +    <!-- Back gesture height -->
 +    <string name="back_height_low_label">Full</string>
 +    <string name="back_height_high_label">底部</string>
@@ -660,6 +693,21 @@ index 0000000..ef27d1c
 +    <!-- Brightness control -->
 +    <string name="status_bar_toggle_brightness">亮度控制</string>
 +    <string name="status_bar_toggle_brightness_summary">通过滑动状态栏调节亮度</string>
++    <!-- Changelog -->
++    <string name="changelog_title">变更日志</string>
++    <string name="changelog_summary">自上次更新以来</string>
++    <string name="changelog_error">无法加载变更日志</string>
++    <!-- Summary for the accessibility preference to adjust the display size, font size, bold text, and high contrast text features. [CHAR LIMIT=NONE] -->
++    <string name="accessibility_text_reading_options_summary">自定义显示尺寸、字体和文本</string>
++    <!-- Developer Options -->
++    <string name="cleartext_network_policy_title">限制明文网络流量</string>
++    <string name="cleartext_network_policy_summary">阻止所有非 TLS 网络流量。需要私有 DNS 配置。注意：如果没有明确的豁免，使用明文流量的应用程序可能无法运行</string>
++    <!-- Auto pin confirm -->
++    <string name="lock_screen_auto_pin_confirm_summary_custom">输入正确的 PIN 码后会自动解锁。这比点击 Enter 确认的安全性稍差。</string>
++    <!-- Other Fragment -->
++    <string name="miscellaneous_settings">杂项</string>
++    <string name="other_settings">其他设置</string>
++    <string name="quick_settings">快速设置</string>
 +</resources>
 -- 
 2.34.1

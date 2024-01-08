@@ -1,14 +1,14 @@
-From 0a29f7ff67e3925c40d3dc126e606224310022cb Mon Sep 17 00:00:00 2001
+From 5e623f04d3f0114707bdd9526db7903c36b12e20 Mon Sep 17 00:00:00 2001
 From: BoNic <BoNio9527@gmail.com>
-Date: Wed, 3 Jan 2024 21:02:24 -0500
+Date: Sun, 7 Jan 2024 21:14:30 -0500
 Subject: [PATCH] zh
 
 ---
- res/values-zh-rCN/strings.xml | 379 ++++++++++++++--------------------
- 1 file changed, 160 insertions(+), 219 deletions(-)
+ res/values-zh-rCN/strings.xml | 370 ++++++++++++++--------------------
+ 1 file changed, 151 insertions(+), 219 deletions(-)
 
 diff --git a/res/values-zh-rCN/strings.xml b/res/values-zh-rCN/strings.xml
-index 4d774fc..6586819 100644
+index 4d774fc..b650c92 100644
 --- a/res/values-zh-rCN/strings.xml
 +++ b/res/values-zh-rCN/strings.xml
 @@ -42,7 +42,6 @@
@@ -314,7 +314,7 @@ index 4d774fc..6586819 100644
      <!-- Disable QS -->
      <string name="disable_qs_title">在安全的锁屏中隐藏快速设置</string>
      <string name="disable_qs_summary">当设备锁定时隐藏快速设置面板，不会关闭通知面板阴影</string>
-@@ -508,67 +372,144 @@
+@@ -508,67 +372,135 @@
      <string name="qs_auto_brightness_title">自动亮度图标</string>
      <string name="qs_auto_brightness_summary">在滑块左侧显示自动亮度图标</string>
  
@@ -325,7 +325,7 @@ index 4d774fc..6586819 100644
 +    <string name="battery_style_circle">圆圈</string>
 +    <string name="battery_style_text">文本</string>
 +    <string name="battery_percent_title">显示百分比</string>
-+    <string name="battery_percent_summary">始终用图标显示电池百分比</string>
++    <string name="battery_percent_summary">始终在图标旁显示百分比</string>
 +    <string name="battery_percent_inside_title">显示里面的百分比</string>
 +    <string name="battery_percent_inside_summary">在图标内显示百分比</string>
 +    <string name="show_battery_percent_charging_title">充电时显示百分比</string>
@@ -496,22 +496,13 @@ index 4d774fc..6586819 100644
 +    <!-- Ignore window secure -->
 +    <string name="ignore_window_secure_title">忽略窗口安全标志</string>
 +    <string name="ignore_window_secure_summary">删除所有应用程序的屏幕截图和屏幕记录限制。这在某些情况下可能很方便，但可能会导致隐私泄露。</string>
++    <!-- Unlimited g00gle ph0t0s st0rage -->
++    <string name="use_photos_spoof_title">无限的 Google 照片存储空间</string>
++    <string name="use_photos_spoof_summary">您的设备将被识别为 Pixel XL，以便以原始质量获得无限的 Google 照片存储空间</string>
++    <string name="photos_spoof_toast">重新启动照片应用程序使其生效</string>
 +    <!-- Hide statusbar on lockscreen -->
 +    <string name="lockscreen_hide_status_bar_title">隐藏状态栏</string>
 +    <string name="lockscreen_hide_status_bar_summary">启用后，状态栏将在锁屏上隐藏</string>
-+
-+    <!-- Weather -->
-+    <string name="weather_category_title">天气</string>
-+    <string name="weather_settings_title">天气设置</string>
-+    <string name="weather_settings_summary">设置图标包和天气服务</string>
-+    <string name="lockscreen_weather_title">天气条件</string>
-+    <string name="lockscreen_weather_summary">显示当前天气状况和温度</string>
-+    <string name="lockscreen_weather_enabled_info">需要启用天气服务</string>
-+    <string name="lockscreen_weather_location_title">当前位置</string>
-+    <string name="lockscreen_weather_location_summary">显示当前天气位置</string>
-+    <string name="lockscreen_weather_text_title">当前的状况</string>
-+    <string name="lockscreen_weather_text_summary">显示当前天气状况摘要</string>
-+
 +    <!-- Status bar padding -->
 +    <string name="statusbar_padding">状态栏填充</string>
 +    <string name="statusbar_top_padding">顶部</string>
