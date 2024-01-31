@@ -1,7 +1,7 @@
-From 2b6e41766dc946720a33a832bb4cfe59e9c1adfa Mon Sep 17 00:00:00 2001
+From bb1b3abd8d727068638412b058fe3fffe6c28d35 Mon Sep 17 00:00:00 2001
 From: Pierre-Hugues Husson <phh@phh.me>
 Date: Wed, 18 Oct 2023 16:53:40 -0400
-Subject: [PATCH 41/46] Ignore cgroup creation errors
+Subject: [PATCH 41/49] Ignore cgroup creation errors
 
 For old kernels who don't have those modern cgroups
 ---
@@ -46,5 +46,5 @@ index b0f77604319b..23ca22fc73f4 100644
                              app.mProcessGroupCreated = true;
                          }
 -- 
-2.25.1
+2.34.1
 

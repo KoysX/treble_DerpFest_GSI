@@ -1,19 +1,19 @@
-From 032bc21122ee114796a1a906dc5104eb6d6abf27 Mon Sep 17 00:00:00 2001
-From: BoNic <BoNio9527@gmail.com>
-Date: Sun, 7 Jan 2024 21:23:53 -0500
+From 1790c8e9535f36cc9ce80a83f0aa71f235fbb796 Mon Sep 17 00:00:00 2001
+From: BoNic <bonio9527@gmail.com>
+Date: Tue, 30 Jan 2024 03:26:36 -0500
 Subject: [PATCH] zh
 
 ---
- res/values-zh-rCN/derp_strings.xml | 113 +++++++++++++++++++++++++++++
- 1 file changed, 113 insertions(+)
+ res/values-zh-rCN/derp_strings.xml | 153 +++++++++++++++++++++++++++++
+ 1 file changed, 153 insertions(+)
  create mode 100644 res/values-zh-rCN/derp_strings.xml
 
 diff --git a/res/values-zh-rCN/derp_strings.xml b/res/values-zh-rCN/derp_strings.xml
 new file mode 100644
-index 0000000..108d1e1
+index 0000000..2a55774
 --- /dev/null
 +++ b/res/values-zh-rCN/derp_strings.xml
-@@ -0,0 +1,113 @@
+@@ -0,0 +1,153 @@
 +<?xml version="1.0" encoding="utf-8"?>
 +<!--
 +     Copyright (C) 2023 DerpFest
@@ -63,6 +63,7 @@ index 0000000..108d1e1
 +    <string name="category_recents">最近的内容</string>
 +    <string name="category_dev">开发人员</string>
 +    <string name="category_gesture">手势</string>
++    <string name="category_statusbar">状态栏</string>
 +
 +    <!-- Hotseat searchbar -->
 +    <string name="label_search">搜索</string>
@@ -72,6 +73,8 @@ index 0000000..108d1e1
 +    <string name="dock_search_summary">底部停靠栏的搜索栏</string>
 +
 +    <!-- Recents icons -->
++    <string name="recents_chips_title">采用紧凑的动作设计</string>
++    <string name="recents_chips_summary">可能需要显示大量操作</string>
 +    <string name="recents_screenshot_title">截图</string>
 +    <string name="recents_clear_all_title">全部清除</string>
 +    <string name="recents_lens_title">镜头</string>
@@ -126,6 +129,43 @@ index 0000000..108d1e1
 +    <!-- Faster statusbar expansion -->
 +    <string name="faster_sb_expansion_title">更快的状态栏扩展</string>
 +    <string name="faster_sb_expansion_summary">主屏幕右侧向下滑动可展开快捷设置</string>
++
++    <!-- Hide top shadow -->
++    <string name="hide_top_shadow_title">隐藏顶部阴影</string>
++    <string name="hide_top_shadow_summary">去除状态栏下方的阴影</string>
++
++    <!-- Memory info -->
++    <string name="meminfo_text">%1$s available | %2$s</string>
++    <string name="recents_meminfo_title">内存信息</string>
++
++    <!-- Hotseat Background -->
++    <string name="hotseat_bg_title">Hotseat背景</string>
++    <string name="hotseat_bg_summary">为应用程序坞添加半透明背景</string>
++
++    <!-- Background opacity -->
++    <string name="background_opacity_title">背景不透明度</string>
++
++    <!-- Background blur -->
++    <string name="background_blur_title">背景模糊深度</string>
++    <string name="background_blur_summary">设置最近使用的应用程序和应用程序抽屉的模糊深度级别</string>
++
++    <!-- Dark Status Bar -->
++    <string name="perf_dark_status_bar_title">深色状态栏</string>
++    <string name="perf_dark_status_bar_summary">在主屏幕上使用深色状态栏</string>
++
++    <!-- Wallpaper scrolling -->
++    <string name="allow_wallpaper_scrolling">壁纸滚动</string>
++    <string name="allow_wallpaper_scrolling_summary">多屏壁纸滚动效果</string>
++
++    <!-- Homescreen Statusbar -->
++    <string name="show_statusbar_title">显示状态栏</string>
++    <string name="show_statusbar_summary">在主屏幕上显示状态栏</string>
++
++    <!-- App label - max lines -->
++    <string name="icon_max_lines_title">应用程序标签的最大行数</string>
++
++    <!-- Row Height -->
++    <string name="row_height_title">行高</string>
 +</resources>
 -- 
 2.34.1

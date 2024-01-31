@@ -17,12 +17,12 @@ BD=$PWD/treble_DerpFest_GSI/GSI
 initRepos() {
     if [ ! -d .repo ]; then
         echo "--> Initializing workspace"
-        repo init -u https://github.com/DerpFest-AOSP/manifest.git -b 14 --git-lfs --depth=1
+        repo init -u https://github.com/DerpFest-AOSP/manifest.git -b 14 --depth=1
         echo
 
         echo "--> Preparing local manifest"
         mkdir -p .repo/local_manifests
-        cp $BL/manifest.xml .repo/local_manifests/dp.xml
+        cp $BL/manifest.xml .repo/local_manifests/aosp.xml
         echo
     fi
 }
@@ -66,20 +66,65 @@ buildTrebleApp() {
     echo
 }
 
-buildVariant() {
-    echo "--> Building treble_arm64_bvN"
-    lunch treble_arm64_bvN-userdebug
+buildGappsVariant() {
+    echo "--> Building treble_arm64_bgN"
+    lunch treble_arm64_bgN-userdebug
     make -j$(nproc --all) installclean
     make -j$(nproc --all) systemimage
-    mv $OUT/system.img $BD/system-treble_arm64_bvN.img
+    mv $OUT/system.img $BD/system-treble_arm64_bgN.img
+    echo
+}
+
+buildMiniVariant() {
+    echo "--> Building treble_arm64_bgN-mini"
+    lunch treble_arm64_bgN_mini-userdebug
+    make -j$(nproc --all) installclean
+    make -j$(nproc --all) systemimage
+    mv $OUT/system.img $BD/system-treble_arm64_bgN-mini.img
+    echo
+}
+
+buildPicoVariant() {
+    echo "--> Building treble_arm64_bgN-pico"
+    lunch treble_arm64_bgN_pico-userdebug
+    make -j$(nproc --all) installclean
+    make -j$(nproc --all) systemimage
+    mv $OUT/system.img $BD/system-treble_arm64_bgN-pico.img
     echo
 }
 
 generatePackages() {
     echo "--> Generating packages"
     buildDate="$(date +%Y%m%d)"
-    xz -cv $BD/system-treble_arm64_bvN.img -T0 > $BD/DerpFest-arm64-ab-14.0-unofficial-$buildDate.img.xz
+    xz -cv $BD/system-treble_arm64_bgN.img -T0 > $BD/DerpFest-arm64_bgN-14.0-unofficial-$buildDate.img.xz
+    xz -cv $BD/system-treble_arm64_bgN-mini.img -T0 > $BD/DerpFest-arm64_bgN-mini-14.0-unofficial-$buildDate.img.xz
+    xz -cv $BD/system-treble_arm64_bgN-pico.img -T0 > $BD/DerpFest-arm64_bgN-pico-14.0-unofficial-$buildDate.img.xz
     rm -rf $BD/system-*.img
+    echo
+}
+
+generateOta() {
+    echo "--> Generating OTA file"
+    version="$(date +v%Y.%m.%d)"
+    timestamp="$START"
+    json="{\"version\": \"$version\",\"date\": \"$timestamp\",\"variants\": ["
+    find $BD/ -name "DerpFest-*" | sort | {
+        while read file; do
+            filename="$(basename $file)"
+            if [[ $filename == *"mini"* ]]; then
+                name="treble_arm64_bgN-mini"
+            elif [[ $filename == *"pico"* ]]; then
+                name="treble_arm64_bgN-pico"
+            else
+                name="treble_arm64_bgN"
+            fi
+            size=$(wc -c $file | awk '{print $1}')
+            url="https://github.com/KoysX/treble_DerpFest_GSI/releases/download/$version/$filename"
+            json="${json} {\"name\": \"$name\",\"size\": \"$size\",\"url\": \"$url\"},"
+        done
+        json="${json%?}]}"
+        echo "$json" | jq . > $BL/ota.json
+    }
     echo
 }
 
@@ -90,8 +135,11 @@ syncRepos
 applyPatches
 setupEnv
 buildTrebleApp
-buildVariant
+buildGappsVariant
+buildMiniVariant
+buildPicoVariant
 generatePackages
+generateOta
 
 END=$(date +%s)
 ELAPSEDM=$(($(($END-$START))/60))

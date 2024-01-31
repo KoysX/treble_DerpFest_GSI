@@ -1,0 +1,60 @@
+From f6bf41e1f28f52ca85de6f65686a9b2d980c4636 Mon Sep 17 00:00:00 2001
+From: BoNic <bonio9527@gmail.com>
+Date: Tue, 30 Jan 2024 02:40:49 -0500
+Subject: [PATCH] Implement pico and mini gapps
+
+---
+ generate.sh | 18 +++++++++++++++---
+ 1 file changed, 15 insertions(+), 3 deletions(-)
+
+diff --git a/generate.sh b/generate.sh
+index 461eff1..0a5fc7e 100644
+--- a/generate.sh
++++ b/generate.sh
+@@ -15,20 +15,32 @@ fi
+ echo 'PRODUCT_MAKEFILES := \' > AndroidProducts.mk
+ 
+ for part in a ab;do
+-	for apps in vanilla gapps foss gapps-go;do
++	for apps in vanilla gapps foss gapps-go gapps-mini gapps-pico;do
+ 		for arch in arm64 arm a64;do
+ 			for su in yes no;do
+ 				apps_suffix=""
+ 				apps_script=""
+ 				apps_name=""
+ 				extra_packages=""
++				file_suffix=""
+                 vndk="vndk.mk"
+ 		optional_base=""
+ 				if [ "$apps" == "gapps" ];then
+ 					apps_suffix="g"
+-					apps_script='$(call inherit-product, device/phh/treble/gapps.mk)'
+ 					apps_name="with GApps"
+ 				fi
++               if [ "$apps" == "gapps-mini" ];then
++					apps_suffix="g"
++					apps_script='TARGET_USES_MINI_GAPPS := true'
++					apps_name="With mini GApps"
++					file_suffix="_mini"
++				fi
++               if [ "$apps" == "gapps-pico" ];then
++					apps_suffix="g"
++					apps_script='TARGET_USES_PICO_GAPPS := true'
++					apps_name="With pico GApps"
++					file_suffix="_pico"
++               fi
+ 				if [ "$apps" == "gapps-go" ];then
+ 					apps_suffix="o"
+ 					apps_script='$(call inherit-product, device/phh/treble/gapps-go.mk)'
+@@ -64,7 +76,7 @@ for part in a ab;do
+ 					optional_base='$(call inherit-product, device/phh/treble/base-sas.mk)'
+ 				fi
+ 
+-				target="treble_${arch}_${part_suffix}${apps_suffix}${su_suffix}"
++				target="treble_${arch}_${part_suffix}${apps_suffix}${su_suffix}${file_suffix}"
+ 
+ 				baseArch="$arch"
+ 				if [ "$arch" = "a64" ];then
+-- 
+2.34.1
+

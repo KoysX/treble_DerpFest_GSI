@@ -1,0 +1,27 @@
+From d1b8c6df5c22d0f7307db95824472f434aa4a46d Mon Sep 17 00:00:00 2001
+From: BoNic <bonio9527@gmail.com>
+Date: Tue, 30 Jan 2024 06:14:49 -0500
+Subject: [PATCH] Changelog.txt: No such file or directory
+
+---
+ core/Makefile | 4 ----
+ 1 file changed, 4 deletions(-)
+
+diff --git a/core/Makefile b/core/Makefile
+index 87817b5..6bc6b73 100644
+--- a/core/Makefile
++++ b/core/Makefile
+@@ -910,10 +910,6 @@ $(INSTALLED_FILES_FILE_ROOT) : $(INTERNAL_ROOT_FILES) $(FILESLIST) $(FILESLIST_U
+ 	$(FILESLIST) $(TARGET_ROOT_OUT) > $(@:.txt=.json)
+ 	$(FILESLIST_UTIL) -c $(@:.txt=.json) > $@
+ 
+-	@echo "Generating Changelog"
+-	$(hide) ./vendor/derp/tools/changelog
+-	$(hide) mv $(PRODUCT_OUT)/Changelog.txt $(PRODUCT_OUT)/$(PLATFORM_VERSION)-$(TARGET_PRODUCT)-$(shell $(DATE_FROM_FILE) +%Y%m%d-%H%M)-Changelog.txt
+-
+ $(call declare-0p-target,$(INSTALLED_FILES_FILE_ROOT))
+ $(call declare-0p-target,$(INSTALLED_FILES_JSON_ROOT))
+ 
+-- 
+2.34.1
+

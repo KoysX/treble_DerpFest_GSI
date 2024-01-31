@@ -30,5 +30,5 @@ index 64093743f8..3eb7419a02 100644
      // For the devices that support cgroup socket filter, the socket filter
      // should be loaded successfully by bpfloader. So we attach the filter to
 -- 
-2.25.1
+2.34.1
 

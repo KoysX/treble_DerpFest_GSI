@@ -1,4 +1,4 @@
-From a695e2d74ee804856e3a5066068d2092d23e4fc6 Mon Sep 17 00:00:00 2001
+From 6bde488aa8ac93ce52ad347b806ee8f004dda32d Mon Sep 17 00:00:00 2001
 From: Pierre-Hugues Husson <phh@phh.me>
 Date: Sat, 25 Nov 2023 08:15:28 -0500
 Subject: [PATCH 09/10] Add MTK GED KPI support to fix broken Mediatek gpufreq
@@ -291,5 +291,5 @@ index 39a59e42aa..ff595dd188 100644
  
  } // namespace android
 -- 
-2.25.1
+2.34.1
 

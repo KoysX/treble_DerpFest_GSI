@@ -1,27 +1,26 @@
-From 9fbe4871e5380d0b1366f34f66e69ea723cb0eb5 Mon Sep 17 00:00:00 2001
+From 679747f83df981a4ed3dcaf64f158c6b7db2c122 Mon Sep 17 00:00:00 2001
 From: ChonDoit <thphantomblog@gmail.com>
 Date: Thu, 24 Aug 2023 15:58:15 -0300
-Subject: [PATCH 40/46] Fix brightness slider curve for some devices
+Subject: [PATCH] Fix brightness slider curve for some devices
 
 Some devices report max brightness as 2047 or 4095
 ---
- .../src/com/android/settingslib/display/BrightnessUtils.java   | 3 +--
- 1 file changed, 1 insertion(+), 2 deletions(-)
+ .../src/com/android/settingslib/display/BrightnessUtils.java    | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
 diff --git a/packages/SettingsLib/DisplayUtils/src/com/android/settingslib/display/BrightnessUtils.java b/packages/SettingsLib/DisplayUtils/src/com/android/settingslib/display/BrightnessUtils.java
-index 68bb378b8..3dcac0039 100644
+index 68bb378b8..8cc192f4f 100644
 --- a/packages/SettingsLib/DisplayUtils/src/com/android/settingslib/display/BrightnessUtils.java
 +++ b/packages/SettingsLib/DisplayUtils/src/com/android/settingslib/display/BrightnessUtils.java
-@@ -23,8 +23,7 @@ import com.android.internal.display.BrightnessSynchronizer;
- /** Utility methods for calculating the display brightness. */
+@@ -24,7 +24,7 @@ import com.android.internal.display.BrightnessSynchronizer;
  public class BrightnessUtils {
  
--    public static final boolean sysUseLowGamma = Boolean.parseBoolean(
+     public static final boolean sysUseLowGamma = Boolean.parseBoolean(
 -        SystemProperties.get("persist.sys.brightness.low.gamma", "false"));
-+    public static final boolean sysUseLowGamma = Boolean.parseBoolean(SystemProperties.get("persist.sys.phh.low_gamma_brightness", "false"));
-
++        SystemProperties.get("persist.sys.phh.low_gamma_brightness", "false"));
+ 
      public static final int GAMMA_SPACE_MIN = 0;
      public static final int GAMMA_SPACE_MAX = sysUseLowGamma ? 255 : 65535;
 -- 
-2.25.1
+2.34.1
 

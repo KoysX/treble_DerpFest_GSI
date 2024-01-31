@@ -14,7 +14,7 @@ It means this command isn't in the command_queue_, we can just ignore it.
  1 file changed, 4 insertions(+)
 
 diff --git a/system/gd/hci/hci_layer.cc b/system/gd/hci/hci_layer.cc
-index 3e8ab78371..32495069a2 100644
+index 3e8ab783714..32495069a21 100644
 --- a/system/gd/hci/hci_layer.cc
 +++ b/system/gd/hci/hci_layer.cc
 @@ -359,6 +359,10 @@ struct HciLayer::impl {
@@ -29,5 +29,5 @@ index 3e8ab78371..32495069a2 100644
              op_code == OpCode::NONE,
              "Received %s event with OpCode 0x%02hx (%s) without a waiting command"
 -- 
-2.25.1
+2.34.1
 

@@ -12,10 +12,10 @@ Subject: [PATCH] Add tunnings for status bar paddings [1/2]
  5 files changed, 143 insertions(+), 8 deletions(-)
 
 diff --git a/core/java/android/provider/Settings.java b/core/java/android/provider/Settings.java
-index b261275d2..28486d208 100644
+index 2f95762fe..84e82b4d4 100644
 --- a/core/java/android/provider/Settings.java
 +++ b/core/java/android/provider/Settings.java
-@@ -6825,6 +6825,24 @@ public final class Settings {
+@@ -6848,6 +6848,24 @@ public final class Settings {
           */
          public static final String LOCK_HIDE_STATUS_BAR = "lockscreen_hide_status_bar";
  
@@ -38,26 +38,26 @@ index b261275d2..28486d208 100644
 +        public static final String STATUSBAR_TOP_PADDING = "statusbar_top_padding";
 +
          /**
-          * Whether keyguard will rotate
-          * 0 = false, 1 = true
-@@ -7007,6 +7025,9 @@ public final class Settings {
-             PRIVATE_SETTINGS.add(INCREASING_RING_START_VOLUME);
-             PRIVATE_SETTINGS.add(INCREASING_RING_RAMP_UP_TIME);
+          * Whether edge light is enabled.
+          * Default 0
+@@ -7092,6 +7110,9 @@ public final class Settings {
+             PRIVATE_SETTINGS.add(SENSOR_BLOCK);
+             PRIVATE_SETTINGS.add(FORCE_FULLSCREEN_CUTOUT_APPS);
              PRIVATE_SETTINGS.add(LOCK_HIDE_STATUS_BAR);
 +            PRIVATE_SETTINGS.add(STATUSBAR_LEFT_PADDING);
 +            PRIVATE_SETTINGS.add(STATUSBAR_RIGHT_PADDING);
 +            PRIVATE_SETTINGS.add(STATUSBAR_TOP_PADDING);
-             PRIVATE_SETTINGS.add(AUTO_BRIGHTNESS_ONE_SHOT);
-             PRIVATE_SETTINGS.add(CLICK_PARTIAL_SCREENSHOT);
-             PRIVATE_SETTINGS.add(SWAP_VOLUME_KEYS_ON_ROTATION);
+             PRIVATE_SETTINGS.add(FLASHLIGHT_ON_CALL);
+             PRIVATE_SETTINGS.add(FLASHLIGHT_ON_CALL_IGNORE_DND);
+             PRIVATE_SETTINGS.add(FLASHLIGHT_ON_CALL_RATE);
 diff --git a/core/res/res/values/derp_symbols.xml b/core/res/res/values/derp_symbols.xml
-index c051574dd..ebd74c79d 100644
+index cdeeedfca..d3b1c767e 100644
 --- a/core/res/res/values/derp_symbols.xml
 +++ b/core/res/res/values/derp_symbols.xml
-@@ -171,4 +171,9 @@
+@@ -201,4 +201,9 @@
  
-     <!-- Whether to cancel fingerprint operation if not idle -->
-     <java-symbol type="bool" name="config_fpCancelIfNotIdle" />
+     <!-- Parallel space max count. -->
+     <java-symbol type="integer" name="config_parallelSpaceMaxCount" />
 +
 +    <!-- Status bar paddings -->
 +    <java-symbol type="dimen" name="status_bar_padding_start" />

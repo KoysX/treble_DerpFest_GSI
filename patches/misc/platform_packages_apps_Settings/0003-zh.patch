@@ -1,19 +1,19 @@
-From 1a13ab90f40ff5d8bc0481aad3952193e59d1128 Mon Sep 17 00:00:00 2001
-From: BoNic <BoNio9527@gmail.com>
-Date: Sun, 7 Jan 2024 22:38:49 -0500
+From af798d907c778c1e63a49685ed8c18b832fdfdac Mon Sep 17 00:00:00 2001
+From: BoNic <bonio9527@gmail.com>
+Date: Tue, 30 Jan 2024 03:28:49 -0500
 Subject: [PATCH] zh
 
 ---
- res/values-zh-rCN/derp_strings.xml | 695 +++++++++++++++++++++++++++++
- 1 file changed, 695 insertions(+)
+ res/values-zh-rCN/derp_strings.xml | 750 +++++++++++++++++++++++++++++
+ 1 file changed, 750 insertions(+)
  create mode 100644 res/values-zh-rCN/derp_strings.xml
 
 diff --git a/res/values-zh-rCN/derp_strings.xml b/res/values-zh-rCN/derp_strings.xml
 new file mode 100644
-index 0000000..afb0ba6
+index 0000000..e9f9c38
 --- /dev/null
 +++ b/res/values-zh-rCN/derp_strings.xml
-@@ -0,0 +1,695 @@
+@@ -0,0 +1,750 @@
 +<?xml version="1.0" encoding="utf-8"?>
 +<!--
 +     Copyright (C) 2023 DerpFest
@@ -70,6 +70,11 @@ index 0000000..afb0ba6
 +    <string name="trust_restrict_usb_keyguard">解锁时允许 USB 连接</string>
 +    <string name="trust_restrict_usb_disabled">始终允许 USB 连接</string>
 +
++    <!-- Max refresh rate -->
++    <string name="max_refresh_rate_title">峰值刷新率</string>
++
++    <!-- Min refresh rate -->
++    <string name="min_refresh_rate_title">最低刷新率</string>
 +    <!-- Message shown in fingerprint enrollment dialog to locate the sensor -->
 +    <string name="fingerprint_enroll_find_sensor_message_front" product="tablet">找到平板电脑正面的指纹传感器。</string>
 +    <string name="fingerprint_enroll_find_sensor_message_front" product="device">找到设备正面的指纹传感器。</string>
@@ -464,11 +469,6 @@ index 0000000..afb0ba6
 +    <string name="power_menu_panic_title">紧急触发</string>
 +    <!-- Text shown for the description of the panic option -->
 +    <string name="power_menu_panic_summary">激活紧急恐慌触发器。</string>
-+
-+    <!-- Mic + Camera indicator -->
-+    <string name="mic_camera_indicator_settings_title">状态栏麦克风和摄像头指示灯</string>
-+    <string name="mic_camera_indicator_settings_description">当任何应用程序使用麦克风或摄像头时显示指示器</string>
-+
 +    <!-- USB configuration -->
 +    <string name="usb_default_config_title">USB配置</string>
 +    <string name="usb_default_config_summary">选择通过 USB 连接到设备时的默认行为</string>
@@ -525,10 +525,6 @@ index 0000000..afb0ba6
 +    <string name="assisted_gps">使用辅助 GPS</string>
 +    <!-- Location settings screen, setting summary for Assisted GPS switch -->
 +    <string name="assisted_gps_summary">从互联网上下载卫星辅助数据，可以大大提高GPS启动性能。对于紧急呼叫，始终允许使用辅助 GPS。</string>
-+
-+    <!-- Name of Refresh Rate controls category in Display Settings [CHAR LIMIT=none] -->
-+    <string name="category_name_refresh_rate_controls">刷新率</string>
-+
 +    <!-- Radio Info -->
 +    <string name="radio_info_title">电台信息</string>
 +
@@ -629,10 +625,6 @@ index 0000000..afb0ba6
 +    <string name="back_gesture_haptic_title">触觉反馈</string>
 +    <string name="back_gesture_haptic_summary">执行返回手势时振动</string>
 +
-+    <!-- Notification guts kill app button -->
-+    <string name="notification_guts_kill_app_button_title">强制停止按钮</string>
-+    <string name="notification_guts_kill_app_button_summary">在通知的长按菜单中显示强制停止按钮</string>
-+
 +    <!-- Show clipboard overlay -->
 +    <string name="show_clipboard_overlay_title">显示剪贴板覆盖</string>
 +    <string name="show_clipboard_overlay_summary">将某些内容复制到剪贴板时，在屏幕左下角显示叠加层</string>
@@ -685,7 +677,6 @@ index 0000000..afb0ba6
 +    <string name="display_cutout_force_fullscreen_summary">强制应用程序忽略凹口空间</string>
 +    <string name="search">搜索</string>
 +    <string name="search_apps">搜索应用程序</string>
-+    <string name="application_icon">应用程序图标</string>
 +
 +    <!-- Pulse on music track change -->
 +    <string name="pulse_on_new_tracks_title">音乐收报机</string>
@@ -708,6 +699,70 @@ index 0000000..afb0ba6
 +    <string name="miscellaneous_settings">杂项</string>
 +    <string name="other_settings">其他设置</string>
 +    <string name="quick_settings">快速设置</string>
++    <!-- Face Unlock -->
++    <string name="face_unlock_method_title">允许在锁定屏幕上进行面部解锁</string>
++    <string name="face_unlock_method_default">当屏幕打开时</string>
++    <string name="face_unlock_method_swipe">在锁定屏幕上滑动时</string>
++    <!-- Smart 5G -->
++    <string name="smart_5g_title">智能5G</string>
++    <string name="smart_5g_summary">自动切换5G和4G，减少电池消耗</string>
++    <!-- Ambient wake toggles -->
++    <string name="doze_gesture_ambient_title">显示环境</string>
++    <string name="doze_gesture_ambient_summary">显示环境显示而不是完全唤醒屏幕</string>
++    <string name="gesture_wake_ambient">显示环境</string>
++    <string name="gesture_wake">完全苏醒</string>
++    <!-- Battery saver refresh rate -->
++    <string name="battery_saver_refresh_rate_title">降低刷新率</string>
++    <string name="battery_saver_refresh_rate_summary">当省电模式打开时，使用 60 Hz 屏幕刷新率来节省电量</string>
++    <!-- Doze on double tap -->
++    <string name="double_tap_title">双击</string>
++    <string name="doze_double_tap_title">双击查看手机</string>
++    <string name="doze_double_tap_summary">通过双击脉冲通知</string>
++    <!-- Doze enablement -->
++    <string name="doze_enabled_title">环境显示</string>
++    <string name="doze_enabled_summary">是否开启doze包功能</string>
++    <!-- Running services - Background processes tab -->
++    <string name="background_processes_settings_title">后台进程</string>
++    <!-- Incall options -->
++    <string name="incall_category">通话中选项</string>
++    <string name="flashlight_notifications_title">闪光警报</string>
++    <string name="flashlight_on_call_title">来电时闪烁手电筒</string>
++    <string name="flashlight_on_call_disabled">禁用</string>
++    <string name="flashlight_on_call_ringer">响铃时</string>
++    <string name="flashlight_on_call_no_ringer">当铃声静音时</string>
++    <string name="flashlight_on_call_silent">当完全静音时（没有铃声或振动器）</string>
++    <string name="flashlight_on_call_always">总是</string>
++    <string name="flashlight_on_call_ignore_dnd_title">忽略免打扰</string>
++    <string name="flashlight_on_call_ignore_dnd_summary">勿扰模式开启时是否闪烁</string>
++    <string name="flashlight_on_call_rate_title">眨眼率</string>
++    <!-- Units -->
++    <string name="unit_milliseconds">毫秒</string>
++    <!-- Refresh rate category name in Display Settings [CHAR LIMIT=none] -->
++    <string name="category_name_display_refresh_rate">刷新率</string>
++    <!-- AOD Schedule -->
++    <string name="always_on_display_schedule_title">始终显示时间表</string>
++    <string name="always_on_display_schedule_sunset">日落</string>
++    <string name="always_on_display_schedule_sunrise">日出</string>
++    <string name="always_on_display_schedule_mixed_sunset">从日落到某个时间开启</string>
++    <string name="always_on_display_schedule_mixed_sunrise">从某个时间一直亮到日出</string>
++    <!-- Wakelock blocker -->
++    <string name="wakelock_blocker_title">唤醒锁拦截器</string>
++    <string name="wakelock_blocker_summary">阻止系统唤醒锁</string>
++    <string name="wakelock_blocker_save">保存</string>
++    <string name="wakelock_list_header">可用的唤醒锁</string>
++    <string name="wakelock_blocker_reload">重新加载</string>
++    <string name="wakelock_blocker_warning_title">谨慎行事</string>
++    <string name="wakelock_blocker_warning">阻止唤醒锁可能会导致不稳定、崩溃或数据丢失</string>
++
++    <!-- Alarm blocker -->
++    <string name="alarm_blocker">警报拦截器</string>
++    <string name="alarm_blocker_title">启用</string>
++    <string name="alarm_blocker_summary">关闭屏幕时阻止警报</string>
++    <string name="alarm_blocker_save">保存</string>
++    <string name="alarm_list_header">可用的警报</string>
++    <string name="alarm_blocker_reload">重新加载</string>
++    <string name="alarm_blocker_warning_title">谨慎行事</string>
++    <string name="alarm_blocker_warning">阻塞警报有可能导致不稳定、崩溃或数据丢失。</string>
 +</resources>
 -- 
 2.34.1

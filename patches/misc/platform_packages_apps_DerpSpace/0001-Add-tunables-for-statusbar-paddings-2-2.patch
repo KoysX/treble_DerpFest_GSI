@@ -34,13 +34,13 @@ index c25dc32..d2f6de2 100644
 +
  </resources>
 diff --git a/res/values/strings.xml b/res/values/strings.xml
-index 77ce246..bcce6d8 100644
+index 31252f0..b5a9417 100644
 --- a/res/values/strings.xml
 +++ b/res/values/strings.xml
-@@ -506,4 +506,16 @@
-     <!-- Hide statusbar on lockscreen -->
-     <string name="lockscreen_hide_status_bar_title">Hide Statusbar</string>
-     <string name="lockscreen_hide_status_bar_summary">When enabled, statusbar will be hidden on lockscreen</string>
+@@ -532,4 +532,16 @@
+     <string name="theme_color">Theme color (Default)</string>
+     <string name="notification_color">Notification color</string>
+     <string name="custom_color">Custom color</string>
 +
 +    <!-- Custom seekbar -->
 +    <string name="custom_seekbar_value">Value: <xliff:g id="v">%s</xliff:g></string>
