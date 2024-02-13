@@ -1,4 +1,4 @@
-From 7759fa2f27faa175deeb71341ba7671a2a908b3f Mon Sep 17 00:00:00 2001
+From 3f43ab251a7d2e04f6e4df755e0f85c16410b617 Mon Sep 17 00:00:00 2001
 From: Pierre-Hugues Husson <phh@phh.me>
 Date: Fri, 6 Oct 2023 19:11:22 -0400
 Subject: [PATCH 5/6] Include vndk v28 sepolicy support
@@ -8,7 +8,7 @@ Subject: [PATCH 5/6] Include vndk v28 sepolicy support
  1 file changed, 1 insertion(+)
 
 diff --git a/core/config.mk b/core/config.mk
-index 0c086ee0907..6006a5e8f5f 100644
+index 0c086ee090..6006a5e8f5 100644
 --- a/core/config.mk
 +++ b/core/config.mk
 @@ -911,6 +911,7 @@ endif
@@ -20,5 +20,5 @@ index 0c086ee0907..6006a5e8f5f 100644
      30.0 \
      31.0 \
 -- 
-2.34.1
+2.25.1
 

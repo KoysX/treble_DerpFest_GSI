@@ -22,5 +22,5 @@ index 0bc29583fb..71bb2e5b75 100644
              if (responseInfo.error == RadioError.NONE) {
                  sendMessageResponse(rr.mResult, iccCardStatus);
 -- 
-2.34.1
+2.25.1
 

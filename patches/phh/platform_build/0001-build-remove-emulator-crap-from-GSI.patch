@@ -1,4 +1,4 @@
-From fbdeaa42bc061abd0cf5eb8ffbbab181f683ece9 Mon Sep 17 00:00:00 2001
+From 9badc624c4472090d6ff8dafcc3b13aade0b0f0b Mon Sep 17 00:00:00 2001
 From: sooti <sooti85@gmail.com>
 Date: Tue, 12 Oct 2021 14:32:52 +0300
 Subject: [PATCH 1/6] build: remove emulator crap from GSI
@@ -9,7 +9,7 @@ Change-Id: Id45f3ff1d31e3d4492f956e68a1eb4b2fb82ce63
  1 file changed, 3 insertions(+), 3 deletions(-)
 
 diff --git a/target/product/emulator_vendor.mk b/target/product/emulator_vendor.mk
-index f71b275b0e2..62984253f31 100644
+index f71b275b0e..62984253f3 100644
 --- a/target/product/emulator_vendor.mk
 +++ b/target/product/emulator_vendor.mk
 @@ -28,7 +28,7 @@ PRODUCT_PACKAGES += \
@@ -30,5 +30,5 @@ index f71b275b0e2..62984253f31 100644
 +# PRODUCT_SYSTEM_EXT_PROPERTIES += \
 +#    ro.setupwizard.mode?=DISABLED
 -- 
-2.34.1
+2.25.1
 

@@ -5,12 +5,13 @@ Subject: [PATCH] Add tunables for statusbar paddings (2/2)
 
 ---
  res/values/attrs.xml                          |   9 +
+ res/values-zh-rCN/strings.xml                 |   6 +
  res/values/strings.xml                        |  12 +
  res/xml/misc_derpspace.xml                    |  27 ++
  .../derpspace/fragments/StatusBar.java        | 121 ++++++
  .../preferences/CustomSeekBarPreference.java  | 344 ++++++++++++++++++
  .../derpspace/utils/ResourceUtils.java        |  34 ++
- 6 files changed, 547 insertions(+)
+ 7 files changed, 553 insertions(+)
  create mode 100644 src/org/derpfest/derpspace/fragments/StatusBar.java
  create mode 100644 src/org/derpfest/derpspace/preferences/CustomSeekBarPreference.java
  create mode 100644 src/org/derpfest/derpspace/utils/ResourceUtils.java
@@ -33,14 +34,29 @@ index c25dc32..d2f6de2 100644
 +    </declare-styleable>
 +
  </resources>
+diff --git a/res/values-zh-rCN/strings.xml b/res/values-zh-rCN/strings.xml
+index fd3788f..002b1a7 100644
+--- a/res/values-zh-rCN/strings.xml
++++ b/res/values-zh-rCN/strings.xml
+@@ -523,4 +523,10 @@
+     <!-- Netflix Spoof -->
+     <string name="netflix_spoof_title">Netflix 机型伪装</string>
+     <string name="netflix_spoof_summary">对 Netflix 伪装您的设备为其他型号</string>
++
++    <!-- Status bar padding -->
++    <string name="statusbar_padding">状态栏填充</string>
++    <string name="statusbar_top_padding">顶部</string>
++    <string name="statusbar_left_padding">左边</string>
++    <string name="statusbar_right_padding">右边</string>
+ </resources>
 diff --git a/res/values/strings.xml b/res/values/strings.xml
-index 31252f0..b5a9417 100644
+index fae5a66..607d3cc 100644
 --- a/res/values/strings.xml
 +++ b/res/values/strings.xml
-@@ -532,4 +532,16 @@
-     <string name="theme_color">Theme color (Default)</string>
-     <string name="notification_color">Notification color</string>
-     <string name="custom_color">Custom color</string>
+@@ -538,4 +538,16 @@
+     <!-- Netflix Spoof -->
+     <string name="netflix_spoof_title">Netflix spoof</string>
+     <string name="netflix_spoof_summary">Spoof your device as different model for Netflix</string>
 +
 +    <!-- Custom seekbar -->
 +    <string name="custom_seekbar_value">Value: <xliff:g id="v">%s</xliff:g></string>

@@ -9,7 +9,7 @@ Change-Id: I02d672f9a2688df7b1abf16377634fdcf4132511
  1 file changed, 5 insertions(+), 1 deletion(-)
 
 diff --git a/src/com/android/nfc/NfcService.java b/src/com/android/nfc/NfcService.java
-index 662112a08..d3e9d2d16 100644
+index 662112a0..d3e9d2d1 100644
 --- a/src/com/android/nfc/NfcService.java
 +++ b/src/com/android/nfc/NfcService.java
 @@ -572,7 +572,11 @@ public class NfcService implements DeviceHostListener, ForegroundUtils.Callback
@@ -26,5 +26,5 @@ index 662112a08..d3e9d2d16 100644
          mScreenState = mScreenStateHelper.checkScreenState();
  
 -- 
-2.34.1
+2.25.1
 

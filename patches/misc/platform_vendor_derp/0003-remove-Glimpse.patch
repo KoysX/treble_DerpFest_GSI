@@ -1,0 +1,24 @@
+From b4c0ba9416cc24e147a167c5784ca49adb027ef7 Mon Sep 17 00:00:00 2001
+From: bonic <bonio9527@gmail.com>
+Date: Mon, 12 Feb 2024 22:39:16 -0500
+Subject: [PATCH] remove Glimpse
+
+---
+ config/packages.mk | 1 -
+ 1 file changed, 1 deletion(-)
+
+diff --git a/config/packages.mk b/config/packages.mk
+index d3d696f..1a166a0 100644
+--- a/config/packages.mk
++++ b/config/packages.mk
+@@ -4,7 +4,6 @@ PRODUCT_PACKAGES += \
+     DerpSetupWizard \
+     Prospect \
+     GameSpace \
+-    Glimpse \
+     NetworkStackOverlay \
+     Panic \
+     ParallelSpace \
+-- 
+2.34.1
+

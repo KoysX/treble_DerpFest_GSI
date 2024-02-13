@@ -1,21 +1,21 @@
-From 9a22ab7c4d6bd35c57a4f76d73c12f9aec3dacd9 Mon Sep 17 00:00:00 2001
-From: BoNic <BoNio9527@gmail.com>
-Date: Sun, 7 Jan 2024 12:56:21 -0500
-Subject: [PATCH] Add tunnings for status bar paddings [1/2]
+From aa27b47bf9cb13106c2dc1033454a896e7460295 Mon Sep 17 00:00:00 2001
+From: bonic <bonio9527@gmail.com>
+Date: Mon, 12 Feb 2024 10:31:46 -0500
+Subject: [PATCH] Add-tunnings-for-status-bar-paddings-1-2
 
 ---
  core/java/android/provider/Settings.java      |  21 ++++
  core/res/res/values/derp_symbols.xml          |   5 +
  core/res/res/values/dimens.xml                |   9 ++
  packages/SystemUI/Android.bp                  |   1 +
- .../statusbar/phone/PhoneStatusBarView.java   | 115 ++++++++++++++++--
- 5 files changed, 143 insertions(+), 8 deletions(-)
+ .../statusbar/phone/PhoneStatusBarView.java   | 112 ++++++++++++++++--
+ 5 files changed, 141 insertions(+), 7 deletions(-)
 
 diff --git a/core/java/android/provider/Settings.java b/core/java/android/provider/Settings.java
-index 2f95762fe..84e82b4d4 100644
+index a0581d601..87ac6738f 100644
 --- a/core/java/android/provider/Settings.java
 +++ b/core/java/android/provider/Settings.java
-@@ -6848,6 +6848,24 @@ public final class Settings {
+@@ -6851,6 +6851,24 @@ public final class Settings {
           */
          public static final String LOCK_HIDE_STATUS_BAR = "lockscreen_hide_status_bar";
  
@@ -38,9 +38,9 @@ index 2f95762fe..84e82b4d4 100644
 +        public static final String STATUSBAR_TOP_PADDING = "statusbar_top_padding";
 +
          /**
-          * Whether edge light is enabled.
-          * Default 0
-@@ -7092,6 +7110,9 @@ public final class Settings {
+          * Enable\Disable swipe up or down gesture on ambient display like OOS
+          * @hide
+@@ -7179,6 +7197,9 @@ public final class Settings {
              PRIVATE_SETTINGS.add(SENSOR_BLOCK);
              PRIVATE_SETTINGS.add(FORCE_FULLSCREEN_CUTOUT_APPS);
              PRIVATE_SETTINGS.add(LOCK_HIDE_STATUS_BAR);
@@ -51,10 +51,10 @@ index 2f95762fe..84e82b4d4 100644
              PRIVATE_SETTINGS.add(FLASHLIGHT_ON_CALL_IGNORE_DND);
              PRIVATE_SETTINGS.add(FLASHLIGHT_ON_CALL_RATE);
 diff --git a/core/res/res/values/derp_symbols.xml b/core/res/res/values/derp_symbols.xml
-index cdeeedfca..d3b1c767e 100644
+index 49f46c4e0..fa7f79af2 100644
 --- a/core/res/res/values/derp_symbols.xml
 +++ b/core/res/res/values/derp_symbols.xml
-@@ -201,4 +201,9 @@
+@@ -197,4 +197,9 @@
  
      <!-- Parallel space max count. -->
      <java-symbol type="integer" name="config_parallelSpaceMaxCount" />
@@ -83,7 +83,7 @@ index 1d013fd4e..87063e2d1 100644
 +    <dimen name="status_bar_padding_top">0dp</dimen>
  </resources>
 diff --git a/packages/SystemUI/Android.bp b/packages/SystemUI/Android.bp
-index e8b69a42f..a2e2138dd 100644
+index 8d7deef4d..bfcdbe3d8 100644
 --- a/packages/SystemUI/Android.bp
 +++ b/packages/SystemUI/Android.bp
 @@ -202,6 +202,7 @@ android_library {
@@ -95,17 +95,18 @@ index e8b69a42f..a2e2138dd 100644
          "vendor.goodix.hardware.biometrics.fingerprint-V2.1-java",
          "vendor.xiaomi.hw.touchfeature-V1.0-java",
 diff --git a/packages/SystemUI/src/com/android/systemui/statusbar/phone/PhoneStatusBarView.java b/packages/SystemUI/src/com/android/systemui/statusbar/phone/PhoneStatusBarView.java
-index 0ab3e0ce9..283ae1053 100644
+index 12b209d5b..00e41842f 100644
 --- a/packages/SystemUI/src/com/android/systemui/statusbar/phone/PhoneStatusBarView.java
 +++ b/packages/SystemUI/src/com/android/systemui/statusbar/phone/PhoneStatusBarView.java
-@@ -18,17 +18,21 @@ package com.android.systemui.statusbar.phone;
+@@ -18,6 +18,7 @@ package com.android.systemui.statusbar.phone;
  
  
  import android.annotation.Nullable;
 +import android.content.ContentResolver;
  import android.content.Context;
  import android.content.res.Configuration;
- import android.graphics.Rect;
+ import android.content.res.Resources;
+@@ -25,11 +26,14 @@ import android.graphics.Rect;
  import android.inputmethodservice.InputMethodService;
  import android.os.IBinder;
  import android.os.RemoteException;
@@ -120,11 +121,12 @@ index 0ab3e0ce9..283ae1053 100644
  import android.view.DisplayCutout;
  import android.view.IWindowManager;
  import android.view.MotionEvent;
-@@ -54,17 +58,33 @@ import com.android.systemui.statusbar.CommandQueue;
+@@ -55,18 +59,34 @@ import com.android.systemui.statusbar.CommandQueue;
  import com.android.systemui.statusbar.CommandQueue.Callbacks;
  import com.android.systemui.statusbar.phone.userswitcher.StatusBarUserSwitcherContainer;
  import com.android.systemui.statusbar.policy.Clock;
 +import com.android.systemui.tuner.TunerService;
+ import com.android.systemui.statusbar.policy.Offset;
  import com.android.systemui.user.ui.binder.StatusBarUserChipViewBinder;
  import com.android.systemui.user.ui.viewmodel.StatusBarUserChipViewModel;
  import com.android.systemui.util.leak.RotationUtils;
@@ -155,24 +157,7 @@ index 0ab3e0ce9..283ae1053 100644
      private DarkReceiver mBattery;
      private ClockController mClockController;
      private int mRotationOrientation = -1;
-@@ -78,6 +98,8 @@ public class PhoneStatusBarView extends FrameLayout implements Callbacks {
-     private int mStatusBarHeight;
-     @Nullable
-     private Gefingerpoken mTouchEventHandler;
-+    @Nullable
-+    private ViewGroup mStatusBarContents = null;
- 
-     /**
-      * Draw this many pixels into the left/right side of the cutout to optimally use the space
-@@ -151,7 +173,6 @@ public class PhoneStatusBarView extends FrameLayout implements Callbacks {
-         mBattery = findViewById(R.id.battery);
-         mClockController = new ClockController(getContext(), this);
-         mCutoutSpace = findViewById(R.id.cutout_space_view);
--
-         updateResources();
-     }
- 
-@@ -161,6 +182,14 @@ public class PhoneStatusBarView extends FrameLayout implements Callbacks {
+@@ -166,6 +186,14 @@ public class PhoneStatusBarView extends FrameLayout implements Callbacks {
          // Always have Battery meters in the status bar observe the dark/light modes.
          Dependency.get(DarkIconDispatcher.class).addDarkReceiver(mBattery);
          mClockController.addDarkReceiver();
@@ -187,7 +172,7 @@ index 0ab3e0ce9..283ae1053 100644
          if (updateDisplayParameters()) {
              updateLayoutForCutout();
          }
-@@ -175,6 +204,9 @@ public class PhoneStatusBarView extends FrameLayout implements Callbacks {
+@@ -180,6 +208,9 @@ public class PhoneStatusBarView extends FrameLayout implements Callbacks {
          super.onDetachedFromWindow();
          Dependency.get(DarkIconDispatcher.class).removeDarkReceiver(mBattery);
          mClockController.removeDarkReceiver();
@@ -197,7 +182,7 @@ index 0ab3e0ce9..283ae1053 100644
          mDisplayCutout = null;
  
          if (mRotationButtonController != null) {
-@@ -308,17 +340,18 @@ public class PhoneStatusBarView extends FrameLayout implements Callbacks {
+@@ -322,17 +353,18 @@ public class PhoneStatusBarView extends FrameLayout implements Callbacks {
      }
  
      private void updatePaddings() {
@@ -207,7 +192,7 @@ index 0ab3e0ce9..283ae1053 100644
 +            mStatusBarContents = findViewById(R.id.status_bar_contents);
 +        }
  
-         findViewById(R.id.status_bar_contents).setPaddingRelative(
+         mStatusBarContents.setPaddingRelative(
 -                statusBarPaddingStart,
 -                getResources().getDimensionPixelSize(R.dimen.status_bar_padding_top),
 -                getResources().getDimensionPixelSize(R.dimen.status_bar_padding_end),
@@ -222,7 +207,7 @@ index 0ab3e0ce9..283ae1053 100644
  
          findViewById(R.id.system_icons).setPaddingRelative(
                  getResources().getDimensionPixelSize(R.dimen.status_bar_icons_padding_start),
-@@ -380,4 +413,70 @@ public class PhoneStatusBarView extends FrameLayout implements Callbacks {
+@@ -394,4 +426,70 @@ public class PhoneStatusBarView extends FrameLayout implements Callbacks {
      public ClockController getClockController() {
          return mClockController;
      }

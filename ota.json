@@ -1,21 +1,21 @@
 {
-  "version": "v2024.01.30",
-  "date": "1706630436",
+  "version": "v2024.02.12",
+  "date": "1707753652",
   "variants": [
     {
       "name": "treble_arm64_bgN",
-      "size": "1674979588",
-      "url": "https://github.com/KoysX/treble_DerpFest_GSI/releases/download/v2024.01.30/DerpFest-arm64_bgN-14.0-unofficial-20240130.img.xz"
+      "size": "1819159984",
+      "url": "https://github.com/KoysX/treble_DerpFest_GSI/releases/download/v2024.02.12/DerpFest-arm64_bgN-14.0-unofficial-20240212.img.xz"
     },
     {
       "name": "treble_arm64_bgN-mini",
-      "size": "1476054108",
-      "url": "https://github.com/KoysX/treble_DerpFest_GSI/releases/download/v2024.01.30/DerpFest-arm64_bgN-mini-14.0-unofficial-20240130.img.xz"
+      "size": "1625299652",
+      "url": "https://github.com/KoysX/treble_DerpFest_GSI/releases/download/v2024.02.12/DerpFest-arm64_bgN-mini-14.0-unofficial-20240212.img.xz"
     },
     {
       "name": "treble_arm64_bgN-pico",
-      "size": "1327136200",
-      "url": "https://github.com/KoysX/treble_DerpFest_GSI/releases/download/v2024.01.30/DerpFest-arm64_bgN-pico-14.0-unofficial-20240130.img.xz"
+      "size": "1472843916",
+      "url": "https://github.com/KoysX/treble_DerpFest_GSI/releases/download/v2024.02.12/DerpFest-arm64_bgN-pico-14.0-unofficial-20240212.img.xz"
     }
   ]
 }

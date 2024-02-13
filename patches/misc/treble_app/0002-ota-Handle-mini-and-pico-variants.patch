@@ -1,0 +1,36 @@
+From c3db54fa21c6f07de310a47bd249a33ec73e7ee4 Mon Sep 17 00:00:00 2001
+From: BoNic <bonio9527@gmail.com>
+Date: Tue, 30 Jan 2024 02:44:48 -0500
+Subject: [PATCH] ota: Handle mini and pico variants
+
+---
+ app/src/main/java/me/phh/treble/app/UpdaterActivity.kt | 9 ++++++---
+ 1 file changed, 6 insertions(+), 3 deletions(-)
+
+diff --git a/app/src/main/java/me/phh/treble/app/UpdaterActivity.kt b/app/src/main/java/me/phh/treble/app/UpdaterActivity.kt
+index 7a9fe1c..594f23d 100644
+--- a/app/src/main/java/me/phh/treble/app/UpdaterActivity.kt
++++ b/app/src/main/java/me/phh/treble/app/UpdaterActivity.kt
+@@ -262,13 +262,16 @@ class UpdaterActivity : PreferenceActivity() {
+ 
+     private fun getVariant() : String {
+         var flavor = SystemProperties.get("ro.build.flavor").replace(Regex("-user(debug)?"), "")
+-        val secure = File("/system/phh/secure")
++        val calendar = File("/system/product/app/CalendarGooglePrebuilt/CalendarGooglePrebuilt.apk")
++        val photos = File("/system/product/app/Photos/Photos.apk")
+         var vndklite = File("/system_ext/apex/com.android.vndk.v29/lib64/vendor.qti.qcril.am@1.0.so")
+         if (flavor.contains("_a64_")) {
+             vndklite = File("/system_ext/apex/com.android.vndk.v29/lib/libstdc++.so")
+         }
+-        if (secure.exists()) {
+-            flavor += "-secure"
++        if (!calendar.exists()) {
++            flavor += "-pico"
++        } else if (!photos.exists()) {
++            flavor += "-mini"
+         } else if (vndklite.exists()) {
+             flavor += "-vndklite"
+         }
+-- 
+2.34.1
+
